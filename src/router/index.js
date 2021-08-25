@@ -84,6 +84,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/categoryList',
+    component: Layout,
+    children: [
+      {
+        path: '/categoryList',
+        component: () => import('@/views/category/category-list'),
+        name: 'Category',
+        meta: { title: 'Category', icon: 'documentation', affix: true }
+      }
+    ]
+  },
+  {
     path: '/documentation',
     component: Layout,
     children: [
