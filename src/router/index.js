@@ -84,18 +84,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/categoryList',
-    component: Layout,
-    children: [
-      {
-        path: '/categoryList',
-        component: () => import('@/views/category/category-list'),
-        name: 'Category',
-        meta: { title: 'Category', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
     path: '/documentation',
     component: Layout,
     children: [
@@ -141,6 +129,38 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  {
+    path: '/category',
+    component: Layout,
+    redirect: '/category/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'Category',
+    meta: {
+      title: 'Category',
+      icon: 'component',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/category/list-category'),
+        name: 'List Category',
+        meta: {
+          title: 'List Category',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/category/add-category'),
+        name: 'Add Category',
+        meta: {
+          title: 'Add Category'
+          // if do not set roles, means: this page does not require permission
+        }
+      }
+    ]
+  },
   {
     path: '/permission',
     component: Layout,

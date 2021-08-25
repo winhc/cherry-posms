@@ -152,7 +152,7 @@ export default {
       console.log("login page: response => ", response);
       if (response.status === 200) {
         this.$store.dispatch("user/login");
-        this.$router.push({ path: "/categoryList" });
+        this.$router.push({ path: "/category/list" });
         this.$message.success("login success");
       } else {
         this.$message.error(`${response.data.message}`);
