@@ -79,7 +79,7 @@ export default {
   data() {
     const validateUserLogin = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("Can not be less than 6 digits"));
+        callback(new Error("Cannot be less than 6 digits"));
       } else {
         callback();
       }
@@ -151,7 +151,7 @@ export default {
       this.loading = false;
       console.log("login page: response => ", response);
       if (response.status === 200) {
-        this.$store.dispatch("user/login");
+        this.$store.dispatch("user/login", response.data);
         this.$router.push({ path: "/category/list" });
         this.$message.success("login success");
       } else {

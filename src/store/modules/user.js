@@ -3,7 +3,8 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
-  token: getToken(),
+  token: '',
+  userInfo: {},
   name: '',
   avatar: '',
   introduction: '',
@@ -13,6 +14,9 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_USER_INFO: (state, userInfo) => {
+    state.userInfo = userInfo
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -30,11 +34,15 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login({ commit }, data) {
     removeToken()
-    const data = { token: 'posms-token' }
-    commit('SET_TOKEN', data.token)
-    setToken(data.token)
+    
+    const bearerToken = 'Bearer '+ data.accessToken; // token type is Bearer
+    commit('SET_TOKEN', bearerToken) // to store vuex
+    setToken(bearerToken) // to Cookies
+
+    const userInfo = data.user;
+    commit('SET_USER_INFO', userInfo);
 
     // const { username, password } = userInfo
     // return new Promise((resolve, reject) => {
