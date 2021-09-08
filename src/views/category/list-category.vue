@@ -75,7 +75,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <DeleteDialog v-if="showDeleteDialog" @confirm="comfirmDelete" @cancel="showDeleteDialog = false" />
+    <DeleteDialog v-if="showDeleteDialog" @confirm="confirmDelete" @cancel="showDeleteDialog = false" />
   </div>
 </template>
 <script>

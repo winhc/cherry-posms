@@ -7,7 +7,8 @@ export const ListCategory = {
   data() {
     return {
       categoryData: [],
-      showDeleteDialog: false
+      showDeleteDialog: false,
+      category_id: 0
     }
   },
   mounted() { },
@@ -29,18 +30,25 @@ export const ListCategory = {
     },
     deleteCategory(data) {
       console.log('deleteCategory=>', data)
+      this.category_id = data.id;
       this.showDeleteDialog = true
     },
-    comfirmDelete(remarks) {
-      this.showDeleteDialog = false
+    async confirmDelete(remarks) {
       console.log('remarks=>', remarks)
+      const response = await http.delete(`/categories/${this.category_id}`)
+      console.log('category delete response => ', response)
+      if (response.status == 200) {
+        this.showDeleteDialog = false;
+        this.category_id = 0 ;
+        this.getData();
+      }
     }
   },
   watch: {},
   computed: {},
   filters: {
     moment: function(date) {
-      return moment(date).format('DD-MM-YYYY, h:mm:ss')
+      return moment(date).format('DD-MM-YYYY')
     }
   }
 }

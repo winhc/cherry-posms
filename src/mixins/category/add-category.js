@@ -1,5 +1,6 @@
 import * as http from '@/utils/http';
 import * as CodeGenerator from '@/utils/code-generator';
+import moment from 'moment';
 
 export const AddCategory = {
   components: {},
@@ -11,7 +12,7 @@ export const AddCategory = {
         category_name: '',
         image_url: '',
         remarks: '',
-        created_at: '2021-08-21 19:24:26'
+        created_at: moment(new Date()).format('DD-MM-YYYY')
       },
       rules: {
         category_name: [
@@ -38,6 +39,7 @@ export const AddCategory = {
       });
     },
     async createCategory() {
+      this.categoryForm.created_at = moment(new Date()).format('YYYY-MM-DD h:mm:ss');
       const response = await http.post('/categories', this.categoryForm);
       console.log('createCategory response =>', response);
       if (response.status == 201) {
@@ -53,7 +55,7 @@ export const AddCategory = {
         category_name: '',
         image_url: '',
         remarks: '',
-        created_at: '2021-08-21 19:24:26'
+        created_at: moment(new Date()).format('DD-MM-YYYY')
       }
     }
   },

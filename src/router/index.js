@@ -91,8 +91,7 @@ export const constantRoutes = [
     name: 'Category',
     meta: {
       title: 'Category',
-      icon: 'component',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      icon: 'component'
     },
     children: [
       {
@@ -100,8 +99,7 @@ export const constantRoutes = [
         component: () => import('@/views/category/list-category'),
         name: 'List Category',
         meta: {
-          title: 'List Category',
-          roles: ['admin'] // or you can only set roles in sub nav
+          title: 'List Category'
         }
       },
       {
@@ -110,7 +108,6 @@ export const constantRoutes = [
         name: 'Add Category',
         meta: {
           title: 'Add Category'
-          // if do not set roles, means: this page does not require permission
         }
       }
     ]
