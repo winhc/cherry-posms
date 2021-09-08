@@ -20,6 +20,8 @@ import RightPanel from '@/components/RightPanel'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
+import store from '@/store'
+import router from '@/router'
 
 export default {
   name: 'Layout',
@@ -49,9 +51,25 @@ export default {
       }
     }
   },
+  created() {
+    window.addEventListener('beforeunload', this.handleReload)
+    this.checkToken()
+  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    },
+    checkToken() {
+      const accessToken = store.getters.token
+      console.log('layout accessToken=>', accessToken)
+      if (!accessToken) {
+        store.dispatch('user/logout')
+        router.push('/login')
+      }
+    },
+    handleReload() {
+      store.dispatch('user/logout')
+      router.push('/login')
     }
   }
 }

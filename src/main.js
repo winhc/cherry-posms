@@ -33,12 +33,12 @@ import * as filters from './filters' // global filters
 //   mockXHR()
 // }
 
-// Vue.use(Element, {
-//   size: Cookies.get('size') || 'medium', // set element-ui default size
-//   locale: enLang
-// })
+Vue.use(Element, {
+  // size: Cookies.get('size') || 'medium', // set element-ui default size
+  locale: enLang
+})
 
-Vue.use(Element);
+Vue.use(Element)
 
 // register global utility filters
 Object.keys(filters).forEach(key => {

@@ -8,8 +8,16 @@
       autocomplete="on"
       label-position="left"
     >
+      <!-- <div class="title-container">
+        <div class="title" style="margin-bottom: 10px;">
+          <img
+          style="width: 120px; height: 120px"
+          src="../../assets/logo/cherry_posms_001.png"/>
+        </div>
+      </div> -->
+
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">Cherry POSMS</h3>
       </div>
 
       <el-form-item prop="username">
@@ -63,103 +71,104 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >Login</el-button
-      >
+      >Login</el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import SocialSign from "./components/SocialSignin";
-import * as http from "@/utils/http";
+import SocialSign from './components/SocialSignin'
+import * as http from '@/utils/http'
+import posms_logo from '@/assets/logo/cherry_posms_001.png'
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: { SocialSign },
   data() {
     const validateUserLogin = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("Cannot be less than 6 digits"));
+        callback(new Error('Cannot be less than 6 digits'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "",
-        password: "",
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUserLogin },
+          { required: true, trigger: 'blur', validator: validateUserLogin }
         ],
         password: [
-          { required: true, trigger: "blur", validator: validateUserLogin },
-        ],
+          { required: true, trigger: 'blur', validator: validateUserLogin }
+        ]
       },
-      passwordType: "password",
+      passwordType: 'password',
       capsTooltip: false,
       loading: false,
       showDialog: false,
       redirect: undefined,
       otherQuery: {},
-    };
+      logoUrl: posms_logo
+    }
   },
   watch: {},
   created() {},
   mounted() {
-    if (this.loginForm.username === "") {
-      this.$refs.username.focus();
-    } else if (this.loginForm.password === "") {
-      this.$refs.password.focus();
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
+    } else if (this.loginForm.password === '') {
+      this.$refs.password.focus()
     }
   },
   destroyed() {},
   methods: {
     checkCapslock(e) {
-      const { key } = e;
-      this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
+      const { key } = e
+      this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
     },
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          this.userLogin();
+          this.loading = true
+          this.userLogin()
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     async userLogin() {
-      console.log("login");
+      console.log('login')
       const user = {
         account: this.loginForm.username,
-        password: this.loginForm.password,
-      };
-      const response = await http.post("/auth/login", user);
-      this.loading = false;
-      console.log("login page: response => ", response);
-      if (response.status === 200) {
-        this.$store.dispatch("user/login", response.data);
-        this.$router.push({ path: "/category/list" });
-        this.$message.success("login success");
-      } else {
-        this.$message.error(`${response.data.message}`);
+        password: this.loginForm.password
       }
-    },
-  },
-};
+      const response = await http.post('/auth/login', user)
+      this.loading = false
+      console.log('login page: response => ', response)
+      if (response.status === 200) {
+        this.$store.dispatch('user/login', response.data)
+        this.$router.push({ path: '/' })
+        this.$message.success('login success')
+      } else {
+        this.$message.error(`${response.data.message}`)
+      }
+    }
+  }
+}
 </script>
 
 <style lang="scss">

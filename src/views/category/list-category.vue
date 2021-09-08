@@ -3,10 +3,30 @@
     <el-table :data="categoryData" border style="width: 100%">
       <el-table-column align="center">
         <template slot="header">
-          <span>Category Code</span>
+          <span>Operation</span>
         </template>
         <template slot-scope="{ row }">
-          <span>{{ row.category_code }}</span>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            circle
+            @click="editCategory(row)"
+          />
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            circle
+            @click="deleteCategory(row)"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center">
+        <template slot="header">
+          <span>Image</span>
+        </template>
+        <template slot-scope="{ row }">
+          <span>{{ row.image_url }}</span>
         </template>
       </el-table-column>
 
@@ -21,10 +41,19 @@
 
       <el-table-column align="center">
         <template slot="header">
+          <span>Category Code</span>
+        </template>
+        <template slot-scope="{ row }">
+          <span>{{ row.category_code }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center">
+        <template slot="header">
           <span>Created At</span>
         </template>
         <template slot-scope="{ row }">
-          <span>{{ row.created_at }}</span>
+          <span>{{ row.created_at | moment }}</span>
         </template>
       </el-table-column>
 
@@ -33,7 +62,7 @@
           <span>Updated At</span>
         </template>
         <template slot-scope="{ row }">
-          <span>{{ row.updated_at }}</span>
+          <span>{{ row.updated_at | moment }}</span>
         </template>
       </el-table-column>
 
@@ -46,13 +75,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <DeleteDialog v-if="showDeleteDialog" @confirm="comfirmDelete" @cancel="showDeleteDialog = false" />
   </div>
 </template>
 <script>
-import { ListCategory } from "@/mixins/category/list-category";
+import { ListCategory } from '@/mixins/category/list-category'
 export default {
-  mixins: [ListCategory],
-};
+  mixins: [ListCategory]
+}
 </script>
 <style>
 </style>
