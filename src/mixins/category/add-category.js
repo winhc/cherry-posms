@@ -18,7 +18,9 @@ export const AddCategory = {
         category_name: [
           { required: true, message: 'Enter category name', trigger: 'blur' }
         ]
-      }
+      },
+      imageUrl: '',
+      imageFile: null
     };
   },
   mounted() {
@@ -56,6 +58,27 @@ export const AddCategory = {
         image_url: '',
         remarks: '',
         created_at: moment(new Date()).format('DD-MM-YYYY')
+      }
+    },
+    handleUploadChange(file){
+      if(file){
+        console.log('upload image==>', file);
+        this.imageFile = file;
+        this.imageUrl = URL.createObjectURL(file.raw);
+      }
+    },
+    async uploadImage() {
+      console.log('file type=>', typeof this.imageFile)
+      let formData = new FormData();
+      formData.append('file', this.imageFile.raw);
+      console.log('formData=>', formData);
+      const response = await http.postFormData('/categories/upload', formData);
+      console.log('uploadImage response =>', response);
+      if (response.status == 201) {
+        this.$message.success(`Success: ${response.statusText}`);
+        this.resetCategoryForm();
+      } else {
+        this.$message.error(`Fail: ${response.statusText}`);
       }
     }
   },

@@ -32,6 +32,18 @@ async function post(url, data) {
   }
 }
 
+async function postFormData(url, data) {
+  const fullUrl = baseUrl + url
+  console.log('getMultiPartHeaderOption => ', getMultiPartHeaderOption())
+  try {
+    const response = await axios.post(fullUrl, data, getMultiPartHeaderOption())
+    return response
+  } catch (error) {
+    console.log('http post error: ', error.response)
+    return error.response
+  }
+}
+
 async function put(url, data) {
   const fullUrl = baseUrl + url
   try {
@@ -77,4 +89,16 @@ function getHeaderOption() {
   return headerOption
 }
 
-export { get, post, put, patch, _delete as delete }
+function getMultiPartHeaderOption() {
+  const accessToken = store.getters.token
+  console.log('accessToken=>', accessToken)
+  const headerOption = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': accessToken
+    }
+  }
+  return headerOption
+}
+
+export { get, post, put, patch, _delete as delete, postFormData }
