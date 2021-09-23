@@ -8,7 +8,8 @@ export const ListCategory = {
     return {
       categoryData: [],
       showDeleteDialog: false,
-      category_id: 0
+      category_id: 0,
+      avatar_url: process.env.VUE_APP_CATEGORY_AVATAR_API,
     }
   },
   mounted() { },

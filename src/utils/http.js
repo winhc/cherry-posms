@@ -1,7 +1,7 @@
 import store from '@/store'
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:4000'
+const baseUrl = process.env.VUE_APP_SERVER;
 // const headerOption = {
 //   headers: {
 //     'Content-Type': 'application/json; charset=UTF-8',
