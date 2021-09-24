@@ -26,7 +26,7 @@
           <span>Image</span>
         </template>
         <template slot-scope="{ row }">
-          <img v-if="row.image_url != ''" :src="avatar_url + row.id" style="width: 100px; height: 100px;" />
+          <img v-if="row.image" :src="avatar_url + row.id" style="width: 100px; height: 100px;" />
           <i v-else class="el-icon-camera" />
         </template>
       </el-table-column>
