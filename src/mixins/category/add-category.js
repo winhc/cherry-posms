@@ -46,21 +46,29 @@ export const AddCategory = {
       formData.append('category_name', this.categoryForm.category_name);
       formData.append('remarks', this.categoryForm.remarks);
       formData.append('created_at', this.categoryForm.created_at);
-      formData.append('image_file', this.imageFile);
-      const response = await http.postFormData('/categories', formData);
+      formData.append('image', this.imageFile);
+      const response = await http.post('/categories', formData);
       console.log('createCategory response =>', response);
       if (response.status == 201) {
         this.$message.success(`Success: ${response.statusText}`);
         this.resetCategoryForm();
       } else {
-        this.$message.error(`Fail: ${response.statusText} Messaage: ${this.getErrorMessage(response.message)}`);
+        this.$message.error(`${this.getErrorMessage(response)}`);
       }
     },
-    getErrorMessage(response){
-      for(const message in response){
-        console.log('message: ', message);
-        return 'message';
+    getErrorMessage(response) {
+      console.log('response', response);
+      let errorTip = '';
+      errorTip += 'Fail: ' + response?.statusText;
+      let message = '';
+      if (response.message) {
+        for (const msg in response) {
+          console.log('message: ', msg);
+          message += msg;
+        }
+        errorTip += 'Message: ' + message;
       }
+      return errorTip;
     },
     resetCategoryForm() {
       this.categoryForm = {
@@ -72,30 +80,16 @@ export const AddCategory = {
       this.imageUrl = '';
       this.imageFile = null;
     },
-    handleUploadChange(file){
-      if(file){
+    handleUploadChange(file) {
+      if (file) {
         console.log('upload image==>', file);
         this.imageFile = file.raw;
         this.imageUrl = URL.createObjectURL(file.raw);
-      }else{
+      } else {
         console.log('no file');
       }
     },
-    // async uploadImage() {
-    //   console.log('file type=>', typeof this.imageFile)
-    //   let formData = new FormData();
-    //   formData.append('file', this.imageFile.raw);
-    //   console.log('formData=>', formData);
-    //   const response = await http.postFormData('/categories/upload', formData);
-    //   console.log('uploadImage response =>', response);
-    //   if (response.status == 201) {
-    //     this.$message.success(`Success: ${response.statusText}`);
-    //     this.resetCategoryForm();
-    //   } else {
-    //     this.$message.error(`Fail: ${response.statusText}`);
-    //   }
-    // },
-    async getImage(id){
+    async getImage(id) {
       const image = await http.get(`/categories/images/${id}`);
       console.log('getImage==>', image);
       return '';
