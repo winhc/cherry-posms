@@ -80,6 +80,10 @@ export const AddCategory = {
       this.imageUrl = '';
       this.imageFile = null;
     },
+    deleteImage() {
+      this.imageUrl = '';
+      this.imageFile = null;
+    },
     handleUploadChange(file) {
       if (file) {
         console.log('upload image==>', file);
@@ -88,11 +92,6 @@ export const AddCategory = {
       } else {
         console.log('no file');
       }
-    },
-    async getImage(id) {
-      const image = await http.get(`/categories/images/${id}`);
-      console.log('getImage==>', image);
-      return '';
     }
   },
   watch: {},

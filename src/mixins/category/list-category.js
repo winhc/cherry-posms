@@ -13,12 +13,16 @@ export const ListCategory = {
       isUpdate: false,
       categoryForm: {
         category_name: '',
+        image: '',
         remarks: '',
         updated_at: ''
       },
       rules: {
         category_name: [
           { required: true, message: 'Enter category name', trigger: 'blur' }
+        ],
+        remarks: [
+          {required: true, message: 'Enter remarks', trigger: 'blur'}
         ]
       },
       imageUrl: '',
@@ -43,6 +47,7 @@ export const ListCategory = {
       console.log('updateCategory=>', data)
       this.categoryForm.category_name = data.category_name;
       this.categoryForm.remarks = data.remarks;
+      this.categoryForm.image = data.image;
       this.imageUrl = '';
       if (data.image) {
         this.imageUrl = this.avatar_url + data.id + '/' + data.image;
@@ -75,7 +80,11 @@ export const ListCategory = {
       formData.append('category_name', this.categoryForm.category_name);
       formData.append('remarks', this.categoryForm.remarks);
       formData.append('updated_at', this.categoryForm.updated_at);
-      formData.append('image', this.imageFile);
+      if(this.imageUrl == ''){
+        formData.append('image', '');
+      } else {
+        formData.append('image', this.imageFile || this.categoryForm.image);
+      }
       const response = await http.patch(`/categories/${this.category_id}`, formData);
       console.log('createCategory response =>', response);
       if (response.status == 200) {
@@ -113,6 +122,10 @@ export const ListCategory = {
       // console.log('deleteCategory=>', data)
       this.category_id = data.id;
       this.showDeleteDialog = true
+    },
+    deleteImage() {
+      this.imageUrl = '';
+      this.imageFile = null;
     },
     async confirmDelete(remarks) {
       // console.log('remarks=>', remarks)
