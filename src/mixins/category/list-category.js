@@ -1,8 +1,9 @@
 import * as http from '@/utils/http'
 import moment from 'moment'
 import DeleteDialog from '../../components/DeleteDialog/'
+import UploadImage from '../../components/UploadImage/';
 export const ListCategory = {
-  components: { DeleteDialog },
+  components: { DeleteDialog, UploadImage },
   props: {},
   data() {
     return {
@@ -22,11 +23,12 @@ export const ListCategory = {
           { required: true, message: 'Enter category name', trigger: 'blur' }
         ],
         remarks: [
-          {required: true, message: 'Enter remarks', trigger: 'blur'}
+          { required: true, message: 'Enter remarks', trigger: 'blur' }
         ]
       },
       imageUrl: '',
-      imageFile: null
+      imageFile: null,
+      isResetImage: false
     }
   },
   mounted() { },
@@ -56,17 +58,24 @@ export const ListCategory = {
       this.isUpdate = true;
     },
     handleUploadChange(file) {
+      console.log('handleUploadChange view==>', file);
       if (file) {
-        console.log('upload update image==>', file);
-        this.imageFile = file.raw; // for upload
-        this.imageUrl = URL.createObjectURL(file.raw); // for show
-      } else {
-        console.log('no file');
+        this.imageFile = file.raw;
+        this.imageUrl = this.imageUrl = URL.createObjectURL(file.raw);
+        this.isResetImage = false;
       }
+    },
+    deleteImage(file) {
+      console.log('deleteImage view==>', file);
+      this.imageFile = file;
+      this.categoryForm.image = '';
     },
     onSubmit() {
       this.$refs.categoryForm.validate((valid) => {
         if (valid) {
+          console.log('imageUrl=>>', this.imageUrl);
+          console.log('imageFile=>>', this.imageFile);
+          console.log('categoryForm=>>', this.categoryForm);
           this.submitUpdate();
         } else {
           console.log('error onSubmit!!');
@@ -80,7 +89,7 @@ export const ListCategory = {
       formData.append('category_name', this.categoryForm.category_name);
       formData.append('remarks', this.categoryForm.remarks);
       formData.append('updated_at', this.categoryForm.updated_at);
-      if(this.imageUrl == ''){
+      if (this.imageUrl == '') {
         formData.append('image', '');
       } else {
         formData.append('image', this.imageFile || this.categoryForm.image);
@@ -90,19 +99,20 @@ export const ListCategory = {
       if (response.status == 200) {
         this.$message.success(`Success: ${response.statusText}`);
         this.getData();
-        this.resetUpdateData();
-        this.isUpdate = false;
+        this.resetUpdate();
       } else {
         this.$message.error(`${this.getErrorMessage(response)}`);
       }
     },
-    resetUpdateData() {
+    resetUpdate() {
       this.category_id = 0;
       this.categoryForm.category_name = '';
       this.categoryForm.remarks = '';
       this.categoryForm.updated_at = '';
       this.imageUrl = '';
       this.imageFile = null;
+      this.isUpdate = false;
+      this.isResetImage = true;
     },
     getErrorMessage(response) {
       console.log('response', response);
@@ -122,10 +132,6 @@ export const ListCategory = {
       // console.log('deleteCategory=>', data)
       this.category_id = data.id;
       this.showDeleteDialog = true
-    },
-    deleteImage() {
-      this.imageUrl = '';
-      this.imageFile = null;
     },
     async confirmDelete(remarks) {
       // console.log('remarks=>', remarks)

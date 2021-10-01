@@ -1,9 +1,10 @@
 import * as http from '@/utils/http';
 import * as CodeGenerator from '@/utils/code-generator';
 import moment from 'moment';
+import UploadImage from '../../components/UploadImage/';
 
 export const AddCategory = {
-  components: {},
+  components: { UploadImage },
   props: {},
   data() {
     return {
@@ -18,8 +19,8 @@ export const AddCategory = {
           { required: true, message: 'Enter category name', trigger: 'blur' }
         ]
       },
-      imageUrl: '',
-      imageFile: null
+      imageFile: null,
+      isResetImage: false
     };
   },
   mounted() {
@@ -34,7 +35,7 @@ export const AddCategory = {
         if (valid) {
           this.createCategory();
         } else {
-          console.log('error onSubmit!!');
+          // console.log('error onSubmit!!');
           return false;
         }
       });
@@ -77,20 +78,18 @@ export const AddCategory = {
         remarks: '',
         created_at: moment(new Date()).format('DD-MM-YYYY')
       }
-      this.imageUrl = '';
       this.imageFile = null;
+      this.isResetImage = true;
     },
-    deleteImage() {
-      this.imageUrl = '';
-      this.imageFile = null;
+    deleteImage(file) {
+      // console.log('deleteImage view==>', file);
+      this.imageFile = file;
     },
     handleUploadChange(file) {
+      // console.log('handleUploadChange view==>', file);
       if (file) {
-        console.log('upload image==>', file);
         this.imageFile = file.raw;
-        this.imageUrl = URL.createObjectURL(file.raw);
-      } else {
-        console.log('no file');
+        this.isResetImage = false;
       }
     }
   },
