@@ -2,6 +2,7 @@ import * as http from '@/utils/http'
 import moment from 'moment'
 import DeleteDialog from '../../components/DeleteDialog/'
 import UploadImage from '../../components/UploadImage/';
+import { getErrorMessage } from '@/utils/message-tip';
 export const ListCategory = {
   components: { DeleteDialog, UploadImage },
   props: {},
@@ -15,8 +16,7 @@ export const ListCategory = {
       categoryForm: {
         category_name: '',
         image: '',
-        remarks: '',
-        updated_at: ''
+        remarks: ''
       },
       rules: {
         category_name: [
@@ -28,7 +28,17 @@ export const ListCategory = {
       },
       imageUrl: '',
       imageFile: null,
-      isResetImage: false
+      isResetImage: false,
+      pickerOptions: {
+        disabledDate: function (date) {
+          return new Date(date).getTime() > new Date().getTime();
+        }
+      },
+      searchForm: {
+        dateData: [new Date(), new Date()],
+        category_name: '',
+        isAll: true
+      }
     }
   },
   mounted() { },
@@ -38,12 +48,30 @@ export const ListCategory = {
   destroyed() { },
   methods: {
     async getData() {
-      const response = await http.get('/categories')
-      console.log('category list response => ', response)
-      if (response.status == 200) {
-        this.categoryData = response.data
-        console.log('categoryData => ', this.categoryData)
+      console.log('searchForm', this.searchForm);
+      const from_date = this.dateFormat(this.searchForm.dateData[0]);
+      const to_date = this.dateFormat(this.searchForm.dateData[1]);
+      let url = '';
+      if (this.searchForm.isAll) {
+        url = '/categories?category_name=' + this.searchForm.category_name
+      } else {
+        url = '/categories?category_name=' + this.searchForm.category_name
+          + '&from_date=' + from_date
+          + '&to_date=' + to_date
       }
+      const response = await http.get(url);
+      console.log('category list response => ', response)
+      if (response != null) {
+        if (response.status == 200) {
+          this.categoryData = response.data
+          console.log('categoryData => ', this.categoryData)
+        } else {
+          this.$message.error(`${getErrorMessage(response)}`);
+        }
+      }
+    },
+    dateFormat(date) {
+      return moment(date).format('YYYY-MM-DD');
     },
     updateCategory(data) {
       console.log('updateCategory=>', data)
@@ -84,49 +112,34 @@ export const ListCategory = {
       });
     },
     async submitUpdate() {
-      this.categoryForm.updated_at = moment(new Date()).format('YYYY-MM-DD h:mm:ss');
       let formData = new FormData(); // important for image file upload
       formData.append('category_name', this.categoryForm.category_name);
       formData.append('remarks', this.categoryForm.remarks);
-      formData.append('updated_at', this.categoryForm.updated_at);
       if (this.imageUrl == '') {
         formData.append('image', '');
       } else {
         formData.append('image', this.imageFile || this.categoryForm.image);
       }
       const response = await http.patch(`/categories/${this.category_id}`, formData);
-      console.log('createCategory response =>', response);
-      if (response.status == 200) {
-        this.$message.success(`Success: ${response.statusText}`);
-        this.getData();
-        this.resetUpdate();
-      } else {
-        this.$message.error(`${this.getErrorMessage(response)}`);
+      console.log('updateCategory response =>', response);
+      if (response != null) {
+        if (response.status == 200) {
+          this.$message.success(`Success: ${response.statusText}`);
+          this.getData();
+          this.resetUpdate();
+        } else {
+          this.$message.error(`${getErrorMessage(response)}`);
+        }
       }
     },
     resetUpdate() {
       this.category_id = 0;
       this.categoryForm.category_name = '';
       this.categoryForm.remarks = '';
-      this.categoryForm.updated_at = '';
       this.imageUrl = '';
       this.imageFile = null;
       this.isUpdate = false;
       this.isResetImage = true;
-    },
-    getErrorMessage(response) {
-      console.log('response', response);
-      let errorTip = '';
-      errorTip += 'Fail: ' + response?.statusText;
-      let message = '';
-      if (response.message) {
-        for (const msg in response) {
-          console.log('message: ', msg);
-          message += msg;
-        }
-        errorTip += 'Message: ' + message;
-      }
-      return errorTip;
     },
     deleteCategory(data) {
       // console.log('deleteCategory=>', data)
@@ -143,7 +156,7 @@ export const ListCategory = {
         this.$message.success(`Success: ${response.statusText}`);
         this.getData();
       } else {
-        this.$message.error(`Fail: ${response.statusText} Messaage: ${this.getErrorMessage(response.message)}`);
+        this.$message.error(`Fail: ${response.statusText} Messaage: ${getErrorMessage(response.message)}`);
       }
     }
   },

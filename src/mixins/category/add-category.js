@@ -1,7 +1,7 @@
 import * as http from '@/utils/http';
 import * as CodeGenerator from '@/utils/code-generator';
-import moment from 'moment';
 import UploadImage from '../../components/UploadImage/';
+import { getErrorMessage } from '@/utils/message-tip';
 
 export const AddCategory = {
   components: { UploadImage },
@@ -11,8 +11,7 @@ export const AddCategory = {
       categoryForm: {
         category_code: CodeGenerator.getCode({ length: 5 }),
         category_name: '',
-        remarks: '',
-        created_at: moment(new Date()).format('DD-MM-YYYY')
+        remarks: ''
       },
       rules: {
         category_name: [
@@ -41,42 +40,27 @@ export const AddCategory = {
       });
     },
     async createCategory() {
-      this.categoryForm.created_at = moment(new Date()).format('YYYY-MM-DD h:mm:ss');
       let formData = new FormData(); // important for image file upload
       formData.append('category_code', this.categoryForm.category_code);
       formData.append('category_name', this.categoryForm.category_name);
       formData.append('remarks', this.categoryForm.remarks);
-      formData.append('created_at', this.categoryForm.created_at);
       formData.append('image', this.imageFile);
       const response = await http.post('/categories', formData);
       console.log('createCategory response =>', response);
-      if (response.status == 201) {
-        this.$message.success(`Success: ${response.statusText}`);
-        this.resetCategoryForm();
-      } else {
-        this.$message.error(`${this.getErrorMessage(response)}`);
-      }
-    },
-    getErrorMessage(response) {
-      console.log('response', response);
-      let errorTip = '';
-      errorTip += 'Fail: ' + response?.statusText;
-      let message = '';
-      if (response.message) {
-        for (const msg in response) {
-          console.log('message: ', msg);
-          message += msg;
+      if (response != null) {
+        if (response.status == 201) {
+          this.$message.success(`Success: ${response.statusText}`);
+          this.resetCategoryForm();
+        } else {
+          this.$message.error(`${getErrorMessage(response)}`);
         }
-        errorTip += 'Message: ' + message;
       }
-      return errorTip;
     },
     resetCategoryForm() {
       this.categoryForm = {
         category_code: CodeGenerator.getCode({ length: 5 }),
         category_name: '',
-        remarks: '',
-        created_at: moment(new Date()).format('DD-MM-YYYY')
+        remarks: ''
       }
       this.imageFile = null;
       this.isResetImage = true;

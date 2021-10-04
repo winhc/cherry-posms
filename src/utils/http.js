@@ -1,5 +1,7 @@
 import store from '@/store'
 import axios from 'axios'
+import router from '@/router';
+import { MessageBox } from 'element-ui';
 
 const baseUrl = process.env.VUE_APP_SERVER;
 
@@ -8,12 +10,13 @@ const baseUrl = process.env.VUE_APP_SERVER;
  */
 async function get(url) {
   const fullUrl = baseUrl + url
+  console.log('http get: ', fullUrl)
   try {
     const response = await axios.get(fullUrl, getDefaultHeaderOption())
     return response
   } catch (error) {
     console.log('http get error: ', error.response)
-    return error.response
+    return checkErrorResponse(error.response)
   }
 }
 
@@ -22,13 +25,14 @@ async function get(url) {
  */
 async function post(url, data) {
   const fullUrl = baseUrl + url
-  console.log('getDefaultHeaderOption => ', getDefaultHeaderOption())
+  console.log('http post: ', fullUrl)
+  // console.log('getDefaultHeaderOption => ', getDefaultHeaderOption())
   try {
     const response = await axios.post(fullUrl, data, getDefaultHeaderOption())
     return response
   } catch (error) {
     console.log('http post error: ', error.response)
-    return error.response
+    return checkErrorResponse(error.response)
   }
 }
 
@@ -37,12 +41,13 @@ async function post(url, data) {
  */
 async function put(url, data) {
   const fullUrl = baseUrl + url
+  console.log('http put: ', fullUrl)
   try {
     const response = await axios.put(fullUrl, data, getDefaultHeaderOption())
     return response
   } catch (error) {
     console.log('http put error: ', error.response)
-    return error.response
+    return checkErrorResponse(error.response)
   }
 }
 
@@ -51,12 +56,13 @@ async function put(url, data) {
  */
 async function patch(url, data) {
   const fullUrl = baseUrl + url
+  console.log('http patch: ', fullUrl)
   try {
     const response = await axios.patch(fullUrl, data, getDefaultHeaderOption())
     return response
   } catch (error) {
     console.log('http patch error: ', error.response)
-    return error.response
+    return checkErrorResponse(error.response)
   }
 }
 
@@ -65,12 +71,13 @@ async function patch(url, data) {
  */
 async function _delete(url) {
   const fullUrl = baseUrl + url
+  console.log('http delete: ', fullUrl)
   try {
     const response = await axios.delete(fullUrl, getDefaultHeaderOption())
     return response
   } catch (error) {
     console.log('http delete error: ', error.response)
-    return error.response
+    return checkErrorResponse(error.response)
   }
 }
 
@@ -121,6 +128,29 @@ function getMultiPartHeaderOption() {
     }
   }
   return headerOption
+}
+
+/**
+ * check error response
+ */
+function checkErrorResponse(response) {
+  if (response.status == 401) {
+    MessageBox.alert(`Please, login again`, `${response?.statusText} request`, {
+      confirmButtonText: 'OK',
+      showClose: false,
+      callback: action => {
+        logout();
+      }
+    });
+    return null;
+  } else {
+    return response.data;
+  }
+}
+
+async function logout() {
+  await store.dispatch('user/logout')
+  router.push(`/login`)
 }
 
 export { get, post, put, patch, _delete as delete }

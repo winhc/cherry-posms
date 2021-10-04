@@ -7,9 +7,6 @@
       label-width="150px"
       style="width: 60%"
     >
-      <el-form-item label="Created At">
-        <el-input v-model="categoryForm.created_at" readonly></el-input>
-      </el-form-item>
       <el-form-item label="Category code">
         <el-input v-model="categoryForm.category_code" readonly></el-input>
       </el-form-item>
