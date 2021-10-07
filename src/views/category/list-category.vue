@@ -113,6 +113,16 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          :page-sizes="[10,20,30]"
+          :page-size="pageSize"
+          :page-index="pageIndex"
+          layout="sizes, prev, pager, next"
+          :total="tableDataCount"
+          style="float:right;margin-top: 5px"
+          @size-change="handlePageSizeChange"
+          @current-change="handlePageIndexChange"
+        />
       </div>
     </div>
 

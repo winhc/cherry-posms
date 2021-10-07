@@ -38,7 +38,10 @@ export const ListCategory = {
         dateData: [new Date(), new Date()],
         category_name: '',
         isAll: true
-      }
+      },
+      pageSize: 10,
+      pageIndex: 1,
+      tableDataCount: 0
     }
   },
   mounted() { },
@@ -53,9 +56,13 @@ export const ListCategory = {
       const to_date = this.dateFormat(this.searchForm.dateData[1]);
       let url = '';
       if (this.searchForm.isAll) {
-        url = '/categories?category_name=' + this.searchForm.category_name
+        url = '/categories?page_size=' + this.pageSize
+          + '&page_index=' + this.pageIndex
+          + '&category_name=' + this.searchForm.category_name
       } else {
-        url = '/categories?category_name=' + this.searchForm.category_name
+        url = '/categories?page_size=' + this.pageSize
+          + '&page_index=' + this.pageIndex
+          + '&category_name=' + this.searchForm.category_name
           + '&from_date=' + from_date
           + '&to_date=' + to_date
       }
@@ -63,7 +70,8 @@ export const ListCategory = {
       console.log('category list response => ', response)
       if (response != null) {
         if (response.status == 200) {
-          this.categoryData = response.data
+          this.categoryData = response.data.data
+          this.tableDataCount = response.data.count
           console.log('categoryData => ', this.categoryData)
         } else {
           this.$message.error(`${getErrorMessage(response)}`);
@@ -158,6 +166,15 @@ export const ListCategory = {
       } else {
         this.$message.error(`Fail: ${response.statusText} Messaage: ${getErrorMessage(response.message)}`);
       }
+    },
+    handlePageSizeChange(size) {
+      this.pageSize = size;
+      this.pageIndex = 1;
+      this.getData();
+    },
+    handlePageIndexChange(index) {
+      this.pageIndex = index;
+      this.getData();
     }
   },
   watch: {},
