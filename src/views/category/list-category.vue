@@ -4,7 +4,10 @@
       <!-- search form -->
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="All">
-          <el-switch v-model="searchForm.isAll"></el-switch>
+          <el-switch
+            v-model="searchForm.isAll"
+            @change="handleSwitchAndSearch"
+          ></el-switch>
         </el-form-item>
         <el-form-item v-show="!searchForm.isAll" label="Date">
           <el-date-picker
@@ -25,7 +28,10 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="getData"
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleSwitchAndSearch"
             >Search</el-button
           >
         </el-form-item>
@@ -33,7 +39,12 @@
 
       <div style="margin-top: 20px">
         <!-- category list table -->
-        <el-table :data="categoryData" border style="width: 100%">
+        <el-table
+          :data="categoryData"
+          v-loading="tableLoading"
+          border
+          style="width: 100%"
+        >
           <el-table-column align="center">
             <template slot="header">
               <span>Operation</span>
@@ -114,12 +125,14 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          :page-sizes="[10,20,30]"
+          v-if="tableDataCount > 0"
+          :page-sizes="[5, 10, 20, 30]"
           :page-size="pageSize"
           :page-index="pageIndex"
+          :current-page="pageIndex"
           layout="sizes, prev, pager, next"
           :total="tableDataCount"
-          style="float:right;margin-top: 5px"
+          style="float: right; margin-top: 5px"
           @size-change="handlePageSizeChange"
           @current-change="handlePageIndexChange"
         />

@@ -41,7 +41,8 @@ export const ListCategory = {
       },
       pageSize: 10,
       pageIndex: 1,
-      tableDataCount: 0
+      tableDataCount: 0,
+      tableLoading: false
     }
   },
   mounted() { },
@@ -51,6 +52,7 @@ export const ListCategory = {
   destroyed() { },
   methods: {
     async getData() {
+      this.tableLoading = true;
       console.log('searchForm', this.searchForm);
       const from_date = this.dateFormat(this.searchForm.dateData[0]);
       const to_date = this.dateFormat(this.searchForm.dateData[1]);
@@ -77,6 +79,15 @@ export const ListCategory = {
           this.$message.error(`${getErrorMessage(response)}`);
         }
       }
+      this.tableLoading = false;
+    },
+    handleSwitchAndSearch() {
+      this.resetPagination();
+      this.getData();
+    },
+    resetPagination() {
+      this.pageIndex = 1;
+      this.pageSize = 10;
     },
     dateFormat(date) {
       return moment(date).format('YYYY-MM-DD');
