@@ -35,6 +35,14 @@
             >Search</el-button
           >
         </el-form-item>
+        <el-button
+          icon="el-icon-download"
+          @click="handleDownload"
+          :loading ="downloadLoading"
+          :disabled="categoryData.length == 0"
+          style="float: right"
+          >Download</el-button
+        >
       </el-form>
 
       <div style="margin-top: 20px">

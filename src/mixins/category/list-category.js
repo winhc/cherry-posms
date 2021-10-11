@@ -42,7 +42,8 @@ export const ListCategory = {
       pageSize: 10,
       pageIndex: 1,
       tableDataCount: 0,
-      tableLoading: false
+      tableLoading: false,
+      downloadLoading: false
     }
   },
   mounted() { },
@@ -80,6 +81,41 @@ export const ListCategory = {
         }
       }
       this.tableLoading = false;
+    },
+    handleDownload() {
+      try {
+        this.downloadLoading = true;
+        const tHeader = ['Category Name', 'Category Code', 'Created At', 'Updated At', 'Remarks']
+        const tBody = [];
+        for (const i in this.categoryData) {
+          let item = this.categoryData[i];
+          let data = [
+            item.category_name,
+            item.category_code,
+            this.formattedDate(item.created_at),
+            this.formattedDate(item.updated_at),
+            item.remarks
+          ];
+          tBody.push(data);
+        }
+        const now = new Date();
+        const fileName = 'CategoryData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
+        import('@/vendor/Export2Excel').then(excel => {
+          excel.export_json_to_excel({
+            header: tHeader,
+            data: tBody,
+            filename: fileName,
+            autoWidth: true,
+            bookType: 'xlsx'
+          })
+          this.downloadLoading = false
+        })
+      } catch (erorr) {
+        console.log('Download => ', error);
+      }
+    },
+    formattedDate(date) {
+      return moment(date).format('DD-MM-YYYY')
     },
     handleSwitchAndSearch() {
       this.resetPagination();
