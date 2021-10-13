@@ -21,10 +21,10 @@
             :picker-options="pickerOptions"
           />
         </el-form-item>
-        <el-form-item label="Category name">
+        <el-form-item label="Product type">
           <el-input
-            v-model="searchForm.category_name"
-            placeholder="Enter category name"
+            v-model="searchForm.product_type_name"
+            placeholder="Enter product type"
             clearable
           ></el-input>
         </el-form-item>
@@ -39,17 +39,17 @@
         <el-button
           icon="el-icon-download"
           @click="handleDownload"
-          :loading ="downloadLoading"
-          :disabled="categoryData.length == 0"
+          :loading="downloadLoading"
+          :disabled="productTypeData.length == 0"
           style="float: right"
           >Download</el-button
         >
       </el-form>
 
       <div style="margin-top: 20px">
-        <!-- category list table -->
+        <!-- product type list table -->
         <el-table
-          :data="categoryData"
+          :data="productTypeData"
           v-loading="tableLoading"
           border
           style="width: 100%"
@@ -63,46 +63,23 @@
                 type="primary"
                 icon="el-icon-edit"
                 circle
-                @click="updateCategory(row)"
+                @click="updateProductType(row)"
               />
               <el-button
                 type="danger"
                 icon="el-icon-delete"
                 circle
-                @click="deleteCategory(row)"
+                @click="deleteProductType(row)"
               />
             </template>
           </el-table-column>
 
           <el-table-column align="center">
             <template slot="header">
-              <span>Image</span>
+              <span>Product Type</span>
             </template>
             <template slot-scope="{ row }">
-              <img
-                v-if="row.image"
-                :src="avatar_url + row.id + '/' + row.image"
-                style="width: 100px; height: 100px"
-              />
-              <i v-else class="el-icon-camera" />
-            </template>
-          </el-table-column>
-
-          <el-table-column align="center">
-            <template slot="header">
-              <span>Category Name</span>
-            </template>
-            <template slot-scope="{ row }">
-              <span>{{ row.category_name }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column align="center">
-            <template slot="header">
-              <span>Category Code</span>
-            </template>
-            <template slot-scope="{ row }">
-              <span>{{ row.category_code }}</span>
+              <span>{{ row.product_type_name }}</span>
             </template>
           </el-table-column>
 
@@ -151,28 +128,17 @@
     <!-- update form -->
     <el-form
       v-if="isUpdate"
-      ref="categoryForm"
-      :model="categoryForm"
+      ref="productTypeForm"
+      :model="productTypeForm"
       :rules="rules"
       label-width="150px"
       style="width: 60%"
     >
-      <el-form-item label="Category name" prop="category_name">
-        <el-input
-          v-model="categoryForm.category_name"
-          ref="category_name"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="Image">
-        <UploadImage
-          :is-reset-image="isResetImage"
-          :image-path="imageUrl"
-          @deleteImage="deleteImage"
-          @handleUploadChange="handleUploadChange"
-        />
+      <el-form-item label="Product Type" prop="product_type_name">
+        <el-input v-model="productTypeForm.product_type_name" ref="product_type_name"></el-input>
       </el-form-item>
       <el-form-item label="Remarks" prop="remarks">
-        <el-input type="textarea" v-model="categoryForm.remarks"></el-input>
+        <el-input type="textarea" v-model="productTypeForm.remarks"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="info" @click="isUpdate = false">Cancel</el-button>
@@ -189,9 +155,10 @@
   </div>
 </template>
 <script>
-import { ListCategory } from "@/mixins/category/list-category";
+import { ListProductType } from "@/mixins/product-type/list-product-type";
+
 export default {
-  mixins: [ListCategory],
+  mixins: [ListProductType],
 };
 </script>
 <style>

@@ -141,6 +141,35 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/product-type',
+    component: Layout,
+    redirect: '/product-type/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'Product Type',
+    meta: {
+      title: 'Product Type',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/product-type/list-product-type'),
+        name: 'List Product Type',
+        meta: {
+          title: 'List Product Type'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/product-type/add-product-type'),
+        name: 'Add Product Type',
+        meta: {
+          title: 'Add Product Type'
+        }
+      }
+    ]
+  },
   // {
   //   path: '/documentation',
   //   component: Layout,

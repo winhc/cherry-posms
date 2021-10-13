@@ -25,6 +25,7 @@
           <el-input
             v-model="searchForm.brand_name"
             placeholder="Enter brand name"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item>
