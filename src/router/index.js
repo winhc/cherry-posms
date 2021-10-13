@@ -112,6 +112,35 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/brand',
+    component: Layout,
+    redirect: '/brand/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'Brand',
+    meta: {
+      title: 'Brand',
+      icon: 'star'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/brand/list-brand'),
+        name: 'List Brand',
+        meta: {
+          title: 'List Brand'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/brand/add-brand'),
+        name: 'Add Brand',
+        meta: {
+          title: 'Add Brand'
+        }
+      }
+    ]
+  },
   // {
   //   path: '/documentation',
   //   component: Layout,

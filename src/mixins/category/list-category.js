@@ -55,8 +55,8 @@ export const ListCategory = {
     async getData() {
       this.tableLoading = true;
       console.log('searchForm', this.searchForm);
-      const from_date = this.dateFormat(this.searchForm.dateData[0]);
-      const to_date = this.dateFormat(this.searchForm.dateData[1]);
+      const from_date = this.searchForm.dateData[0];
+      const to_date = this.searchForm.dateData[1];
       let url = '';
       if (this.searchForm.isAll) {
         url = '/categories?page_size=' + this.pageSize
@@ -124,9 +124,6 @@ export const ListCategory = {
     resetPagination() {
       this.pageIndex = 1;
       this.pageSize = 10;
-    },
-    dateFormat(date) {
-      return moment(date).format('YYYY-MM-DD');
     },
     updateCategory(data) {
       console.log('updateCategory=>', data)
@@ -211,7 +208,7 @@ export const ListCategory = {
         this.$message.success(`Success: ${response.statusText}`);
         this.getData();
       } else {
-        this.$message.error(`Fail: ${response.statusText} Messaage: ${getErrorMessage(response.message)}`);
+        this.$message.error(`${getErrorMessage(response)}`);
       }
     },
     handlePageSizeChange(size) {

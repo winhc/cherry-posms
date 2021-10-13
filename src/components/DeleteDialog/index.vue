@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="Are you sure to delete"
+    title="Are you sure to delete?"
     :visible.sync="dialogVisible"
     width="30%"
     :before-close="handleClose"
@@ -28,36 +28,36 @@ export default {
     return {
       dialogVisible: true,
       deleteForm: {
-        remarks: ''
+        remarks: "",
       },
       rules: {
         remarks: [
-          { required: true, message: 'Enter remarks', trigger: 'blur' }
-        ]
-      }
-    }
+          { required: true, message: "Enter remarks", trigger: "blur" },
+        ],
+      },
+    };
   },
   methods: {
     confirmDialog() {
       this.$refs.deleteForm.validate((valid) => {
         if (valid) {
-          this.cancelDialog()
-          this.$emit('confirm', this.deleteForm.remarks)
+          this.cancelDialog();
+          this.$emit("confirm", this.deleteForm.remarks);
         } else {
-          console.log('error onSubmit!!')
-          return false
+          console.log("error onSubmit!!");
+          return false;
         }
-      })
+      });
     },
     handleClose() {
-      this.cancelDialog()
+      this.cancelDialog();
     },
     cancelDialog() {
-      this.dialogVisible = false
-      this.$emit('cancel')
-    }
-  }
-}
+      this.dialogVisible = false;
+      this.$emit("cancel");
+    },
+  },
+};
 </script>
 <style>
 </style>
