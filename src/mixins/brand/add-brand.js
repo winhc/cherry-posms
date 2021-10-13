@@ -45,7 +45,7 @@ export const AddBrand = {
         },
         resetBrandForm() {
             this.brandForm.brand_name = '';
-            this.remarks = ''
+            this.brandForm.remarks = ''
         }
     },
     watch: {},
