@@ -1,4 +1,4 @@
-export function getCode({ length }) {
+export function getCode({ prefix,length }) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' + new Date().getTime();
     var charactersLength = characters.length;
@@ -6,5 +6,5 @@ export function getCode({ length }) {
         result += characters.charAt(Math.floor(Math.random() *
             charactersLength));
     }
-    return '#C' + result;
+    return `#${prefix}` + result;
 }

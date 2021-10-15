@@ -84,6 +84,35 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/list',
+    alwaysShow: true, // will always show the root menu
+    name: 'Product',
+    meta: {
+      title: 'Product',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/product/list-product'),
+        name: 'List Product',
+        meta: {
+          title: 'List Product'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/product/add-product'),
+        name: 'Add Product',
+        meta: {
+          title: 'Add Product'
+        }
+      }
+    ]
+  },
+  {
     path: '/category',
     component: Layout,
     redirect: '/category/list',

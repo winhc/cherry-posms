@@ -3,6 +3,7 @@ import moment from 'moment'
 import DeleteDialog from '../../components/DeleteDialog/'
 import UploadImage from '../../components/UploadImage/';
 import { getErrorMessage } from '@/utils/message-tip';
+import { currentDate } from '@/utils/date-format';
 export const ListCategory = {
   components: { DeleteDialog, UploadImage },
   props: {},
@@ -35,7 +36,7 @@ export const ListCategory = {
         }
       },
       searchForm: {
-        dateData: [new Date(), new Date()],
+        dateData: [currentDate(), currentDate()],
         category_name: '',
         isAll: true
       },
