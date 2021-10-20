@@ -160,6 +160,9 @@ export default {
       this.loading = false
       console.log('login page: response => ', response)
       if (response.status === 200) {
+        /// create new password key and add value from loginForm
+        /// server not return password
+        response.data.user.password = this.loginForm.password;
         this.$store.dispatch('user/login', response.data)
         this.$router.push({ path: '/' })
         this.$message.success('login success')

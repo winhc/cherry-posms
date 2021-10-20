@@ -4,22 +4,22 @@ import DeleteDialog from '../../components/DeleteDialog/'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
 
-export const ListBrand = {
+export const ListUserType = {
     components: { DeleteDialog },
     props: {},
     data() {
         return {
-            brandData: [],
+            userTypeData: [],
             showDeleteDialog: false,
-            brand_id: 0,
+            user_type_id: 0,
             isUpdate: false,
-            brandForm: {
-                brand_name: '',
+            userTypeForm: {
+                user_role: '',
                 remarks: ''
             },
             rules: {
-                brand_name: [
-                    { required: true, message: 'Enter brand name', trigger: 'blur' }
+                user_role: [
+                    { required: true, message: 'Enter user role', trigger: 'blur' }
                 ],
                 remarks: [
                     { required: true, message: 'Enter remarks', trigger: 'blur' }
@@ -32,7 +32,7 @@ export const ListBrand = {
             },
             searchForm: {
                 dateData: [currentDate(), currentDate()],
-                brand_name: '',
+                user_role: '',
                 isAll: true
             },
             pageSize: 10,
@@ -55,23 +55,23 @@ export const ListBrand = {
             const to_date = this.searchForm.dateData[1];
             let url = '';
             if (this.searchForm.isAll) {
-                url = '/brands?page_size=' + this.pageSize
+                url = '/user-types?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&brand_name=' + this.searchForm.brand_name
+                    + '&user_role=' + this.searchForm.user_role
             } else {
-                url = '/brands?page_size=' + this.pageSize
+                url = '/user-types?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&brand_name=' + this.searchForm.brand_name
+                    + '&user_role=' + this.searchForm.user_role
                     + '&from_date=' + from_date
                     + '&to_date=' + to_date
             }
             const response = await http.get(url);
-            console.log('brand list response => ', response)
+            console.log('user type list response => ', response)
             if (response != null) {
                 if (response.status == 200) {
-                    this.brandData = response.data.data
+                    this.userTypeData = response.data.data
                     this.tableDataCount = response.data.count
-                    console.log('brandData => ', this.brandData)
+                    console.log('userTypeData => ', this.userTypeData)
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -81,12 +81,12 @@ export const ListBrand = {
         handleDownload() {
             try {
                 this.downloadLoading = true;
-                const tHeader = ['Brand Name', 'Created At', 'Updated At', 'Remarks']
+                const tHeader = ['User Role', 'Created At', 'Updated At', 'Remarks']
                 const tBody = [];
-                for (const i in this.brandData) {
-                    let item = this.brandData[i];
+                for (const i in this.userTypeData) {
+                    let item = this.userTypeData[i];
                     let data = [
-                        item.brand_name,
+                        item.user_role,
                         this.formattedDate(item.created_at),
                         this.formattedDate(item.updated_at),
                         item.remarks
@@ -94,7 +94,7 @@ export const ListBrand = {
                     tBody.push(data);
                 }
                 const now = new Date();
-                const fileName = 'BrandData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
+                const fileName = 'UserTypeData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
                 import('@/vendor/Export2Excel').then(excel => {
                     excel.export_json_to_excel({
                         header: tHeader,
@@ -120,17 +120,17 @@ export const ListBrand = {
             this.pageIndex = 1;
             this.pageSize = 10;
         },
-        updateBrand(data) {
-            console.log('updateBrand=>', data)
-            this.brandForm.brand_name = data.brand_name;
-            this.brandForm.remarks = data.remarks;
-            this.brand_id = data.id;
+        updateUserType(data) {
+            console.log('updateUserType=>', data)
+            this.userTypeForm.user_role = data.user_role;
+            this.userTypeForm.remarks = data.remarks;
+            this.user_type_id = data.id;
             this.isUpdate = true;
         },
         onSubmit() {
-            this.$refs.brandForm.validate((valid) => {
+            this.$refs.userTypeForm.validate((valid) => {
                 if (valid) {
-                    console.log('brandForm=>>', this.brandForm);
+                    console.log('userTypeForm=>>', this.userTypeForm);
                     this.submitUpdate();
                 } else {
                     console.log('error onSubmit!!');
@@ -139,8 +139,8 @@ export const ListBrand = {
             });
         },
         async submitUpdate() {
-            const response = await http.patch(`/brands/${this.brand_id}`, this.brandForm);
-            console.log('updateBrand response =>', response);
+            const response = await http.patch(`/user-types/${this.user_type_id}`, this.userTypeForm);
+            console.log('updateUserType response =>', response);
             if (response != null) {
                 if (response.status == 200) {
                     this.$message.success(`Success: ${response.statusText}`);
@@ -152,22 +152,22 @@ export const ListBrand = {
             }
         },
         resetUpdate() {
-            this.brand_id = 0;
-            this.brandForm.brand_name = '';
-            this.brandForm.remarks = '';
+            this.user_type_id = 0;
+            this.userTypeForm.user_role = '';
+            this.userTypeForm.remarks = '';
             this.isUpdate = false;
         },
-        deleteBrand(data) {
-            this.brand_id = data.id;
+        deleteUserType(data) {
+            this.user_type_id = data.id;
             this.showDeleteDialog = true
         },
         async confirmDelete(remarks) {
             // console.log('remarks=>', remarks)
-            const response = await http.delete(`/brands/${this.brand_id}`)
-            console.log('brand delete response => ', response)
+            const response = await http.delete(`/user-types/${this.user_type_id}`)
+            console.log('user type delete response => ', response)
             if (response.status == 200) {
                 this.showDeleteDialog = false;
-                this.brand_id = 0;
+                this.user_type_id = 0;
                 this.$message.success(`Success: ${response.statusText}`);
                 this.getData();
             } else {
