@@ -39,12 +39,21 @@
         <el-button
           icon="el-icon-download"
           @click="handleDownload"
-          :loading ="downloadLoading"
+          :loading="downloadLoading"
           :disabled="categoryData.length == 0"
           style="float: right"
           >Download</el-button
         >
       </el-form>
+
+      <el-alert
+        v-show="messageAlert.isShow"
+        :title="messageAlert.title"
+        :type="messageAlert.isSuccess ? 'success' : 'error'"
+        effect="dark"
+        show-icon
+        @close="closeAlert"
+      />
 
       <div style="margin-top: 20px">
         <!-- category list table -->

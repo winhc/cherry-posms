@@ -85,11 +85,11 @@ export const ListUser = {
             if (this.searchForm.isAll) {
                 url = '/users?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&name=' + this.searchForm.name
+                    + '&name=' + this.searchForm.account
             } else {
-                url = '/user?page_size=' + this.pageSize
+                url = '/users?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&account=' + this.searchForm.name
+                    + '&account=' + this.searchForm.account
                     + '&from_date=' + from_date
                     + '&to_date=' + to_date
             }
@@ -126,12 +126,14 @@ export const ListUser = {
         handleDownload() {
             try {
                 this.downloadLoading = true;
-                const tHeader = ['Name', 'Created At', 'Updated At', 'Remarks']
+                const tHeader = ['Name', 'Account', 'Role', 'Created At', 'Updated At', 'Remarks']
                 const tBody = [];
                 for (const i in this.userData) {
                     let item = this.userData[i];
                     let data = [
                         item.name,
+                        item.account,
+                        item.user_type.user_role,
                         this.formattedDate(item.created_at),
                         this.formattedDate(item.updated_at),
                         item.remarks

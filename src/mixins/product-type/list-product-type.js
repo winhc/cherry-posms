@@ -38,7 +38,12 @@ export const ListProductType = {
             pageIndex: 1,
             tableDataCount: 0,
             tableLoading: false,
-            downloadLoading: false
+            downloadLoading: false,
+            messageAlert: {
+                title: '',
+                isSuccess: true,
+                isShow: false,
+            }
         }
     },
     mounted() { },
@@ -170,7 +175,11 @@ export const ListProductType = {
                 this.$message.success(`Success: ${response.statusText}`);
                 this.getData();
             } else {
-                this.$message.error(`${getErrorMessage(response)}`);
+                this.messageAlert = {
+                    title: getErrorMessage(response),
+                    isSuccess: false,
+                    isShow: true
+                }
             }
         },
         handlePageSizeChange(size) {
@@ -181,6 +190,10 @@ export const ListProductType = {
         handlePageIndexChange(index) {
             this.pageIndex = index;
             this.getData();
+        },
+        closeAlert(){
+            console.log('close alert')
+            this.messageAlert.isShow = false;
         }
     },
     watch: {},

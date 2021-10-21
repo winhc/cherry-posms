@@ -46,6 +46,15 @@
         >
       </el-form>
 
+      <el-alert
+        v-show="messageAlert.isShow"
+        :title="messageAlert.title"
+        :type="messageAlert.isSuccess ? 'success' : 'error'"
+        effect="dark"
+        show-icon
+        @close="closeAlert"
+      />
+
       <div style="margin-top: 20px">
         <!-- brand list table -->
         <el-table
