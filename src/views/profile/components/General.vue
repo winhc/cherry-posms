@@ -55,6 +55,8 @@ export default {
         callback(new Error(`Enter account`));
       } else if (value.length < 6) {
         callback(new Error(`Account can't be less than 6 digit`));
+      } else if (value.length > 8) {
+        callback(new Error(`Account can't be greater than 8 digit`));
       } else {
         callback();
       }
@@ -64,6 +66,8 @@ export default {
         callback(new Error(`Enter new password`));
       } else if (value.length < 6) {
         callback(new Error(`New pasword can't be less than 6 digit`));
+      } else if (value.length > 8) {
+        callback(new Error(`New password can't be greater than 8 digit`));
       } else {
         callback();
       }
@@ -72,9 +76,13 @@ export default {
       if (value == "") {
         callback(new Error(`Enter new password again`));
       } else if (value.length < 6) {
-        callback(new Error(`New password can't be less than 6 digit`));
+        callback(new Error(`Re-type new password can't be less than 6 digit`));
+      } else if (value.length > 8) {
+        callback(
+          new Error(`Re-type new password can't be greater than 8 digit`)
+        );
       } else if (value != this.passwordForm.new_password) {
-        callback(new Error(`Re-type password must same with new password`));
+        callback(new Error(`Re-type new password must same with new password`));
       } else {
         callback();
       }

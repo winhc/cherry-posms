@@ -14,6 +14,8 @@ export const ListUser = {
                 callback(new Error(`Enter account`))
             } else if (value.length < 6) {
                 callback(new Error(`Account can't be less than 6 digit`))
+            } else if (value.length > 8) {
+                callback(new Error(`Account can't be greater than 8 digit`))
             } else {
                 callback()
             }
@@ -23,6 +25,8 @@ export const ListUser = {
                 callback(new Error(`Enter password`))
             } else if (value.length < 6) {
                 callback(new Error(`Password can't be less than 6 digit`))
+            } else if (value.length > 8) {
+                callback(new Error(`Password can't be greater than 8 digit`))
             } else {
                 callback()
             }
@@ -98,9 +102,9 @@ export const ListUser = {
             if (response != null) {
                 if (response.status == 200) {
                     const dataArr = response.data.data;
-                    const index = dataArr.findIndex( x => x.account == store.getters.userInfo.account);
-                    if(index > -1){
-                        dataArr.splice(index,1);
+                    const index = dataArr.findIndex(x => x.account == store.getters.userInfo.account);
+                    if (index > -1) {
+                        dataArr.splice(index, 1);
                     }
                     this.userData = dataArr;
                     this.tableDataCount = response.data.count
