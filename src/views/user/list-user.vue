@@ -95,7 +95,7 @@
 
         <el-table-column align="center">
             <template slot="header">
-              <span>Type</span>
+              <span>Role</span>
             </template>
             <template slot-scope="{ row }">
               <span>{{ row.user_type.user_role }}</span>
@@ -159,7 +159,7 @@
       <el-form-item label="account" prop="account">
         <el-input v-model="userForm.account"></el-input>
       </el-form-item>
-      <el-form-item label="User type" prop="user_type">
+      <el-form-item label="Role" prop="user_type">
         <el-select v-model="userForm.user_type" placeholder="Select user type">
           <el-option
             v-for="item in userTypeList"

@@ -84,6 +84,52 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/profile',
+    component: Layout,
+    redirect: '/profile/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/profile/index'),
+        name: 'Profile',
+        meta: { title: 'Profile', icon: 'user', noCache: true }
+      }
+    ]
+  },
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: 'Documentation', icon: 'documentation', affix: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: 'Guide',
+  //       meta: { title: 'Guide', icon: 'guide', noCache: true }
+  //     }
+  //   ]
+  // },
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+  {
     path: '/product',
     component: Layout,
     redirect: '/product/list',
@@ -91,7 +137,8 @@ export const constantRoutes = [
     name: 'Product',
     meta: {
       title: 'Product',
-      icon: 'list'
+      icon: 'list',
+      roles: ['admin', 'manager', 'accountant']
     },
     children: [
       {
@@ -120,7 +167,8 @@ export const constantRoutes = [
     name: 'Category',
     meta: {
       title: 'Category',
-      icon: 'component'
+      icon: 'component',
+      roles: ['admin', 'manager', 'accountant']
     },
     children: [
       {
@@ -149,7 +197,8 @@ export const constantRoutes = [
     name: 'Brand',
     meta: {
       title: 'Brand',
-      icon: 'star'
+      icon: 'star',
+      roles: ['admin', 'manager', 'accountant']
     },
     children: [
       {
@@ -178,7 +227,8 @@ export const constantRoutes = [
     name: 'Product Type',
     meta: {
       title: 'Product Type',
-      icon: 'example'
+      icon: 'example',
+      roles: ['admin', 'manager', 'accountant']
     },
     children: [
       {
@@ -207,7 +257,8 @@ export const constantRoutes = [
     name: 'User',
     meta: {
       title: 'User',
-      icon: 'user'
+      icon: 'user',
+      roles: ['admin']
     },
     children: [
       {
@@ -215,7 +266,7 @@ export const constantRoutes = [
         component: () => import('@/views/user/list-user'),
         name: 'List User',
         meta: {
-          title: 'List User'
+          title: 'List User',
         }
       },
       {
@@ -255,52 +306,7 @@ export const constantRoutes = [
       },
     ]
   },
-  // {
-  //   path: '/documentation',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/documentation/index'),
-  //       name: 'Documentation',
-  //       meta: { title: 'Documentation', icon: 'documentation', affix: true }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/guide',
-  //   component: Layout,
-  //   redirect: '/guide/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/guide/index'),
-  //       name: 'Guide',
-  //       meta: { title: 'Guide', icon: 'guide', noCache: true }
-  //     }
-  //   ]
-  // },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
-      }
-    ]
-  }
-]
 
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
   // {
   //   path: '/permission',
   //   component: Layout,

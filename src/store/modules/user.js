@@ -36,8 +36,7 @@ const actions = {
   // user login
   login({ commit }, data) {
     removeToken()
-    
-    const bearerToken = 'Bearer '+ data.accessToken; // token type is Bearer
+    const bearerToken = 'Bearer ' + data.accessToken; // token type is Bearer
     commit('SET_TOKEN', bearerToken) // to store vuex
     setToken(bearerToken) // to Cookies
 
@@ -61,17 +60,21 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       const data = {
-        roles: ['admin'],
-        introduction: 'I am a super administrator',
-        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-        name: 'Super Admin'
+        roles: [`${state.userInfo.user_type.user_role}`],
+        name: '',
+        avatar: '',
+        introduction: ''
       }
+      // console.log('getInfo data==>', data)
+
       const { roles, name, avatar, introduction } = data
       commit('SET_ROLES', roles)
       commit('SET_NAME', name)
       commit('SET_AVATAR', avatar)
       commit('SET_INTRODUCTION', introduction)
       resolve(data)
+
+
       // getInfo(state.token).then(response => {
       //   const { data } = response
 
