@@ -29,14 +29,14 @@ export const AddUser = {
         }
         return {
             userForm: {
-                name: '',
+                user_name: '',
                 account: '',
                 password: '',
                 user_type: null,
                 remarks: ''
             },
             rules: {
-                name: [
+                user_name: [
                     { required: true, message: 'Enter name', trigger: 'blur' }
                 ],
                 account: [
@@ -53,8 +53,8 @@ export const AddUser = {
         };
     },
     mounted() {
-        if (this.userForm.name === '') {
-            this.$refs.name.focus()
+        if (this.userForm.user_name === '') {
+            this.$refs.user_name.focus()
         }
     },
     created() {
@@ -96,7 +96,7 @@ export const AddUser = {
         },
         resetForm() {
             this.userForm = {
-                name: '',
+                user_name: '',
                 account: '',
                 password: '',
                 user_type: null,

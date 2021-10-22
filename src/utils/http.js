@@ -135,7 +135,7 @@ function getMultiPartHeaderOption() {
  */
 function checkErrorResponse(response) {
   if (response.status == 401) {
-    MessageBox.alert(`Please, login again`, `${response?.statusText} request`, {
+    MessageBox.alert(`Please, login again`, `${response.data.message ? response.data.message : response?.statusText} request`, {
       confirmButtonText: 'OK',
       showClose: false,
       callback: action => {

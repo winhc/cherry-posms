@@ -37,13 +37,13 @@ export const ListUser = {
             user_id: 0,
             isUpdate: false,
             userForm: {
-                name: '',
+                user_name: '',
                 account: '',
                 user_type: null,
                 remarks: ''
             },
             rules: {
-                name: [
+                user_name: [
                     { required: true, message: 'Enter name', trigger: 'blur' }
                 ],
                 account: [
@@ -89,7 +89,7 @@ export const ListUser = {
             if (this.searchForm.isAll) {
                 url = '/users?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&name=' + this.searchForm.account
+                    + '&account=' + this.searchForm.account
             } else {
                 url = '/users?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
@@ -108,13 +108,13 @@ export const ListUser = {
                     }
                     this.userData = dataArr;
                     this.tableDataCount = response.data.count
+                    this.getUserType();
                     console.log('userData => ', this.userData)
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
             }
             this.tableLoading = false;
-            this.getUserType();
         },
         async getUserType() {
             const response = await http.get('/user-types');
@@ -135,7 +135,7 @@ export const ListUser = {
                 for (const i in this.userData) {
                     let item = this.userData[i];
                     let data = [
-                        item.name,
+                        item.user_name,
                         item.account,
                         item.user_type.user_role,
                         this.formattedDate(item.created_at),
@@ -173,7 +173,7 @@ export const ListUser = {
         },
         updateUser(data) {
             console.log('updateUser=>', data)
-            this.userForm.name = data.name;
+            this.userForm.user_name = data.user_name;
             this.userForm.account = data.account;
             this.userForm.user_type = data.user_type.id;
             this.userForm.remarks = data.remarks;
@@ -208,7 +208,7 @@ export const ListUser = {
             this.user_id = 0;
             this.isUpdate = false;
             this.userForm = {
-                name: '',
+                user_name: '',
                 account: '',
                 user_type: null,
                 remarks: ''

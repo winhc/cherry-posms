@@ -2,8 +2,8 @@
   <div>
     <el-divider>Account</el-divider>
     <el-form ref="accountForm" :model="accountForm" :rules="accountRule">
-      <el-form-item label="Name" prop="name">
-        <el-input v-model="accountForm.name" />
+      <el-form-item label="Name" prop="user_name">
+        <el-input v-model="accountForm.user_name" />
       </el-form-item>
       <el-form-item label="Login Account" prop="account">
         <el-input v-model="accountForm.account" />
@@ -89,7 +89,7 @@ export default {
     };
     return {
       accountForm: {
-        name: this.user.name,
+        user_name: this.user.user_name,
         account: this.user.account,
       },
       passwordForm: {
@@ -98,7 +98,7 @@ export default {
         retype_new_password: "",
       },
       accountRule: {
-        name: [{ required: true, message: "Enter name", trigger: "blur" }],
+        user_name: [{ required: true, message: "Enter user name", trigger: "blur" }],
         account: [
           { required: true, trigger: "blur", validator: validateAccount },
         ],

@@ -143,13 +143,13 @@ export const ListProduct = {
                 if (response.status == 200) {
                     this.productData = response.data.data
                     this.tableDataCount = response.data.count
+                    this.getProductOption();
                     console.log('productData => ', this.productData)
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
             }
             this.tableLoading = false;
-            this.getProductOption();
         },
         async getProductOption() {
             const response = await http.get('/products/product-options');

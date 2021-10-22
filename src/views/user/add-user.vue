@@ -7,8 +7,8 @@
       label-width="150px"
       style="width: 60%"
     >
-      <el-form-item label="name" prop="name">
-        <el-input v-model="userForm.name" ref="name"></el-input>
+      <el-form-item label="Name" prop="user_name">
+        <el-input v-model="userForm.user_name" ref="user_name"></el-input>
       </el-form-item>
       <el-form-item label="account" prop="account">
         <el-input v-model="userForm.account"></el-input>
