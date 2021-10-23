@@ -84,11 +84,6 @@ export const ListCategory = {
           console.log('categoryData => ', this.categoryData)
         } else {
           this.$message.error(`${getErrorMessage(response)}`);
-          this.messageAlert = {
-            title: getErrorMessage(response),
-            isSuccess: false,
-            isShow: true
-          }
         }
       }
       this.tableLoading = false;

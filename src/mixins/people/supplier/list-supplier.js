@@ -1,25 +1,45 @@
 import * as http from '@/utils/http'
 import moment from 'moment'
-import DeleteDialog from '../../components/DeleteDialog/'
+import DeleteDialog from '../../../components/DeleteDialog'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
 
-export const ListUserType = {
+export const ListSupplier = {
     components: { DeleteDialog },
     props: {},
     data() {
+        const validatePhoneNumber = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error(`Enter phone number`))
+            }
+            else if (value.length < 9) {
+                callback(new Error(`Phone number can't be less than 9 digit`))
+            } else if (value.length > 9) {
+                callback(new Error(`Phone number can't be greater than 9 digit`))
+            } else {
+                callback()
+            }
+        }
         return {
-            userTypeData: [],
+            supplierData: [],
             showDeleteDialog: false,
-            user_type_id: 0,
+            supplier_id: 0,
             isUpdate: false,
-            userTypeForm: {
-                user_role: '',
+            supplierForm: {
+                supplier_name: '',
+                phone: '',
+                address: null,
                 remarks: ''
             },
             rules: {
-                user_role: [
-                    { required: true, message: 'Enter user role', trigger: 'blur' }
+                supplier_name: [
+                    { required: true, message: 'Enter supplier name', trigger: 'blur' }
+                ],
+                phone: [
+                    { required: true, trigger: 'blur', validator: validatePhoneNumber }
+                ],
+                address: [
+                    { required: true, message: 'Enter address', trigger: 'blur' }
                 ],
                 remarks: [
                     { required: true, message: 'Enter remarks', trigger: 'blur' }
@@ -32,7 +52,7 @@ export const ListUserType = {
             },
             searchForm: {
                 dateData: [currentDate(), currentDate()],
-                user_role: '',
+                supplier_name: '',
                 isAll: true
             },
             pageSize: 10,
@@ -60,23 +80,23 @@ export const ListUserType = {
             const to_date = this.searchForm.dateData[1];
             let url = '';
             if (this.searchForm.isAll) {
-                url = '/user-types?page_size=' + this.pageSize
+                url = '/suppliers?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&user_role=' + this.searchForm.user_role
+                    + '&supplier_name=' + this.searchForm.supplier_name
             } else {
-                url = '/user-types?page_size=' + this.pageSize
+                url = '/suppliers?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&user_role=' + this.searchForm.user_role
+                    + '&supplier_name=' + this.searchForm.supplier_name
                     + '&from_date=' + from_date
                     + '&to_date=' + to_date
             }
             const response = await http.get(url);
-            console.log('user type list response => ', response)
+            console.log('supplier list response => ', response)
             if (response != null) {
                 if (response.status == 200) {
-                    this.userTypeData = response.data.data
-                    this.tableDataCount = response.data.count
-                    console.log('userTypeData => ', this.userTypeData)
+                    this.supplierData = response.data.data;
+                    this.tableDataCount = response.data.count;
+                    console.log('supplierData => ', this.supplierData)
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -86,12 +106,14 @@ export const ListUserType = {
         handleDownload() {
             try {
                 this.downloadLoading = true;
-                const tHeader = ['User Role', 'Created At', 'Updated At', 'Remarks']
+                const tHeader = ['Supplier name', 'Phone', 'Address', 'Created At', 'Updated At', 'Remarks']
                 const tBody = [];
-                for (const i in this.userTypeData) {
-                    let item = this.userTypeData[i];
+                for (const i in this.supplierData) {
+                    let item = this.supplierData[i];
                     let data = [
-                        item.user_role,
+                        item.supplier_name,
+                        item.phone,
+                        item.address,
                         this.formattedDate(item.created_at),
                         this.formattedDate(item.updated_at),
                         item.remarks
@@ -99,7 +121,7 @@ export const ListUserType = {
                     tBody.push(data);
                 }
                 const now = new Date();
-                const fileName = 'UserTypeData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
+                const fileName = 'SupplierData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
                 import('@/vendor/Export2Excel').then(excel => {
                     excel.export_json_to_excel({
                         header: tHeader,
@@ -125,17 +147,19 @@ export const ListUserType = {
             this.pageIndex = 1;
             this.pageSize = 10;
         },
-        updateUserType(data) {
-            console.log('updateUserType=>', data)
-            this.userTypeForm.user_role = data.user_role;
-            this.userTypeForm.remarks = data.remarks;
-            this.user_type_id = data.id;
+        updateSupplier(data) {
+            console.log('updateSupplier=>', data)
+            this.supplierForm.supplier_name = data.supplier_name;
+            this.supplierForm.phone = data.phone?.substring(2);
+            this.supplierForm.address = data.address;
+            this.supplierForm.remarks = data.remarks;
+            this.supplier_id = data.id;
             this.isUpdate = true;
         },
         onSubmit() {
-            this.$refs.userTypeForm.validate((valid) => {
+            this.$refs.supplierForm.validate((valid) => {
                 if (valid) {
-                    console.log('userTypeForm=>>', this.userTypeForm);
+                    console.log('supplierForm=>>', this.supplierForm);
                     this.submitUpdate();
                 } else {
                     console.log('error onSubmit!!');
@@ -144,8 +168,8 @@ export const ListUserType = {
             });
         },
         async submitUpdate() {
-            const response = await http.patch(`/user-types/${this.user_type_id}`, this.userTypeForm);
-            console.log('updateUserType response =>', response);
+            const response = await http.patch(`/suppliers/${this.supplier_id}`, this.supplierForm);
+            console.log('updateSupplier response =>', response);
             if (response != null) {
                 if (response.status == 200) {
                     this.$message.success(`Success: ${response.statusText}`);
@@ -157,22 +181,26 @@ export const ListUserType = {
             }
         },
         resetUpdate() {
-            this.user_type_id = 0;
-            this.userTypeForm.user_role = '';
-            this.userTypeForm.remarks = '';
+            this.supplier_id = 0;
             this.isUpdate = false;
+            this.supplierForm = {
+                supplier_name: '',
+                phone: '',
+                address: '',
+                remarks: ''
+            };
         },
-        deleteUserType(data) {
-            this.user_type_id = data.id;
+        deleteUser(data) {
+            this.supplier_id = data.id;
             this.showDeleteDialog = true
         },
         async confirmDelete(remarks) {
             // console.log('remarks=>', remarks)
-            const response = await http.delete(`/user-types/${this.user_type_id}`)
-            console.log('user type delete response => ', response)
+            const response = await http.delete(`/suppliers/${this.supplier_id}`)
+            console.log('user delete response => ', response)
             if (response.status == 200) {
                 this.showDeleteDialog = false;
-                this.user_type_id = 0;
+                this.supplier_id = 0;
                 this.$message.success(`Success: ${response.statusText}`);
                 this.getData();
             } else {
@@ -192,7 +220,7 @@ export const ListUserType = {
             this.pageIndex = index;
             this.getData();
         },
-        closeAlert() {
+        closeAlert(){
             console.log('close alert')
             this.messageAlert.isShow = false;
         }

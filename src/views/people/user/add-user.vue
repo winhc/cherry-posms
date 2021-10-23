@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { AddUser } from "@/mixins/user/add-user";
+import { AddUser } from "@/mixins/people/user/add-user";
 
 export default {
   mixins: [AddUser],

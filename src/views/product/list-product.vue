@@ -189,6 +189,15 @@
 
           <el-table-column align="center" width="150">
             <template slot="header">
+              <span>Supplier</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.supplier.supplier_name }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
               <span>For sale</span>
             </template>
             <template slot-scope="{ row }">
@@ -289,6 +298,17 @@
             v-for="item in brandList"
             :key="item.id"
             :label="item.brand_name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Supplier" prop="supplier">
+        <el-select v-model="productForm.supplier" placeholder="Select supplier">
+          <el-option
+            v-for="item in supplierList"
+            :key="item.id"
+            :label="item.supplier_name"
             :value="item.id"
           >
           </el-option>

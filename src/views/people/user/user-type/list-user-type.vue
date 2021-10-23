@@ -21,10 +21,10 @@
             :picker-options="pickerOptions"
           />
         </el-form-item>
-        <el-form-item label="Account">
+        <el-form-item label="User role">
           <el-input
-            v-model="searchForm.account"
-            placeholder="Enter account"
+            v-model="searchForm.user_role"
+            placeholder="Enter user role"
             clearable
           ></el-input>
         </el-form-item>
@@ -40,16 +40,25 @@
           icon="el-icon-download"
           @click="handleDownload"
           :loading="downloadLoading"
-          :disabled="userData.length == 0"
+          :disabled="userTypeData.length == 0"
           style="float: right"
           >Download</el-button
         >
       </el-form>
 
+      <el-alert
+        v-show="messageAlert.isShow"
+        :title="messageAlert.title"
+        :type="messageAlert.isSuccess ? 'success' : 'error'"
+        effect="dark"
+        show-icon
+        @close="closeAlert"
+      />
+
       <div style="margin-top: 20px">
         <!-- brand list table -->
         <el-table
-          :data="userData"
+          :data="userTypeData"
           v-loading="tableLoading"
           border
           style="width: 100%"
@@ -60,45 +69,28 @@
             </template>
             <template slot-scope="{ row }">
               <el-button
+                v-show="row.id != 1"
                 type="primary"
                 icon="el-icon-edit"
                 circle
-                @click="updateUser(row)"
+                @click="updateUserType(row)"
               />
               <el-button
-              v-show="row.id != 1"
+                v-show="row.id != 1"
                 type="danger"
                 icon="el-icon-delete"
                 circle
-                @click="deleteUser(row)"
+                @click="deleteUserType(row)"
               />
             </template>
           </el-table-column>
 
           <el-table-column align="center">
             <template slot="header">
-              <span>Name</span>
+              <span>User Role</span>
             </template>
             <template slot-scope="{ row }">
-              <span>{{ row.user_name }}</span>
-            </template>
-          </el-table-column>
-
-        <el-table-column align="center">
-            <template slot="header">
-              <span>Account</span>
-            </template>
-            <template slot-scope="{ row }">
-              <span>{{ row.account }}</span>
-            </template>
-          </el-table-column>
-
-        <el-table-column align="center">
-            <template slot="header">
-              <span>Role</span>
-            </template>
-            <template slot-scope="{ row }">
-              <span>{{ row.user_type.user_role }}</span>
+              <span>{{ row.user_role }}</span>
             </template>
           </el-table-column>
 
@@ -147,31 +139,17 @@
     <!-- update form -->
     <el-form
       v-if="isUpdate"
-      ref="userForm"
-      :model="userForm"
+      ref="userTypeForm"
+      :model="userTypeForm"
       :rules="rules"
       label-width="150px"
       style="width: 60%"
     >
-    <el-form-item label="name" prop="user_name">
-        <el-input v-model="userForm.user_name" ref="user_name"></el-input>
-      </el-form-item>
-      <el-form-item label="account" prop="account">
-        <el-input v-model="userForm.account"></el-input>
-      </el-form-item>
-      <el-form-item label="Role" prop="user_type">
-        <el-select v-model="userForm.user_type" placeholder="Select user type">
-          <el-option
-            v-for="item in userTypeList"
-            :key="item.id"
-            :label="item.user_role"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
+      <el-form-item label="User role" prop="user_role">
+        <el-input v-model="userTypeForm.user_role" ref="user_role"></el-input>
       </el-form-item>
       <el-form-item label="Remarks" prop="remarks">
-        <el-input type="textarea" v-model="userForm.remarks"></el-input>
+        <el-input type="textarea" v-model="userTypeForm.remarks"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="info" @click="isUpdate = false">Cancel</el-button>
@@ -188,10 +166,10 @@
   </div>
 </template>
 <script>
-import { ListUser } from "@/mixins/user/list-user";
+import { ListUserType } from "@/mixins/people/user/user-type/list-user-type";
 
 export default {
-  mixins: [ListUser],
+  mixins: [ListUserType],
 };
 </script>
 <style>

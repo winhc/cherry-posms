@@ -47,6 +47,7 @@ export const ListProduct = {
                 category: null,
                 product_type: null,
                 brand: null,
+                supplier: null,
                 buy_unit_price: null,
                 sell_unit_price: null,
                 expiry_at: '',
@@ -68,6 +69,9 @@ export const ListProduct = {
                 ],
                 brand: [
                     { required: true, message: 'Select brand', trigger: 'blur' },
+                ],
+                supplier: [
+                    { required: true, message: 'Select supplier', trigger: 'blur' },
                 ],
                 buy_unit_price: [
                     { required: true, trigger: 'blur', validator: validateBuyUnitPrice },
@@ -110,7 +114,8 @@ export const ListProduct = {
             downloadLoading: false,
             categoryList: [],
             brandList: [],
-            productTypeList: []
+            productTypeList: [],
+            supplierList: []
         }
     },
     mounted() { },
@@ -159,6 +164,7 @@ export const ListProduct = {
                     this.brandList = response.data.brand.data;
                     this.categoryList = response.data.category.data;
                     this.productTypeList = response.data.product_type.data;
+                    this.supplierList = response.data.supplier.data;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -213,6 +219,7 @@ export const ListProduct = {
             this.productForm.category = data.category.id;
             this.productForm.brand = data.brand.id;
             this.productForm.product_type = data.product_type.id;
+            this.productForm.supplier = data.supplier.id;
             this.productForm.buy_unit_price = data.buy_unit_price;
             this.productForm.sell_unit_price = data.sell_unit_price;
             this.productForm.expiry_at = data.expiry_at;

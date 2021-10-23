@@ -52,6 +52,17 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="Supplier" prop="supplier">
+        <el-select v-model="productForm.supplier" placeholder="Select supplier">
+          <el-option
+            v-for="item in supplierList"
+            :key="item.id"
+            :label="item.supplier_name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="Buy unit price" prop="buy_unit_price">
         <el-input-number
           v-model="productForm.buy_unit_price"

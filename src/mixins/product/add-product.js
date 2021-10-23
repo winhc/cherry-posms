@@ -41,6 +41,7 @@ export const AddProduct = {
                 category: null,
                 product_type: null,
                 brand: null,
+                supplier: null,
                 buy_unit_price: null,
                 sell_unit_price: null,
                 expiry_at: '',
@@ -63,6 +64,9 @@ export const AddProduct = {
                 brand: [
                     { required: true, message: 'Select brand', trigger: 'blur' },
                 ],
+                supplier: [
+                    { required: true, message: 'Select supplier', trigger: 'blur' },
+                ],
                 buy_unit_price: [
                     { required: true, trigger: 'blur', validator: validateBuyUnitPrice },
                 ],
@@ -84,6 +88,7 @@ export const AddProduct = {
             categoryList: [],
             productTypeList: [],
             brandList: [],
+            supplierList: [],
             pickerOptions: {
                 disabledDate: function (date) {
                     return new Date(date).getTime() < new Date().getTime();
@@ -109,6 +114,7 @@ export const AddProduct = {
                     this.brandList = response.data.brand.data;
                     this.categoryList = response.data.category.data;
                     this.productTypeList = response.data.product_type.data;
+                    this.supplierList = response.data.supplier.data;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -122,6 +128,7 @@ export const AddProduct = {
             formData.append('category', this.productForm.category);
             formData.append('product_type', this.productForm.product_type);
             formData.append('brand', this.productForm.brand);
+            formData.append('supplier', this.productForm.supplier);
             formData.append('buy_unit_price', this.productForm.buy_unit_price);
             formData.append('sell_unit_price', this.productForm.sell_unit_price);
             formData.append('expiry_at', this.productForm.expiry_at);

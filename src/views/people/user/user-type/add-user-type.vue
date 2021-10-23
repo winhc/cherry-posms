@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { AddUserType } from "@/mixins/user-type/add-user-type";
+import { AddUserType } from "@/mixins/people/user/user-type/add-user-type";
 
 export default {
   mixins: [AddUserType],

@@ -21,10 +21,10 @@
             :picker-options="pickerOptions"
           />
         </el-form-item>
-        <el-form-item label="User role">
+        <el-form-item label="Supplier name">
           <el-input
-            v-model="searchForm.user_role"
-            placeholder="Enter user role"
+            v-model="searchForm.supplier_name"
+            placeholder="Enter supplier name"
             clearable
           ></el-input>
         </el-form-item>
@@ -40,7 +40,7 @@
           icon="el-icon-download"
           @click="handleDownload"
           :loading="downloadLoading"
-          :disabled="userTypeData.length == 0"
+          :disabled="supplierData.length == 0"
           style="float: right"
           >Download</el-button
         >
@@ -56,9 +56,9 @@
       />
 
       <div style="margin-top: 20px">
-        <!-- brand list table -->
+        <!-- supplier list table -->
         <el-table
-          :data="userTypeData"
+          :data="supplierData"
           v-loading="tableLoading"
           border
           style="width: 100%"
@@ -69,28 +69,44 @@
             </template>
             <template slot-scope="{ row }">
               <el-button
-                v-show="row.id != 1"
                 type="primary"
                 icon="el-icon-edit"
                 circle
-                @click="updateUserType(row)"
+                @click="updateSupplier(row)"
               />
               <el-button
-                v-show="row.id != 1"
                 type="danger"
                 icon="el-icon-delete"
                 circle
-                @click="deleteUserType(row)"
+                @click="deleteSupplier(row)"
               />
             </template>
           </el-table-column>
 
           <el-table-column align="center">
             <template slot="header">
-              <span>User Role</span>
+              <span>Supplier Name</span>
             </template>
             <template slot-scope="{ row }">
-              <span>{{ row.user_role }}</span>
+              <span>{{ row.supplier_name }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center">
+            <template slot="header">
+              <span>Phone number</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.phone }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center">
+            <template slot="header">
+              <span>Address</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.address }}</span>
             </template>
           </el-table-column>
 
@@ -139,17 +155,28 @@
     <!-- update form -->
     <el-form
       v-if="isUpdate"
-      ref="userTypeForm"
-      :model="userTypeForm"
+      ref="supplierForm"
+      :model="supplierForm"
       :rules="rules"
       label-width="150px"
       style="width: 60%"
     >
-      <el-form-item label="User role" prop="user_role">
-        <el-input v-model="userTypeForm.user_role" ref="user_role"></el-input>
+      <el-form-item label="Customer name" prop="supplier_name">
+        <el-input
+          v-model="supplierForm.supplier_name"
+          ref="supplier_name"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Phone number" prop="phone">
+        <el-input type="phone" v-model="supplierForm.phone" maxlength="9">
+          <template slot="prepend">09</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="Address" prop="address">
+        <el-input v-model="supplierForm.address"></el-input>
       </el-form-item>
       <el-form-item label="Remarks" prop="remarks">
-        <el-input type="textarea" v-model="userTypeForm.remarks"></el-input>
+        <el-input type="textarea" v-model="supplierForm.remarks"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="info" @click="isUpdate = false">Cancel</el-button>
@@ -166,10 +193,10 @@
   </div>
 </template>
 <script>
-import { ListUserType } from "@/mixins/user-type/list-user-type";
+import { ListSupplier } from "@/mixins/people/supplier/list-supplier";
 
 export default {
-  mixins: [ListUserType],
+  mixins: [ListSupplier],
 };
 </script>
 <style>

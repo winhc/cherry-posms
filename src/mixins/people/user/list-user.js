@@ -1,6 +1,6 @@
 import * as http from '@/utils/http'
 import moment from 'moment'
-import DeleteDialog from '../../components/DeleteDialog/'
+import DeleteDialog from '../../../components/DeleteDialog/'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
 import store from '@/store'
@@ -98,7 +98,7 @@ export const ListUser = {
                     + '&to_date=' + to_date
             }
             const response = await http.get(url);
-            console.log('brand list response => ', response)
+            console.log('user list response => ', response)
             if (response != null) {
                 if (response.status == 200) {
                     const dataArr = response.data.data;

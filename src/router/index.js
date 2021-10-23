@@ -11,6 +11,7 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import peopleRouter from './modules/people'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -249,63 +250,7 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/list',
-    alwaysShow: true, // will always show the root menu
-    name: 'User',
-    meta: {
-      title: 'User',
-      icon: 'user',
-      roles: ['admin']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/user/list-user'),
-        name: 'List User',
-        meta: {
-          title: 'List User',
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/user/add-user'),
-        name: 'Add User',
-        meta: {
-          title: 'Add User'
-        }
-      },
-      {
-        path: 'user-type',
-        component: () => import('@/views/user-type'),
-        redirect: 'user/user-type/list',
-        name: 'User Type',
-        meta: {
-          title: 'User Type',
-        },
-        children: [
-          {
-            path: 'list',
-            component: () => import('@/views/user-type/list-user-type'),
-            name: 'List User Type',
-            meta: {
-              title: 'List User Type'
-            }
-          },
-          {
-            path: 'add',
-            component: () => import('@/views/user-type/add-user-type'),
-            name: 'Add User Type',
-            meta: {
-              title: 'Add User Type'
-            }
-          }
-        ]
-      },
-    ]
-  },
+  peopleRouter,
 
   // {
   //   path: '/permission',
