@@ -190,7 +190,7 @@ export const ListSupplier = {
                 remarks: ''
             };
         },
-        deleteUser(data) {
+        deleteSupplier(data) {
             this.supplier_id = data.id;
             this.showDeleteDialog = true
         },
