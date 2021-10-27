@@ -12,6 +12,9 @@ import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
 import peopleRouter from './modules/people'
+import warehouseRouter from './modules/warehouse'
+import inventoryRouter from './modules/inventory'
+import storeRouter from './modules/store'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -98,6 +101,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/pos',
+    component: Layout,
+    redirect: '/pos',
+    children: [
+      {
+        path: 'pos',
+        component: () => import('@/views/pos'),
+        name: 'POS',
+        meta: { title: 'POS', icon: 'menu', affix: true }
+      }
+    ]
+  },
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -130,126 +146,9 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: '/product',
-    component: Layout,
-    redirect: '/product/list',
-    alwaysShow: true, // will always show the root menu
-    name: 'Product',
-    meta: {
-      title: 'Product',
-      icon: 'list',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/product/list-product'),
-        name: 'List Product',
-        meta: {
-          title: 'List Product'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/product/add-product'),
-        name: 'Add Product',
-        meta: {
-          title: 'Add Product'
-        }
-      }
-    ]
-  },
-  {
-    path: '/category',
-    component: Layout,
-    redirect: '/category/list',
-    alwaysShow: true, // will always show the root menu
-    name: 'Category',
-    meta: {
-      title: 'Category',
-      icon: 'component',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/category/list-category'),
-        name: 'List Category',
-        meta: {
-          title: 'List Category'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/category/add-category'),
-        name: 'Add Category',
-        meta: {
-          title: 'Add Category'
-        }
-      }
-    ]
-  },
-  {
-    path: '/brand',
-    component: Layout,
-    redirect: '/brand/list',
-    alwaysShow: true, // will always show the root menu
-    name: 'Brand',
-    meta: {
-      title: 'Brand',
-      icon: 'star',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/brand/list-brand'),
-        name: 'List Brand',
-        meta: {
-          title: 'List Brand'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/brand/add-brand'),
-        name: 'Add Brand',
-        meta: {
-          title: 'Add Brand'
-        }
-      }
-    ]
-  },
-  {
-    path: '/product-type',
-    component: Layout,
-    redirect: '/product-type/list',
-    alwaysShow: true, // will always show the root menu
-    name: 'Product Type',
-    meta: {
-      title: 'Product Type',
-      icon: 'example',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/product-type/list-product-type'),
-        name: 'List Product Type',
-        meta: {
-          title: 'List Product Type'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/product-type/add-product-type'),
-        name: 'Add Product Type',
-        meta: {
-          title: 'Add Product Type'
-        }
-      }
-    ]
-  },
+  warehouseRouter,
+  inventoryRouter,
+  storeRouter,
   peopleRouter,
 
   // {
@@ -294,18 +193,18 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  // {
-  //   path: '/icon',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/icons/index'),
-  //       name: 'Icons',
-  //       meta: { title: 'Icons', icon: 'icon', noCache: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/icon',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/icons/index'),
+        name: 'Icons',
+        meta: { title: 'Icons', icon: 'icon', noCache: true }
+      }
+    ]
+  },
 
   // /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,

@@ -1,6 +1,6 @@
 import * as http from '@/utils/http'
 import moment from 'moment'
-import DeleteDialog from '../../../components/DeleteDialog/'
+import DeleteDialog from '@/components/DeleteDialog/'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
 

@@ -3,54 +3,27 @@ import moment from 'moment'
 import DeleteDialog from '@/components/DeleteDialog/'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
-import store from '@/store'
 
-export const ListUser = {
+export const ListStore = {
     components: { DeleteDialog },
     props: {},
     data() {
-        const validateAccount = (rule, value, callback) => {
-            if (value == '') {
-                callback(new Error(`Enter account`))
-            } else if (value.length < 6) {
-                callback(new Error(`Account can't be less than 6 digit`))
-            } else if (value.length > 8) {
-                callback(new Error(`Account can't be greater than 8 digit`))
-            } else {
-                callback()
-            }
-        }
-        const validatePassword = (rule, value, callback) => {
-            if (value == '') {
-                callback(new Error(`Enter password`))
-            } else if (value.length < 6) {
-                callback(new Error(`Password can't be less than 6 digit`))
-            } else if (value.length > 8) {
-                callback(new Error(`Password can't be greater than 8 digit`))
-            } else {
-                callback()
-            }
-        }
         return {
-            userData: [],
+            storeData: [],
             showDeleteDialog: false,
-            user_id: 0,
+            store_id: 0,
             isUpdate: false,
-            userForm: {
-                user_name: '',
-                account: '',
-                user_type: null,
+            storeForm: {
+                store_name: '',
+                address: '',
                 remarks: ''
             },
             rules: {
-                user_name: [
-                    { required: true, message: 'Enter name', trigger: 'blur' }
+                store_name: [
+                    { required: true, message: 'Enter store name', trigger: 'blur' }
                 ],
-                account: [
-                    { required: true, trigger: 'blur', validator: validateAccount }
-                ],
-                user_type: [
-                    { required: true, message: 'Select user type', trigger: 'blur' }
+                address: [
+                    { required: true, message: 'Enter address', trigger: 'blur' }
                 ],
                 remarks: [
                     { required: true, message: 'Enter remarks', trigger: 'blur' }
@@ -63,7 +36,7 @@ export const ListUser = {
             },
             searchForm: {
                 dateData: [currentDate(), currentDate()],
-                account: '',
+                store_name: '',
                 isAll: true
             },
             pageSize: 10,
@@ -71,7 +44,11 @@ export const ListUser = {
             tableDataCount: 0,
             tableLoading: false,
             downloadLoading: false,
-            userTypeList: []
+            messageAlert: {
+                title: '',
+                isSuccess: true,
+                isShow: false,
+            }
         }
     },
     mounted() { },
@@ -87,57 +64,38 @@ export const ListUser = {
             const to_date = this.searchForm.dateData[1];
             let url = '';
             if (this.searchForm.isAll) {
-                url = '/users?page_size=' + this.pageSize
+                url = '/stores?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&account=' + this.searchForm.account
+                    + '&store_name=' + this.searchForm.store_name
             } else {
-                url = '/users?page_size=' + this.pageSize
+                url = '/stores?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&account=' + this.searchForm.account
+                    + '&store_name=' + this.searchForm.store_name
                     + '&from_date=' + from_date
                     + '&to_date=' + to_date
             }
             const response = await http.get(url);
-            console.log('user list response => ', response)
+            console.log('store list response => ', response)
             if (response != null) {
                 if (response.status == 200) {
-                    const dataArr = response.data.data;
-                    const index = dataArr.findIndex(x => x.account == store.getters.userInfo.account);
-                    if (index > -1) {
-                        dataArr.splice(index, 1);
-                    }
-                    this.userData = dataArr;
+                    this.storeData = response.data.data
                     this.tableDataCount = response.data.count
-                    this.getUserType();
-                    console.log('userData => ', this.userData)
+                    console.log('storeData => ', this.storeData)
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
             }
             this.tableLoading = false;
         },
-        async getUserType() {
-            const response = await http.get('/user-types');
-            console.log('user type list response => ', response)
-            if (response != null) {
-                if (response.status == 200) {
-                    this.userTypeList = response.data.data;
-                } else {
-                    this.$message.error(`${getErrorMessage(response)}`);
-                }
-            }
-        },
         handleDownload() {
             try {
                 this.downloadLoading = true;
-                const tHeader = ['Name', 'Account', 'Role', 'Created At', 'Updated At', 'Remarks']
+                const tHeader = ['Store Name', 'Address', 'Created At', 'Updated At', 'Remarks']
                 const tBody = [];
-                for (const i in this.userData) {
-                    let item = this.userData[i];
+                for (const i in this.storeData) {
+                    let item = this.storeData[i];
                     let data = [
-                        item.user_name,
-                        item.account,
-                        item.user_type.user_role,
+                        item.store_name,
                         this.formattedDate(item.created_at),
                         this.formattedDate(item.updated_at),
                         item.remarks
@@ -145,7 +103,7 @@ export const ListUser = {
                     tBody.push(data);
                 }
                 const now = new Date();
-                const fileName = 'UserData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
+                const fileName = 'StoreData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
                 import('@/vendor/Export2Excel').then(excel => {
                     excel.export_json_to_excel({
                         header: tHeader,
@@ -171,19 +129,18 @@ export const ListUser = {
             this.pageIndex = 1;
             this.pageSize = 10;
         },
-        updateUser(data) {
-            console.log('updateUser=>', data)
-            this.userForm.user_name = data.user_name;
-            this.userForm.account = data.account;
-            this.userForm.user_type = data.user_type.id;
-            this.userForm.remarks = data.remarks;
-            this.user_id = data.id;
+        updateStore(data) {
+            console.log('updateStore=>', data)
+            this.storeForm.store_name = data.store_name;
+            this.storeForm.address = data.address;
+            this.storeForm.remarks = data.remarks;
+            this.store_id = data.id;
             this.isUpdate = true;
         },
         onSubmit() {
-            this.$refs.userForm.validate((valid) => {
+            this.$refs.storeForm.validate((valid) => {
                 if (valid) {
-                    console.log('userForm=>>', this.userForm);
+                    console.log('storeForm=>>', this.storeForm);
                     this.submitUpdate();
                 } else {
                     console.log('error onSubmit!!');
@@ -192,8 +149,8 @@ export const ListUser = {
             });
         },
         async submitUpdate() {
-            const response = await http.patch(`/users/${this.user_id}`, this.userForm);
-            console.log('updateUser response =>', response);
+            const response = await http.patch(`/stores/${this.store_id}`, this.storeForm);
+            console.log('updateBrand response =>', response);
             if (response != null) {
                 if (response.status == 200) {
                     this.$message.success(`Success: ${response.statusText}`);
@@ -205,30 +162,30 @@ export const ListUser = {
             }
         },
         resetUpdate() {
-            this.user_id = 0;
+            this.store_id = 0;
+            this.storeForm.store_name = '';
+            this.storeForm.remarks = '';
             this.isUpdate = false;
-            this.userForm = {
-                user_name: '',
-                account: '',
-                user_type: null,
-                remarks: ''
-            };
         },
-        deleteUser(data) {
-            this.user_id = data.id;
+        deleteStore(data) {
+            this.store_id = data.id;
             this.showDeleteDialog = true
         },
         async confirmDelete(remarks) {
             // console.log('remarks=>', remarks)
-            const response = await http.delete(`/users/${this.user_id}`)
-            console.log('user delete response => ', response)
+            const response = await http.delete(`/stores/${this.store_id}`)
+            console.log('store delete response => ', response)
             if (response.status == 200) {
                 this.showDeleteDialog = false;
-                this.user_id = 0;
+                this.store_id = 0;
                 this.$message.success(`Success: ${response.statusText}`);
                 this.getData();
             } else {
-                this.$message.error(`${getErrorMessage(response)}`);
+                this.messageAlert = {
+                    title: getErrorMessage(response),
+                    isSuccess: false,
+                    isShow: true
+                }
             }
         },
         handlePageSizeChange(size) {
@@ -239,6 +196,10 @@ export const ListUser = {
         handlePageIndexChange(index) {
             this.pageIndex = index;
             this.getData();
+        },
+        closeAlert() {
+            console.log('close alert')
+            this.messageAlert.isShow = false;
         }
     },
     watch: {},
