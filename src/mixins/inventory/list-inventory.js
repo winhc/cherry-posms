@@ -9,81 +9,67 @@ export const ListInventory = {
     props: {},
     data() {
         return {
-            // brandData: [],
-            // showDeleteDialog: false,
-            // brand_id: 0,
-            // isUpdate: false,
-            // brandForm: {
-            //     brand_name: '',
-            //     remarks: ''
-            // },
-            // rules: {
-            //     brand_name: [
-            //         { required: true, message: 'Enter brand name', trigger: 'blur' }
-            //     ],
-            //     remarks: [
-            //         { required: true, message: 'Enter remarks', trigger: 'blur' }
-            //     ]
-            // },
-            // pickerOptions: {
-            //     disabledDate: function (date) {
-            //         return new Date(date).getTime() > new Date().getTime();
-            //     }
-            // },
-            // searchForm: {
-            //     dateData: [currentDate(), currentDate()],
-            //     brand_name: '',
-            //     isAll: true
-            // },
-            // pageSize: 10,
-            // pageIndex: 1,
-            // tableDataCount: 0,
-            // tableLoading: false,
-            // downloadLoading: false,
-            // messageAlert: {
-            //     title: '',
-            //     isSuccess: true,
-            //     isShow: false,
-            // }
-            title: 'Inventory list'
+            currentTab: 'Warehouse',
+            warehouseProductData: [],
+            storeProductData: [],
+            storeData: [],
+            tableDataCount: 0,
+            tableLoading: false,
+            tabList: [
+                {
+                    title: 'Warehouse'
+                }
+            ],
         }
     },
     mounted() { },
     created() {
-        // this.getData();
+        this.getData();
     },
     destroyed() { },
     methods: {
-        // async getData() {
-        //     this.tableLoading = true;
-        //     console.log('searchForm', this.searchForm);
-        //     const from_date = this.searchForm.dateData[0];
-        //     const to_date = this.searchForm.dateData[1];
-        //     let url = '';
-        //     if (this.searchForm.isAll) {
-        //         url = '/brands?page_size=' + this.pageSize
-        //             + '&page_index=' + this.pageIndex
-        //             + '&brand_name=' + this.searchForm.brand_name
-        //     } else {
-        //         url = '/brands?page_size=' + this.pageSize
-        //             + '&page_index=' + this.pageIndex
-        //             + '&brand_name=' + this.searchForm.brand_name
-        //             + '&from_date=' + from_date
-        //             + '&to_date=' + to_date
-        //     }
-        //     const response = await http.get(url);
-        //     console.log('brand list response => ', response)
-        //     if (response != null) {
-        //         if (response.status == 200) {
-        //             this.brandData = response.data.data
-        //             this.tableDataCount = response.data.count
-        //             console.log('brandData => ', this.brandData)
-        //         } else {
-        //             this.$message.error(`${getErrorMessage(response)}`);
-        //         }
-        //     }
-        //     this.tableLoading = false;
-        // },
+        handleTabClick(tab, event) {
+            console.log(this.currentTab);
+        },
+        async getData() {
+            this.tableLoading = true;
+            // console.log('searchForm', this.searchForm);
+            // const from_date = this.searchForm.dateData[0];
+            // const to_date = this.searchForm.dateData[1];
+            let url = '/inventories';
+            // if (this.searchForm.isAll) {
+            //     url = '/brands?page_size=' + this.pageSize
+            //         + '&page_index=' + this.pageIndex
+            //         + '&brand_name=' + this.searchForm.brand_name
+            // } else {
+            //     url = '/brands?page_size=' + this.pageSize
+            //         + '&page_index=' + this.pageIndex
+            //         + '&brand_name=' + this.searchForm.brand_name
+            //         + '&from_date=' + from_date
+            //         + '&to_date=' + to_date
+            // }
+            const response = await http.get(url);
+            console.log('inventory list response => ', response)
+            if (response != null) {
+                if (response.status == 200) {
+                    this.warehouseProductData = response.data.product.data;
+                    this.storeData = response.data.store.data;
+                    var obj = {};
+                    for(const i in this.storeData){
+                        const item = this.storeData[i];
+                        obj.title = item.store_name;
+                        this.storeProductData = this.storeData[i].store_products;
+                    }
+                    this.tabList.push(obj);
+                    console.log('warehouseProductData => ', this.warehouseProductData)
+                    console.log('storeData => ', this.storeData)
+                    console.log('storeProductData => ', this.storeProductData)
+                } else {
+                    this.$message.error(`${getErrorMessage(response)}`);
+                }
+            }
+            this.tableLoading = false;
+        },
         // handleDownload() {
         //     try {
         //         this.downloadLoading = true;
