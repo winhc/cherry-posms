@@ -11,7 +11,11 @@
         <el-input v-model="productForm.product_code" readonly></el-input>
       </el-form-item>
       <el-form-item label="Bar code" prop="bar_code">
-        <el-input minlength="13" maxlength="13" v-model="productForm.bar_code"></el-input>
+        <el-input
+          minlength="13"
+          maxlength="13"
+          v-model="productForm.bar_code"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Product name" prop="product_name">
         <el-input
@@ -52,11 +56,15 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="Quantity" prop="quantity">
+        <el-input-number
+          v-model="productForm.quantity"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
       <el-form-item label="Unit" prop="product_type">
-        <el-select
-          v-model="productForm.product_type"
-          placeholder="Select unit"
-        >
+        <el-select v-model="productForm.product_type" placeholder="Select unit">
           <el-option
             v-for="item in productTypeList"
             :key="item.id"
@@ -65,13 +73,6 @@
           >
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="Quantity" prop="quantity">
-        <el-input-number
-          v-model="productForm.quantity"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
       </el-form-item>
       <el-form-item label="Cost" prop="cost">
         <el-input-number
@@ -98,25 +99,6 @@
           :picker-options="pickerOptions"
         />
       </el-form-item>
-      <!--  <el-form-item label="Sell unit price" prop="sell_unit_price">
-        <el-input-number
-          v-model="productForm.sell_unit_price"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
-        <span> (MMK)</span>
-      </el-form-item>
-      <el-form-item label="Tax" prop="tax">
-        <el-input-number
-          v-model="productForm.tax"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
-        <span> (MMK)</span>
-      </el-form-item>
-      <el-form-item label="For sale">
-        <el-switch v-model="productForm.for_sale"></el-switch>
-      </el-form-item> -->
       <el-form-item label="Image">
         <UploadImage
           :is-reset-image="isResetImage"

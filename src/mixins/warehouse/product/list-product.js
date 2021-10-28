@@ -28,15 +28,15 @@ export const ListProduct = {
                 callback()
             }
         }
-        // const validateSellUnitPrice = (rule, value, callback) => {
-        //     if (value == null) {
-        //         callback(new Error(`Enter sell unit price`))
-        //     } else if (value <= 0) {
-        //         callback(new Error('Sell unit price must greater than 0'))
-        //     } else {
-        //         callback()
-        //     }
-        // }
+        const validatePrice = (rule, value, callback) => {
+            if (value == null) {
+                callback(new Error(`Enter price`))
+            } else if (value <= 0) {
+                callback(new Error('Price must greater than 0'))
+            } else {
+                callback()
+            }
+        }
         const validateQuantity = (rule, value, callback) => {
             if (value == null) {
                 callback(new Error(`Enter quantity`))
@@ -73,6 +73,9 @@ export const ListProduct = {
                 quantity: null,
                 cost: null,
                 alert_quantity: null,
+                price: null,
+                tax: null,
+                store: null,
                 remarks: ''
             },
             rules: {
@@ -94,6 +97,9 @@ export const ListProduct = {
                 supplier: [
                     { required: true, message: 'Select supplier', trigger: 'blur' },
                 ],
+                store: [
+                    { required: true, message: 'Select store', trigger: 'blur' },
+                ],
                 cost: [
                     { required: true, trigger: 'blur', validator: validateCost },
                 ],
@@ -103,12 +109,9 @@ export const ListProduct = {
                 alert_quantity: [
                     { required: true, validator: validateAlertQuantity, trigger: 'blur' },
                 ],
-                // sell_unit_price: [
-                //     { required: true, trigger: 'blur', validator: validateSellUnitPrice },
-                // ],
-                // tax: [
-                //     { required: true, trigger: 'blur', message: 'Enter tax', },
-                // ],
+                price: [
+                    { required: true, trigger: 'blur', validator: validatePrice },
+                ]
             },
             imageUrl: '',
             imageFile: null,
@@ -137,7 +140,9 @@ export const ListProduct = {
             brandList: [],
             productTypeList: [],
             supplierList: [],
+            storeList: [],
             isImport: false,
+            isExport: false
         }
     },
     mounted() { },
@@ -187,6 +192,7 @@ export const ListProduct = {
                     this.categoryList = response.data.category.data;
                     this.productTypeList = response.data.product_type.data;
                     this.supplierList = response.data.supplier.data;
+                    this.storeList = response.data.store.data;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -251,8 +257,6 @@ export const ListProduct = {
             this.productForm.alert_quantity = data.alert_quantity;
             this.productForm.cost = data.cost;
 
-            // this.productForm.sell_unit_price = data.sell_unit_price;
-            // this.productForm.tax = data.tax;
             this.productForm.remarks = data.remarks;
             this.productForm.image = data.image;
             this.imageUrl = '';
@@ -302,14 +306,12 @@ export const ListProduct = {
             formData.append('alert_quantity', this.productForm.alert_quantity);
             formData.append('expiry_at', this.productForm.expiry_at);
             formData.append('remarks', this.productForm.remarks);
-            // formData.append('sell_unit_price', this.productForm.sell_unit_price);
-            // formData.append('tax', this.productForm.tax);
             if (this.imageUrl == '') {
                 formData.append('image', '');
             } else {
                 formData.append('image', this.imageFile || this.productForm.image);
             }
-            const response = await http.patch(`/products/${this.product_id}/${this.supplier_product_id}`, formData);
+            const response = await http.put(`/products/${this.product_id}/${this.supplier_product_id}`, formData);
             console.log('updateProduct response =>', response);
             if (response != null) {
                 if (response.status == 200) {
@@ -342,9 +344,10 @@ export const ListProduct = {
             this.isResetImage = true;
             this.isUpdate = false;
             this.isImport = false;
+            this.isExport = false;
         },
         importProduct(data) {
-            console.log(`import => ${data}`)
+            console.log(`import => ${JSON.stringify(data)}`)
             this.productForm.bar_code = data.bar_code;
             this.productForm.product_name = data.product_name;
             this.productForm.category = data.category.id;
@@ -364,7 +367,7 @@ export const ListProduct = {
         },
         async submitImport() {
             console.log('import productForm ==>', JSON.stringify(this.productForm))
-            const response = await http.put(`/products/${this.product_id}`, this.productForm);
+            const response = await http.patch(`/products/import/${this.product_id}`, this.productForm);
             console.log('updateProduct response =>', response);
             if (response != null) {
                 if (response.status == 200) {
@@ -377,8 +380,35 @@ export const ListProduct = {
             }
         },
         exportProduct(data) {
-            console.log(`export => ${data}`)
-
+            console.log(`export => ${JSON.stringify(data)}`)
+            this.productForm.product_name = data.product_name;
+            this.productForm.cost = data.cost;
+            this.product_id = data.id;
+            this.isExport = true;
+        },
+        onExportSubmit() {
+            this.$refs.productForm.validate((valid) => {
+                if (valid) {
+                    this.submitExport();
+                } else {
+                    console.log('error onSubmit!!');
+                    return false;
+                }
+            });
+        },
+        async submitExport() {
+            console.log('export productForm ==>', JSON.stringify(this.productForm))
+            const response = await http.patch(`/products/export/${this.product_id}`, this.productForm);
+            console.log('updateProduct response =>', response);
+            if (response != null) {
+                if (response.status == 200) {
+                    this.$message.success(`Success: ${response.statusText}`);
+                    this.getData();
+                    this.resetForm();
+                } else {
+                    this.$message.error(`${getErrorMessage(response)}`);
+                }
+            }
         },
         deleteProduct(data) {
             this.product_id = data.id;

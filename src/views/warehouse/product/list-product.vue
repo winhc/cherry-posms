@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div v-if="!isUpdate && !isImport">
+    <div v-if="!isUpdate && !isImport && !isExport">
       <!-- search form -->
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="All">
@@ -60,12 +60,22 @@
             </template>
             <template slot-scope="{ row }">
               <el-tooltip effect="dark" content="Export" placement="top">
-                <el-button type="success" size="medium" circle @click="exportProduct(row)">
+                <el-button
+                  type="success"
+                  size="medium"
+                  circle
+                  @click="exportProduct(row)"
+                >
                   <svg-icon icon-class="export" />
                 </el-button>
               </el-tooltip>
               <el-tooltip effect="dark" content="Import" placement="top">
-                <el-button type="primary" size="medium" circle @click="importProduct(row)">
+                <el-button
+                  type="primary"
+                  size="medium"
+                  circle
+                  @click="importProduct(row)"
+                >
                   <svg-icon icon-class="import" />
                 </el-button>
               </el-tooltip>
@@ -154,9 +164,9 @@
               <span>Supplier</span>
             </template>
             <template slot-scope="{ row }">
-              <span v-for="(item,index) in row.supplier_product" :key="index">
-                {{ item.supplier.supplier_name}}
-                <span v-if="(row.supplier_product.length - 1 ) != index">,</span>
+              <span v-for="(item, index) in row.supplier_product" :key="index">
+                {{ item.supplier.supplier_name }}
+                <span v-if="row.supplier_product.length - 1 != index">,</span>
               </span>
             </template>
           </el-table-column>
@@ -166,9 +176,9 @@
               <span>Unit</span>
             </template>
             <template slot-scope="{ row }">
-              <span v-for="(item,index) in row.supplier_product" :key="index">
-                {{ item.product_type.unit}}
-                <span v-if="(row.supplier_product.length - 1 ) != index">,</span>
+              <span v-for="(item, index) in row.supplier_product" :key="index">
+                {{ item.product_type.unit }}
+                <span v-if="row.supplier_product.length - 1 != index">,</span>
               </span>
             </template>
           </el-table-column>
@@ -205,7 +215,7 @@
               <span>Expiry At</span>
             </template>
             <template slot-scope="{ row }">
-              <span>{{ row.supplier_product.expiry_at | moment}}</span>
+              <span>{{ row.supplier_product.expiry_at | moment }}</span>
             </template>
           </el-table-column>
 
@@ -301,8 +311,18 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="Quantity" prop="quantity">
+        <el-input-number
+          v-model="productForm.quantity"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
       <el-form-item label="Unit" prop="product_type">
-        <el-select v-model="productForm.product_type" placeholder="Select  unit">
+        <el-select
+          v-model="productForm.product_type"
+          placeholder="Select  unit"
+        >
           <el-option
             v-for="item in productTypeList"
             :key="item.id"
@@ -311,13 +331,6 @@
           >
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="Quantity" prop="quantity">
-        <el-input-number
-          v-model="productForm.quantity"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
       </el-form-item>
       <el-form-item label="Cost" prop="cost">
         <el-input-number
@@ -334,42 +347,6 @@
           :min="0"
         ></el-input-number>
       </el-form-item>
-      <!--  <el-form-item label="Price" prop="price">
-        <el-input-number
-          v-model="productForm.price"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
-        <span> (MMK)</span>
-      </el-form-item>
-      <el-form-item label="Tax" prop="tax">
-        <el-input-number
-          v-model="productForm.tax"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
-        <span> (MMK)</span>
-      </el-form-item>
-      <el-form-item label="Alert quantity" prop="alert_quantity">
-        <el-input-number
-          v-model="productForm.alert_quantity"
-          controls-position="right"
-          :min="0"
-        ></el-input-number>
-      </el-form-item>
-      <el-form-item label="Expiry at">
-        <el-date-picker
-          v-model="productForm.expiry_at"
-          type="date"
-          :clearable="true"
-          format="dd-MM-yyyy"
-          placeholder="Pick expiry date"
-          :picker-options="singleDatePickerOptions"
-        />
-      </el-form-item>
-      <el-form-item label="For sale">
-        <el-switch v-model="productForm.for_sale"></el-switch>
-      </el-form-item> -->
       <el-form-item label="Expiry at">
         <el-date-picker
           v-model="productForm.expiry_at"
@@ -412,7 +389,11 @@
         <el-input v-model="productForm.product_name" disabled></el-input>
       </el-form-item>
       <el-form-item label="Category" prop="category">
-        <el-select v-model="productForm.category" placeholder="Select category" disabled>
+        <el-select
+          v-model="productForm.category"
+          placeholder="Select category"
+          disabled
+        >
           <el-option
             v-for="item in categoryList"
             :key="item.id"
@@ -423,22 +404,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Brand" prop="brand">
-        <el-select v-model="productForm.brand" placeholder="Select brand" disabled>
+        <el-select
+          v-model="productForm.brand"
+          placeholder="Select brand"
+          disabled
+        >
           <el-option
             v-for="item in brandList"
             :key="item.id"
             :label="item.brand_name"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Unit" prop="product_type">
-        <el-select v-model="productForm.product_type" placeholder="Select product type">
-          <el-option
-            v-for="item in productTypeList"
-            :key="item.id"
-            :label="item.unit"
             :value="item.id"
           >
           </el-option>
@@ -461,6 +435,20 @@
           controls-position="right"
           :min="0"
         ></el-input-number>
+      </el-form-item>
+      <el-form-item label="Unit" prop="product_type">
+        <el-select
+          v-model="productForm.product_type"
+          placeholder="Select product type"
+        >
+          <el-option
+            v-for="item in productTypeList"
+            :key="item.id"
+            :label="item.unit"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="Cost" prop="cost">
         <el-input-number
@@ -487,13 +475,75 @@
           :picker-options="singleDatePickerOptions"
         />
       </el-form-item>
-      <!--  <el-form-item label="Price" prop="price">
+      <el-form-item label="Remarks">
+        <el-input type="textarea" v-model="productForm.remarks"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="info" @click="resetForm">Cancel</el-button>
+        <el-button type="primary" @click="onImportSubmit">Import</el-button>
+      </el-form-item>
+    </el-form>
+
+    <!-- export form -->
+    <el-form
+      v-if="isExport"
+      ref="productForm"
+      :model="productForm"
+      :rules="rules"
+      label-width="150px"
+      style="width: 60%"
+    >
+      <el-divider content-position="left">Export Product</el-divider>
+
+      <el-form-item label="Product name" prop="product_name">
+        <el-input v-model="productForm.product_name" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="Store" prop="store">
+        <el-select v-model="productForm.store" placeholder="Select store">
+          <el-option
+            v-for="item in storeList"
+            :key="item.id"
+            :label="item.store_name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Quantity" prop="quantity">
+        <el-input-number
+          v-model="productForm.quantity"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="Unit" prop="product_type">
+        <el-select
+          v-model="productForm.product_type"
+          placeholder="Select product type"
+        >
+          <el-option
+            v-for="item in productTypeList"
+            :key="item.id"
+            :label="item.unit"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Price" prop="price">
         <el-input-number
           v-model="productForm.price"
           controls-position="right"
           :min="0"
         ></el-input-number>
         <span> (MMK)</span>
+      </el-form-item>
+      <el-form-item label="Alert quantity" prop="alert_quantity">
+        <el-input-number
+          v-model="productForm.alert_quantity"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
       </el-form-item>
       <el-form-item label="Tax" prop="tax">
         <el-input-number
@@ -503,15 +553,14 @@
         ></el-input-number>
         <span> (MMK)</span>
       </el-form-item>
-      <el-form-item label="For sale">
-        <el-switch v-model="productForm.for_sale"></el-switch>
-      </el-form-item> -->
       <el-form-item label="Remarks">
         <el-input type="textarea" v-model="productForm.remarks"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="info" @click="resetForm">Cancel</el-button>
-        <el-button type="primary" @click="onImportSubmit">Import</el-button>
+        <el-button type="primary" @click="onExportSubmit"
+          >Export to store</el-button
+        >
       </el-form-item>
     </el-form>
 
