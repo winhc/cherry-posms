@@ -7,46 +7,36 @@
       label-width="150px"
       style="width: 60%"
     >
-      <el-form-item label="Product code">
-        <el-input v-model="productForm.product_code" readonly></el-input>
-      </el-form-item>
-      <el-form-item label="Bar code" prop="bar_code">
-        <el-input
-          minlength="13"
-          maxlength="13"
-          v-model="productForm.bar_code"
-        ></el-input>
-      </el-form-item>
       <el-form-item label="Product name" prop="product_name">
-        <el-input
-          v-model="productForm.product_name"
-          ref="product_name"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="Category" prop="category">
-        <el-select v-model="productForm.category" placeholder="Select category">
+        <el-select
+          v-model="productForm.product"
+          placeholder="Select product"
+          @change="selectProduct"
+        >
           <el-option
-            v-for="item in categoryList"
-            :key="item.id"
-            :label="item.category_name"
-            :value="item.id"
+            v-for="(item, index) in productList"
+            :key="index"
+            :label="item.product_name"
+            :value="index"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Brand" prop="brand">
-        <el-select v-model="productForm.brand" placeholder="Select brand">
-          <el-option
-            v-for="item in brandList"
-            :key="item.id"
-            :label="item.brand_name"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
+      <el-form-item v-if="productForm.product != null" label="Bar code">
+        <span>{{ productForm.bar_code }}</span>
+      </el-form-item>
+      <el-form-item v-if="productForm.product != null" label="Category">
+        <span>{{ productForm.category }}</span>
+      </el-form-item>
+      <el-form-item v-if="productForm.product != null" label="Brand">
+        <span>{{ productForm.brand }}</span>
       </el-form-item>
       <el-form-item label="Supplier" prop="supplier">
-        <el-select v-model="productForm.supplier" placeholder="Select supplier">
+        <el-select
+          v-model="productForm.supplier"
+          placeholder="Select supplier"
+          :disabled="productForm.product == null"
+        >
           <el-option
             v-for="item in supplierList"
             :key="item.id"
@@ -61,10 +51,15 @@
           v-model="productForm.quantity"
           controls-position="right"
           :min="0"
+          :disabled="productForm.product == null"
         ></el-input-number>
       </el-form-item>
       <el-form-item label="Unit" prop="product_type">
-        <el-select v-model="productForm.product_type" placeholder="Select unit">
+        <el-select
+          v-model="productForm.product_type"
+          placeholder="Select product type"
+          :disabled="productForm.product == null"
+        >
           <el-option
             v-for="item in productTypeList"
             :key="item.id"
@@ -79,6 +74,7 @@
           v-model="productForm.cost"
           controls-position="right"
           :min="0"
+          :disabled="productForm.product == null"
         ></el-input-number>
         <span> (MMK)</span>
       </el-form-item>
@@ -87,6 +83,7 @@
           v-model="productForm.alert_quantity"
           controls-position="right"
           :min="0"
+          :disabled="productForm.product == null"
         ></el-input-number>
       </el-form-item>
       <el-form-item label="Expiry at">
@@ -96,31 +93,39 @@
           :clearable="true"
           format="dd-MM-yyyy"
           placeholder="Pick expiry date"
-          :picker-options="pickerOptions"
-        />
-      </el-form-item>
-      <el-form-item label="Image">
-        <UploadImage
-          :is-reset-image="isResetImage"
-          @deleteImage="deleteImage"
-          @handleUploadChange="handleUploadChange"
+          :picker-options="singleDatePickerOptions"
+          :disabled="productForm.product == null"
         />
       </el-form-item>
       <el-form-item label="Remarks">
-        <el-input type="textarea" v-model="productForm.remarks"></el-input>
+        <el-input
+          type="textarea"
+          v-model="productForm.remarks"
+          :disabled="productForm.product == null"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="info" @click="resetForm">Reset</el-button>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
+        <el-button
+          type="info"
+          @click="resetForm"
+          :disabled="productForm.product == null"
+          >Cancel</el-button
+        >
+        <el-button
+          type="primary"
+          @click="onImportSubmit"
+          :disabled="productForm.product == null"
+          ><svg-icon icon-class="import" /> Import</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
-import { AddProduct } from "@/mixins/warehouse/product/add-product";
+import { ImportProduct } from "@/mixins/warehouse/import-product";
 
 export default {
-  mixins: [AddProduct],
+  mixins: [ImportProduct],
 };
 </script>
 <style>

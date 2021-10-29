@@ -19,42 +19,6 @@ export const ListProduct = {
                 callback()
             }
         }
-        const validateCost = (rule, value, callback) => {
-            if (value == null) {
-                callback(new Error(`Enter buy unit price`))
-            } else if (value <= 0) {
-                callback(new Error('Buy unit price must greater than 0'))
-            } else {
-                callback()
-            }
-        }
-        const validatePrice = (rule, value, callback) => {
-            if (value == null) {
-                callback(new Error(`Enter price`))
-            } else if (value <= 0) {
-                callback(new Error('Price must greater than 0'))
-            } else {
-                callback()
-            }
-        }
-        const validateQuantity = (rule, value, callback) => {
-            if (value == null) {
-                callback(new Error(`Enter quantity`))
-            } else if (value <= 0) {
-                callback(new Error('Quantity must greater than 0'))
-            } else {
-                callback()
-            }
-        }
-        const validateAlertQuantity = (rule, value, callback) => {
-            if (value == null) {
-                callback(new Error(`Enter alert quantity`))
-            } else if (value <= 0) {
-                callback(new Error('Alert quantity must greater than 0'))
-            } else {
-                callback()
-            }
-        }
         return {
             productData: [],
             showDeleteDialog: false,
@@ -63,54 +27,21 @@ export const ListProduct = {
             avatar_url: process.env.VUE_APP_PRODUCT_AVATAR_API,
             isUpdate: false,
             productForm: {
-                bar_code: '',
                 product_name: '',
                 image: '',
                 category: null,
                 brand: null,
-                product_type: null,
-                supplier: null,
-                quantity: null,
-                cost: null,
-                alert_quantity: null,
-                price: null,
-                tax: null,
-                store: null,
                 remarks: ''
             },
             rules: {
-                bar_code: [
-                    { required: true, trigger: 'blur', validator: validateBarCode },
-                ],
                 product_name: [
                     { required: true, message: 'Enter product name', trigger: 'blur' },
                 ],
                 category: [
                     { required: true, message: 'Select category', trigger: 'blur' },
                 ],
-                product_type: [
-                    { required: true, message: 'Select unit', trigger: 'blur' },
-                ],
                 brand: [
                     { required: true, message: 'Select brand', trigger: 'blur' },
-                ],
-                supplier: [
-                    { required: true, message: 'Select supplier', trigger: 'blur' },
-                ],
-                store: [
-                    { required: true, message: 'Select store', trigger: 'blur' },
-                ],
-                cost: [
-                    { required: true, trigger: 'blur', validator: validateCost },
-                ],
-                quantity: [
-                    { required: true, trigger: 'blur', validator: validateQuantity },
-                ],
-                alert_quantity: [
-                    { required: true, validator: validateAlertQuantity, trigger: 'blur' },
-                ],
-                price: [
-                    { required: true, trigger: 'blur', validator: validatePrice },
                 ]
             },
             imageUrl: '',
@@ -119,11 +50,6 @@ export const ListProduct = {
             rangeDatePickerOptions: {
                 disabledDate: function (date) {
                     return new Date(date).getTime() > new Date().getTime();
-                }
-            },
-            singleDatePickerOptions: {
-                disabledDate: function (date) {
-                    return new Date(date).getTime() < new Date().getTime();
                 }
             },
             searchForm: {
@@ -137,18 +63,12 @@ export const ListProduct = {
             tableLoading: false,
             downloadLoading: false,
             categoryList: [],
-            brandList: [],
-            productTypeList: [],
-            supplierList: [],
-            storeList: [],
-            isImport: false,
-            isExport: false
+            brandList: []
         }
     },
     mounted() { },
     created() {
         this.getData()
-        console.log('dateData=>', this.searchForm.dateData);
     },
     destroyed() { },
     methods: {
@@ -190,9 +110,6 @@ export const ListProduct = {
                 if (response.status == 200) {
                     this.brandList = response.data.brand.data;
                     this.categoryList = response.data.category.data;
-                    this.productTypeList = response.data.product_type.data;
-                    this.supplierList = response.data.supplier.data;
-                    this.storeList = response.data.store.data;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -243,20 +160,9 @@ export const ListProduct = {
         },
         updateProduct(data) {
             console.log('updateProduct=>', data)
-            this.productForm.bar_code = data.bar_code;
             this.productForm.product_name = data.product_name;
             this.productForm.category = data.category.id;
             this.productForm.brand = data.brand.id;
-            for (const item of data.supplier_product) {
-                this.supplier_product_id = item.id;
-                this.productForm.product_type = item.product_type.id;
-                this.productForm.supplier = item.supplier.id;
-                this.productForm.expiry_at = item.expiry_at;
-            }
-            this.productForm.quantity = data.quantity;
-            this.productForm.alert_quantity = data.alert_quantity;
-            this.productForm.cost = data.cost;
-
             this.productForm.remarks = data.remarks;
             this.productForm.image = data.image;
             this.imageUrl = '';
@@ -283,9 +189,6 @@ export const ListProduct = {
         onSubmit() {
             this.$refs.productForm.validate((valid) => {
                 if (valid) {
-                    console.log('imageUrl=>>', this.imageUrl);
-                    console.log('imageFile=>>', this.imageFile);
-                    console.log('productForm=>>', this.productForm);
                     this.submitUpdate();
                 } else {
                     console.log('error onSubmit!!');
@@ -295,16 +198,9 @@ export const ListProduct = {
         },
         async submitUpdate() {
             let formData = new FormData(); // important for image file upload
-            formData.append('bar_code', this.productForm.bar_code);
             formData.append('product_name', this.productForm.product_name);
             formData.append('category', this.productForm.category);
             formData.append('brand', this.productForm.brand);
-            formData.append('supplier', this.productForm.supplier);
-            formData.append('product_type', this.productForm.product_type);
-            formData.append('quantity', this.productForm.quantity);
-            formData.append('cost', this.productForm.cost);
-            formData.append('alert_quantity', this.productForm.alert_quantity);
-            formData.append('expiry_at', this.productForm.expiry_at);
             formData.append('remarks', this.productForm.remarks);
             if (this.imageUrl == '') {
                 formData.append('image', '');
@@ -325,90 +221,16 @@ export const ListProduct = {
         },
         resetForm() {
             this.productForm = {
-                bar_code: '',
                 product_name: '',
                 image: '',
                 category: null,
-                product_type: null,
                 brand: null,
-                cost: null,
-                quantity: null,
-                alert_quantity: null,
-                supplier: null,
-                expiry_at: '',
                 remarks: ''
             }
             this.imageUrl = '';
             this.imageFile = null;
             this.isUpdate = false;
             this.isResetImage = true;
-            this.isUpdate = false;
-            this.isImport = false;
-            this.isExport = false;
-        },
-        importProduct(data) {
-            console.log(`import => ${JSON.stringify(data)}`)
-            this.productForm.bar_code = data.bar_code;
-            this.productForm.product_name = data.product_name;
-            this.productForm.category = data.category.id;
-            this.productForm.brand = data.brand.id;
-            this.product_id = data.id;
-            this.isImport = true;
-        },
-        onImportSubmit() {
-            this.$refs.productForm.validate((valid) => {
-                if (valid) {
-                    this.submitImport();
-                } else {
-                    console.log('error onSubmit!!');
-                    return false;
-                }
-            });
-        },
-        async submitImport() {
-            console.log('import productForm ==>', JSON.stringify(this.productForm))
-            const response = await http.patch(`/products/import/${this.product_id}`, this.productForm);
-            console.log('updateProduct response =>', response);
-            if (response != null) {
-                if (response.status == 200) {
-                    this.$message.success(`Success: ${response.statusText}`);
-                    this.getData();
-                    this.resetForm();
-                } else {
-                    this.$message.error(`${getErrorMessage(response)}`);
-                }
-            }
-        },
-        exportProduct(data) {
-            console.log(`export => ${JSON.stringify(data)}`)
-            this.productForm.product_name = data.product_name;
-            this.productForm.cost = data.cost;
-            this.product_id = data.id;
-            this.isExport = true;
-        },
-        onExportSubmit() {
-            this.$refs.productForm.validate((valid) => {
-                if (valid) {
-                    this.submitExport();
-                } else {
-                    console.log('error onSubmit!!');
-                    return false;
-                }
-            });
-        },
-        async submitExport() {
-            console.log('export productForm ==>', JSON.stringify(this.productForm))
-            const response = await http.patch(`/products/export/${this.product_id}`, this.productForm);
-            console.log('updateProduct response =>', response);
-            if (response != null) {
-                if (response.status == 200) {
-                    this.$message.success(`Success: ${response.statusText}`);
-                    this.getData();
-                    this.resetForm();
-                } else {
-                    this.$message.error(`${getErrorMessage(response)}`);
-                }
-            }
         },
         deleteProduct(data) {
             this.product_id = data.id;

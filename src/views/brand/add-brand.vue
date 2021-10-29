@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import { AddBrand } from "@/mixins/warehouse/brand/add-brand";
+import { AddBrand } from "@/mixins/brand/add-brand";
 
 export default {
   mixins: [AddBrand],

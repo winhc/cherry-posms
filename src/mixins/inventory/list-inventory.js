@@ -30,6 +30,7 @@ export const ListInventory = {
     methods: {
         handleTabClick(tab, event) {
             console.log(this.currentTab);
+            // this.getWarehouseData();
         },
         async getData() {
             this.tableLoading = true;
@@ -70,6 +71,10 @@ export const ListInventory = {
             }
             this.tableLoading = false;
         },
+        async getWarehouseData(){
+            const response = await http.get('/warehouses');
+            console.log('inventory list response => ', response)
+        }
         // handleDownload() {
         //     try {
         //         this.downloadLoading = true;

@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-import { AddCategory } from "@/mixins/warehouse/category/add-category";
+import { AddCategory } from "@/mixins/category/add-category";
 
 export default {
   mixins: [AddCategory],

@@ -164,7 +164,7 @@
   </div>
 </template>
 <script>
-import { ListProductType } from "@/mixins/warehouse/product-type/list-product-type";
+import { ListProductType } from "@/mixins/product-type/list-product-type";
 
 export default {
   mixins: [ListProductType],

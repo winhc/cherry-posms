@@ -1,6 +1,6 @@
 import * as http from '@/utils/http';
 import * as CodeGenerator from '@/utils/code-generator';
-import UploadImage from '../../../components/UploadImage/';
+import UploadImage from '@/components/UploadImage/';
 import { getErrorMessage } from '@/utils/message-tip';
 
 export const AddCategory = {

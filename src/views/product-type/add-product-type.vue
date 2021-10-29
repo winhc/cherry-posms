@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import { AddProductType } from "@/mixins/warehouse/product-type/add-product-type";
+import { AddProductType } from "@/mixins/product-type/add-product-type";
 
 export default {
   mixins: [AddProductType],

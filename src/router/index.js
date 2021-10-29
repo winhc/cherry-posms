@@ -7,14 +7,14 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+// import componentsRouter from './modules/components'
+// import chartsRouter from './modules/charts'
+// import tableRouter from './modules/table'
+// import nestedRouter from './modules/nested'
 import peopleRouter from './modules/people'
-import warehouseRouter from './modules/warehouse'
-import inventoryRouter from './modules/inventory'
-import storeRouter from './modules/store'
+// import warehouseRouter from './modules/warehouse'
+// import inventoryRouter from './modules/inventory'
+// import storeRouter from './modules/store'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -146,9 +146,215 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  warehouseRouter,
-  inventoryRouter,
-  storeRouter,
+  {
+    path: '/warehouse',
+    component: Layout,
+    redirect: '/warehouse/import-product',
+    alwaysShow: true,
+    name: 'Warehouse',
+    meta: {
+      title: 'Warehouse',
+      icon: 'warehouse',
+      roles: ['admin', 'manager']
+    },
+    children: [
+      {
+        path: 'import-product',
+        component: () => import('@/views/warehouse/import-product'),
+        name: 'Import Product',
+        meta: {
+          title: 'Import Product'
+        }
+      },
+      {
+        path: 'export-product',
+        component: () => import('@/views/warehouse/export-product'),
+        name: 'Export Product',
+        meta: {
+          title: 'Export Product'
+        }
+      },
+      {
+        path: 'list-product',
+        component: () => import('@/views/warehouse/list-product'),
+        name: 'List Product',
+        meta: {
+          title: 'List Product'
+        }
+      },
+    ]
+  },
+  {
+    path: '/inventory',
+    component: Layout,
+    redirect: '/inventory/list',
+    alwaysShow: true,
+    name: 'Inventory',
+    meta: {
+      title: 'Inventory',
+      icon: 'documentation',
+      roles: ['admin', 'manager']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/inventory/list-inventory'),
+        name: 'List Inventory',
+        meta: {
+          title: 'List Inventory'
+        }
+      },
+    ]
+  },
+  {
+    path: '/store',
+    component: Layout,
+    redirect: '/store/list',
+    alwaysShow: true,
+    name: 'Store',
+    meta: {
+      title: 'Store',
+      icon: 'store',
+      roles: ['admin', 'manager']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/store/list-store'),
+        name: 'List store',
+        meta: {
+          title: 'List store'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/store/add-store'),
+        name: 'Add store',
+        meta: {
+          title: 'Add store'
+        }
+      }
+    ]
+  },
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/list',
+    alwaysShow: true,
+    name: 'Product',
+    meta: {
+      title: 'Product',
+      icon: 'component',
+      roles: ['admin', 'manager', 'accountant']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/product/list-product'),
+        name: 'List Product',
+        meta: {
+          title: 'List Product'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/product/add-product'),
+        name: 'Add Product',
+        meta: {
+          title: 'Add Product'
+        }
+      }
+    ]
+  },
+  {
+    path: '/category',
+    component: Layout,
+    redirect: '/category/list',
+    alwaysShow: true,
+    name: 'Category',
+    meta: {
+      title: 'Category',
+      icon: 'example',
+      roles: ['admin', 'manager', 'accountant']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/category/list-category'),
+        name: 'List Category',
+        meta: {
+          title: 'List Category'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/category/add-category'),
+        name: 'Add Category',
+        meta: {
+          title: 'Add Category'
+        }
+      }
+    ]
+  },
+  {
+    path: '/brand',
+    component: Layout,
+    redirect: '/brand/list',
+    alwaysShow: true,
+    name: 'Brand',
+    meta: {
+      title: 'Brand',
+      icon: 'star',
+      roles: ['admin', 'manager', 'accountant']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/brand/list-brand'),
+        name: 'List Brand',
+        meta: {
+          title: 'List Brand'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/brand/add-brand'),
+        name: 'Add Brand',
+        meta: {
+          title: 'Add Brand'
+        }
+      }
+    ]
+  },
+  {
+    path: '/product-type',
+    component: Layout,
+    redirect: '/product-type/list',
+    name: 'Product Type',
+    meta: {
+      title: 'Product Type',
+      icon: 'list',
+      roles: ['admin', 'manager', 'accountant']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/product-type/list-product-type'),
+        name: 'List Product Type',
+        meta: {
+          title: 'List Product Type'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/product-type/add-product-type'),
+        name: 'Add Product Type',
+        meta: {
+          title: 'Add Product Type'
+        }
+      }
+    ]
+  },
   peopleRouter,
 
   // {
