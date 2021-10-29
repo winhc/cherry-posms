@@ -207,7 +207,7 @@ export const ListProduct = {
             } else {
                 formData.append('image', this.imageFile || this.productForm.image);
             }
-            const response = await http.put(`/products/${this.product_id}/${this.supplier_product_id}`, formData);
+            const response = await http.patch(`/products/${this.product_id}/${this.supplier_product_id}`, formData);
             console.log('updateProduct response =>', response);
             if (response != null) {
                 if (response.status == 200) {

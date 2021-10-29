@@ -22,14 +22,19 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="productForm.product != null" label="Bar code">
-        <span>{{ productForm.bar_code }}</span>
-      </el-form-item>
       <el-form-item v-if="productForm.product != null" label="Category">
         <span>{{ productForm.category }}</span>
       </el-form-item>
       <el-form-item v-if="productForm.product != null" label="Brand">
         <span>{{ productForm.brand }}</span>
+      </el-form-item>
+      <el-form-item label="Bar code" prop="bar_code">
+        <el-input
+          minlength="13"
+          maxlength="13"
+          v-model="productForm.bar_code"
+          style="width: 190px"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Supplier" prop="supplier">
         <el-select

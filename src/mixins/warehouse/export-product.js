@@ -76,7 +76,7 @@ export const ExportProduct = {
     destroyed() { },
     methods: {
         async getData() {
-            const response = await http.get('/products/product-options');
+            const response = await http.get('/warehouses/export-options');
             console.log('product option response => ', response)
             if (response != null) {
                 if (response.status == 200) {
@@ -111,7 +111,7 @@ export const ExportProduct = {
             const { product_type, store, quantity, price, alert_quantity, tax, remarks } = this.productForm;
             const exportProductData = { product_type, store, quantity, price, alert_quantity, tax, remarks };
             console.log('exportProductData ==>', JSON.stringify(exportProductData))
-            const response = await http.patch(`/products/export/${this.product_id}`, exportProductData);
+            const response = await http.patch(`/warehouses/export/${this.product_id}`, exportProductData);
             console.log('exportProduct response =>', response);
             if (response != null) {
                 if (response.status == 200) {
