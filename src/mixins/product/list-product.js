@@ -10,11 +10,47 @@ export const ListProduct = {
     data() {
         const validateBarCode = (rule, value, callback) => {
             if (value == '') {
-                callback(new Error(`Enter or scan bar code`))
+                callback(new Error(`Enter bar code`))
             } else if (value.length < 13) {
-                callback(new Error(`Bar code must have 13 digits`))
+                callback(new Error(`Bar code can't less than 13 digits`))
             } else if (value.length > 13) {
                 callback(new Error(`Bar code can't greater than 13 digits`))
+            } else {
+                callback()
+            }
+        }
+        const validateCost = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error(`Enter unit cost`))
+            } else if (value <= 0) {
+                callback(new Error('Unit cost must greater than 0'))
+            } else {
+                callback()
+            }
+        }
+        const validatePrice = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error(`Enter unit price`))
+            } else if (value <= 0) {
+                callback(new Error('Unit price must greater than 0'))
+            } else {
+                callback()
+            }
+        }
+        const validateQuantity = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error(`Enter quantity`))
+            } else if (value <= 0) {
+                callback(new Error('Quantity must greater than 0'))
+            } else {
+                callback()
+            }
+        }
+        const validateAlertQuantity = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error(`Enter alert quantity`))
+            } else if (value <= 0) {
+                callback(new Error('Alert quantity must greater than 0'))
             } else {
                 callback()
             }
@@ -26,22 +62,47 @@ export const ListProduct = {
             avatar_url: process.env.VUE_APP_PRODUCT_AVATAR_API,
             isUpdate: false,
             productForm: {
+                bar_code: '',
                 product_name: '',
                 image: '',
-                category: null,
-                brand: null,
+                category: '',
+                brand: '',
+                product_type: '',
+                quantity: '',
+                cost: '',
+                price: '',
+                alert_quantity: '',
+                expiry_at: '',
                 remarks: ''
             },
             rules: {
+                // bar_code: [
+                //     { required: true, validator: validateBarCode, trigger: 'blur' },
+                // ],
                 product_name: [
                     { required: true, message: 'Enter product name', trigger: 'blur' },
                 ],
                 category: [
                     { required: true, message: 'Select category', trigger: 'blur' },
                 ],
-                brand: [
+                // brand: [
+                //     { required: true, message: 'Select brand', trigger: 'blur' },
+                // ],
+                product_type: [
                     { required: true, message: 'Select brand', trigger: 'blur' },
-                ]
+                ],
+                quantity: [
+                    { required: true, validator: validateQuantity, trigger: 'blur' },
+                ],
+                cost: [
+                    { required: true, validator: validateCost, trigger: 'blur' },
+                ],
+                price: [
+                    { required: true, validator: validatePrice, trigger: 'blur' },
+                ],
+                // alert_quantity: [
+                //     { required: true, validator: validateAlertQuantity, trigger: 'blur' },
+                // ]
             },
             imageUrl: '',
             imageFile: null,
@@ -49,6 +110,11 @@ export const ListProduct = {
             rangeDatePickerOptions: {
                 disabledDate: function (date) {
                     return new Date(date).getTime() > new Date().getTime();
+                }
+            },
+            singleDatePickerOptions: {
+                disabledDate: function (date) {
+                    return new Date(date).getTime() < new Date().getTime();
                 }
             },
             searchForm: {
@@ -62,7 +128,8 @@ export const ListProduct = {
             tableLoading: false,
             downloadLoading: false,
             categoryList: [],
-            brandList: []
+            brandList: [],
+            productTypeList: [],
         }
     },
     mounted() { },
@@ -109,6 +176,7 @@ export const ListProduct = {
                 if (response.status == 200) {
                     this.brandList = response.data.brand.data;
                     this.categoryList = response.data.category.data;
+                    this.productTypeList = response.data.product_type.data;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -159,9 +227,16 @@ export const ListProduct = {
         },
         updateProduct(data) {
             console.log('updateProduct=>', data)
+            this.productForm.bar_code = data.bar_code;
             this.productForm.product_name = data.product_name;
             this.productForm.category = data.category.id;
-            this.productForm.brand = data.brand.id;
+            this.productForm.brand = data.brand ? data.brand.id : '';
+            this.productForm.product_type = data.product_type.id;
+            this.productForm.quantity = data.quantity;
+            this.productForm.cost = data.cost;
+            this.productForm.price = data.price;
+            this.productForm.alert_quantity = data.alert_quantity;
+            this.productForm.expiry_at = data.expiry_at;
             this.productForm.remarks = data.remarks;
             this.productForm.image = data.image;
             this.imageUrl = '';
@@ -197,9 +272,16 @@ export const ListProduct = {
         },
         async submitUpdate() {
             let formData = new FormData(); // important for image file upload
+            formData.append('bar_code', this.productForm.bar_code);
             formData.append('product_name', this.productForm.product_name);
             formData.append('category', this.productForm.category);
             formData.append('brand', this.productForm.brand);
+            formData.append('product_type', this.productForm.product_type);
+            formData.append('quantity', this.productForm.quantity);
+            formData.append('cost', this.productForm.cost);
+            formData.append('price', this.productForm.price);
+            formData.append('alert_quantity', this.productForm.alert_quantity);
+            formData.append('expiry_at', this.productForm.expiry_at);
             formData.append('remarks', this.productForm.remarks);
             if (this.imageUrl == '') {
                 formData.append('image', '');
@@ -208,7 +290,7 @@ export const ListProduct = {
             }
             const response = await http.patch(`/products/${this.product_id}`, formData);
             console.log('updateProduct response =>', response);
-            if (response != null) {
+            if (response != '') {
                 if (response.status == 200) {
                     this.$message.success(`Success: ${response.statusText}`);
                     this.getData();
@@ -222,8 +304,8 @@ export const ListProduct = {
             this.productForm = {
                 product_name: '',
                 image: '',
-                category: null,
-                brand: null,
+                category: '',
+                brand: '',
                 remarks: ''
             }
             this.imageUrl = '';

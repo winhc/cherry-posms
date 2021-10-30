@@ -146,66 +146,66 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: '/warehouse',
-    component: Layout,
-    redirect: '/warehouse/import-product',
-    alwaysShow: true,
-    name: 'Warehouse',
-    meta: {
-      title: 'Warehouse',
-      icon: 'warehouse',
-      roles: ['admin', 'manager']
-    },
-    children: [
-      {
-        path: 'import-product',
-        component: () => import('@/views/warehouse/import-product'),
-        name: 'Import Product',
-        meta: {
-          title: 'Import Product'
-        }
-      },
-      {
-        path: 'export-product',
-        component: () => import('@/views/warehouse/export-product'),
-        name: 'Export Product',
-        meta: {
-          title: 'Export Product'
-        }
-      },
-      {
-        path: 'warehouse-product',
-        component: () => import('@/views/warehouse/list-product'),
-        name: 'Warehouse Product',
-        meta: {
-          title: 'Warehouse Product'
-        }
-      },
-    ]
-  },
-  {
-    path: '/inventory',
-    component: Layout,
-    redirect: '/inventory/list',
-    alwaysShow: true,
-    name: 'Inventory',
-    meta: {
-      title: 'Inventory',
-      icon: 'documentation',
-      roles: ['admin', 'manager']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/inventory/list-inventory'),
-        name: 'List Inventory',
-        meta: {
-          title: 'List Inventory'
-        }
-      },
-    ]
-  },
+  // {
+  //   path: '/warehouse',
+  //   component: Layout,
+  //   redirect: '/warehouse/import-product',
+  //   alwaysShow: true,
+  //   name: 'Warehouse',
+  //   meta: {
+  //     title: 'Warehouse',
+  //     icon: 'warehouse',
+  //     roles: ['admin', 'manager']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'import-product',
+  //       component: () => import('@/views/warehouse/import-product'),
+  //       name: 'Import Product',
+  //       meta: {
+  //         title: 'Import Product'
+  //       }
+  //     },
+  //     {
+  //       path: 'export-product',
+  //       component: () => import('@/views/warehouse/export-product'),
+  //       name: 'Export Product',
+  //       meta: {
+  //         title: 'Export Product'
+  //       }
+  //     },
+  //     {
+  //       path: 'warehouse-product',
+  //       component: () => import('@/views/warehouse/list-product'),
+  //       name: 'Warehouse Product',
+  //       meta: {
+  //         title: 'Warehouse Product'
+  //       }
+  //     },
+  //   ]
+  // },
+  // {
+  //   path: '/inventory',
+  //   component: Layout,
+  //   redirect: '/inventory/list',
+  //   alwaysShow: true,
+  //   name: 'Inventory',
+  //   meta: {
+  //     title: 'Inventory',
+  //     icon: 'documentation',
+  //     roles: ['admin', 'manager']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/inventory/list-inventory'),
+  //       name: 'List Inventory',
+  //       meta: {
+  //         title: 'List Inventory'
+  //       }
+  //     },
+  //   ]
+  // },
   {
     path: '/store',
     component: Layout,

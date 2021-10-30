@@ -54,7 +54,7 @@
           border
           style="width: 100%"
         >
-          <el-table-column align="center" width="200">
+          <el-table-column align="center" width="150">
             <template slot="header">
               <span>Operation</span>
             </template>
@@ -114,10 +114,19 @@
 
           <el-table-column align="center" width="150">
             <template slot="header">
+              <span>Bar Code</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.bar_code ? row.bar_code : '-' }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
               <span>Category</span>
             </template>
             <template slot-scope="{ row }">
-              <span>{{ row.category.category_name }}</span>
+              <span>{{ row.category ? row.category.category_name : '-' }}</span>
             </template>
           </el-table-column>
 
@@ -126,7 +135,62 @@
               <span>Brand</span>
             </template>
             <template slot-scope="{ row }">
-              <span>{{ row.brand.brand_name }}</span>
+              <span>{{ row.brand ? row.brand.brand_name : '-' }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
+              <span>Unit</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.product_type ? row.product_type.unit : '-' }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
+              <span>Quantity</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.quantity }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
+              <span>Cost</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.cost}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
+              <span>Price</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.price}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
+              <span>Alert quantity</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.alert_quantity ? row.alert_quantity : '-'}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" width="150">
+            <template slot="header">
+              <span>Expiry At</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span v-if="row.expiry_at">{{ row.expiry_at | moment }}</span>
+              <span v-else>-</span>
             </template>
           </el-table-column>
 
@@ -181,10 +245,11 @@
       label-width="150px"
       style="width: 60%"
     >
-      <el-divider content-position="left">Edit Product</el-divider>
-
       <el-form-item label="Product name" prop="product_name">
         <el-input v-model="productForm.product_name"></el-input>
+      </el-form-item>
+      <el-form-item label="Bar code" prop="bar_code">
+        <el-input v-model="productForm.bar_code"></el-input>
       </el-form-item>
       <el-form-item label="Category" prop="category">
         <el-select v-model="productForm.category" placeholder="Select category">
@@ -207,6 +272,55 @@
           >
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="Unit" prop="unit">
+        <el-select v-model="productForm.product_type" placeholder="Select unit">
+          <el-option
+            v-for="item in productTypeList"
+            :key="item.id"
+            :label="item.unit"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Quantity" prop="quantity">
+        <el-input-number
+          v-model="productForm.quantity"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="Cost" prop="cost">
+        <el-input-number
+          v-model="productForm.cost"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="Price" prop="price">
+        <el-input-number
+          v-model="productForm.price"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="Alert quantity" prop="alert_quantity">
+        <el-input-number
+          v-model="productForm.alert_quantity"
+          controls-position="right"
+          :min="0"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="Expiry at">
+        <el-date-picker
+          v-model="productForm.expiry_at"
+          type="date"
+          :clearable="true"
+          format="dd-MM-yyyy"
+          placeholder="Pick expiry date"
+          :picker-options="singleDatePickerOptions"
+        />
       </el-form-item>
       <el-form-item label="Image">
         <UploadImage

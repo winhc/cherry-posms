@@ -6,5 +6,5 @@ export function getCode({ prefix,length }) {
         result += characters.charAt(Math.floor(Math.random() *
             charactersLength));
     }
-    return `#${prefix}` + result;
+    return `${prefix}` + result;
 }
