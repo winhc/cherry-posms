@@ -32,9 +32,9 @@ export const ExportProduct = {
             }
         }
         return {
-            product_id: 0,
             productForm: {
-                product: null,
+                product: 0,
+                product_data: null,
                 bar_code: '',
                 category: '',
                 brand: '',
@@ -91,10 +91,10 @@ export const ExportProduct = {
         selectProduct(index) {
             console.log('selected_product_name => ', this.productForm.product_name);
             console.log('selected_product => ', this.productList[index]);
-            this.productForm.bar_code = this.productList[index].bar_code;
+            this.productForm.bar_code = this.productList[index].supplier_product[0].bar_code;
             this.productForm.category = this.productList[index].category.category_name;
             this.productForm.brand = this.productList[index].brand.brand_name;
-            this.product_id = this.productList[index].id;
+            this.productForm.product = this.productList[index].id;
         },
         onExportSubmit() {
             this.$refs.productForm.validate((valid) => {
@@ -108,13 +108,13 @@ export const ExportProduct = {
         },
         async submitExport() {
             console.log('export productForm ==>', JSON.stringify(this.productForm))
-            const { product_type, store, quantity, price, alert_quantity, tax, remarks } = this.productForm;
-            const exportProductData = { product_type, store, quantity, price, alert_quantity, tax, remarks };
+            const { bar_code,product,product_type, store, quantity, price, alert_quantity, tax, remarks } = this.productForm;
+            const exportProductData = { bar_code,product,product_type, store, quantity, price, alert_quantity, tax, remarks };
             console.log('exportProductData ==>', JSON.stringify(exportProductData))
-            const response = await http.patch(`/warehouses/export/${this.product_id}`, exportProductData);
+            const response = await http.post(`/warehouses/export-product`, exportProductData);
             console.log('exportProduct response =>', response);
             if (response != null) {
-                if (response.status == 200) {
+                if (response.status == 201) {
                     this.$message.success(`Success: ${response.statusText}`);
                     this.getData();
                     this.resetForm();

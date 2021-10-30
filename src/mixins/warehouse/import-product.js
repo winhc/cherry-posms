@@ -43,9 +43,9 @@ export const ImportProduct = {
             }
         }
         return {
-            product_id: 0,
             productForm: {
-                product: null,
+                product: 0,
+                product_data: null,
                 bar_code: '',
                 category: '',
                 brand: '',
@@ -110,9 +110,10 @@ export const ImportProduct = {
         selectProduct(index) {
             console.log('selected_product_name => ', this.productForm.product_name);
             console.log('selected_product => ', this.productList[index]);
+            this.productForm.bar_code = this.productList[index].bar_code ? this.productList[index].bar_code : '';
             this.productForm.category = this.productList[index].category.category_name;
             this.productForm.brand = this.productList[index].brand.brand_name;
-            this.product_id = this.productList[index].id;
+            this.productForm.product = this.productList[index].id;
         },
         onImportSubmit() {
             this.$refs.productForm.validate((valid) => {
@@ -126,13 +127,13 @@ export const ImportProduct = {
         },
         async submitImport() {
             console.log('import productForm ==>', JSON.stringify(this.productForm))
-            const { bar_code, product_type, supplier, quantity, cost, alert_quantity, expiry_at, remarks } = this.productForm;
-            const importProductData = { bar_code, product_type, supplier, quantity, cost, alert_quantity, expiry_at, remarks };
+            const { product,bar_code, product_type, supplier, quantity, cost, alert_quantity, expiry_at, remarks } = this.productForm;
+            const importProductData = { bar_code, product, product_type, supplier, quantity, cost, alert_quantity, expiry_at, remarks };
             console.log('importProductData ==>', JSON.stringify(importProductData))
-            const response = await http.patch(`/warehouses/import/${this.product_id}`, importProductData);
+            const response = await http.post(`/warehouses/import-product`, importProductData);
             console.log('importProduct response =>', response);
             if (response != null) {
-                if (response.status == 200) {
+                if (response.status == 201) {
                     this.$message.success(`Success: ${response.statusText}`);
                     this.getData();
                     this.resetForm();

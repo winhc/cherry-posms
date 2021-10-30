@@ -1,51 +1,92 @@
 import * as http from '@/utils/http'
 import * as moment from 'moment'
-import DeleteDialog from '@/components/DeleteDialog/'
-import UploadImage from '@/components/UploadImage/';
 import { getErrorMessage } from '@/utils/message-tip';
 import { currentDate } from '@/utils/date-format';
 export const ListProduct = {
-    components: { DeleteDialog, UploadImage },
+    components: {},
     props: {},
     data() {
         const validateBarCode = (rule, value, callback) => {
             if (value == '') {
-                callback(new Error(`Enter or scan bar code`))
+                callback(new Error(`Enter bar code`))
             } else if (value.length < 13) {
-                callback(new Error(`Bar code must have 13 digits`))
+                callback(new Error(`Bar code can't less than 13 digits`))
             } else if (value.length > 13) {
                 callback(new Error(`Bar code can't greater than 13 digits`))
             } else {
                 callback()
             }
         }
+        const validateCost = (rule, value, callback) => {
+            if (value == null) {
+                callback(new Error(`Enter unit cost`))
+            } else if (value <= 0) {
+                callback(new Error('Unit cost must greater than 0'))
+            } else {
+                callback()
+            }
+        }
+        const validateQuantity = (rule, value, callback) => {
+            if (value == null) {
+                callback(new Error(`Enter quantity`))
+            } else if (value <= 0) {
+                callback(new Error('Quantity must greater than 0'))
+            } else {
+                callback()
+            }
+        }
+        const validateAlertQuantity = (rule, value, callback) => {
+            if (value == null) {
+                callback(new Error(`Enter alert quantity`))
+            } else if (value <= 0) {
+                callback(new Error('Alert quantity must greater than 0'))
+            } else {
+                callback()
+            }
+        }
         return {
             productData: [],
-            showDeleteDialog: false,
             product_id: 0,
-            avatar_url: process.env.VUE_APP_PRODUCT_AVATAR_API,
+            supplier_product_id: 0,
             isUpdate: false,
             productForm: {
-                product_name: '',
-                image: '',
-                category: null,
-                brand: null,
+                bar_code: '',
+                product_type: null,
+                supplier: null,
+                quantity: null,
+                cost: null,
+                alert_quantity: null,
+                expiry_at: '',
                 remarks: ''
             },
             rules: {
-                product_name: [
-                    { required: true, message: 'Enter product name', trigger: 'blur' },
+                bar_code: [
+                    { required: true, trigger: 'blur', validation: validateBarCode },
                 ],
-                category: [
-                    { required: true, message: 'Select category', trigger: 'blur' },
+                product_type: [
+                    { required: true, message: 'Select unit', trigger: 'blur' },
                 ],
-                brand: [
-                    { required: true, message: 'Select brand', trigger: 'blur' },
+                supplier: [
+                    { required: true, message: 'Select supplier', trigger: 'blur' },
+                ],
+                cost: [
+                    { required: true, trigger: 'blur', validator: validateCost },
+                ],
+                quantity: [
+                    { required: true, trigger: 'blur', validator: validateQuantity },
+                ],
+                alert_quantity: [
+                    { required: true, validator: validateAlertQuantity, trigger: 'blur' },
                 ]
             },
-            imageUrl: '',
-            imageFile: null,
-            isResetImage: false,
+            singleDatePickerOptions: {
+                disabledDate: function (date) {
+                    return new Date(date).getTime() < new Date().getTime();
+                }
+            },
+            productList: [],
+            productTypeList: [],
+            supplierList: [],
             rangeDatePickerOptions: {
                 disabledDate: function (date) {
                     return new Date(date).getTime() > new Date().getTime();
@@ -61,8 +102,6 @@ export const ListProduct = {
             tableDataCount: 0,
             tableLoading: false,
             downloadLoading: false,
-            categoryList: [],
-            brandList: []
         }
     },
     mounted() { },
@@ -78,11 +117,11 @@ export const ListProduct = {
             const to_date = this.searchForm.dateData[1];
             let url = '';
             if (this.searchForm.isAll) {
-                url = '/products?page_size=' + this.pageSize
+                url = '/warehouses?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
                     + '&product_name=' + this.searchForm.product_name
             } else {
-                url = '/products?page_size=' + this.pageSize
+                url = '/warehouses?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
                     + '&product_name=' + this.searchForm.product_name
                     + '&from_date=' + from_date
@@ -92,8 +131,8 @@ export const ListProduct = {
             console.log('product list response => ', response)
             if (response != null) {
                 if (response.status == 200) {
-                    this.productData = response.data.data
-                    this.tableDataCount = response.data.count
+                    this.productData = response.data.data;
+                    this.tableDataCount = response.data.count;
                     this.getProductOption();
                     console.log('productData => ', this.productData)
                 } else {
@@ -103,12 +142,12 @@ export const ListProduct = {
             this.tableLoading = false;
         },
         async getProductOption() {
-            const response = await http.get('/products/product-options');
+            const response = await http.get('/warehouses/import-options');
             console.log('product option response => ', response)
             if (response != null) {
                 if (response.status == 200) {
-                    this.brandList = response.data.brand.data;
-                    this.categoryList = response.data.category.data;
+                    this.supplierList = response.data.supplier.data;
+                    this.productTypeList = response.data.product_type.data;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -158,32 +197,15 @@ export const ListProduct = {
             this.pageSize = 10;
         },
         updateProduct(data) {
-            console.log('updateProduct=>', data)
-            this.productForm.product_name = data.product_name;
-            this.productForm.category = data.category.id;
-            this.productForm.brand = data.brand.id;
+            this.productForm.bar_code = data.product.bar_code;
+            this.productForm.supplier = data.supplier.id;
+            this.productForm.quantity = data.quantity;
+            this.productForm.product_type = data.product_type.id;
+            this.productForm.cost = data.cost;
+            this.productForm.alert_quantity = data.alert_quantity;
+            this.productForm.expiry_at = data.expiry_at;
             this.productForm.remarks = data.remarks;
-            this.productForm.image = data.image;
-            this.imageUrl = '';
-            if (data.image) {
-                this.imageUrl = this.avatar_url + data.id + '/' + data.image;
-                console.log(`imageUrl => ${this.imageUrl}`);
-            }
-            this.product_id = data.id;
             this.isUpdate = true;
-        },
-        handleUploadChange(file) {
-            console.log('handleUploadChange view==>', file);
-            if (file) {
-                this.imageFile = file.raw;
-                this.imageUrl = this.imageUrl = URL.createObjectURL(file.raw);
-                this.isResetImage = false;
-            }
-        },
-        deleteImage(file) {
-            console.log('deleteImage view==>', file);
-            this.imageFile = file;
-            this.productForm.image = '';
         },
         onSubmit() {
             this.$refs.productForm.validate((valid) => {
@@ -196,57 +218,40 @@ export const ListProduct = {
             });
         },
         async submitUpdate() {
-            let formData = new FormData(); // important for image file upload
-            formData.append('product_name', this.productForm.product_name);
-            formData.append('category', this.productForm.category);
-            formData.append('brand', this.productForm.brand);
-            formData.append('remarks', this.productForm.remarks);
-            if (this.imageUrl == '') {
-                formData.append('image', '');
-            } else {
-                formData.append('image', this.imageFile || this.productForm.image);
-            }
-            const response = await http.patch(`/products/${this.product_id}`, formData);
-            console.log('updateProduct response =>', response);
-            if (response != null) {
-                if (response.status == 200) {
-                    this.$message.success(`Success: ${response.statusText}`);
-                    this.getData();
-                    this.resetForm();
-                } else {
-                    this.$message.error(`${getErrorMessage(response)}`);
-                }
-            }
+            // let formData = new FormData(); // important for image file upload
+            // formData.append('product_name', this.productForm.product_name);
+            // formData.append('category', this.productForm.category);
+            // formData.append('brand', this.productForm.brand);
+            // formData.append('remarks', this.productForm.remarks);
+            // if (this.imageUrl == '') {
+            //     formData.append('image', '');
+            // } else {
+            //     formData.append('image', this.imageFile || this.productForm.image);
+            // }
+            // const response = await http.patch(`/products/${this.product_id}/${this.supplier_product_id}`, formData);
+            // console.log('updateProduct response =>', response);
+            // if (response != null) {
+            //     if (response.status == 200) {
+            //         this.$message.success(`Success: ${response.statusText}`);
+            //         this.getData();
+            //         this.resetForm();
+            //     } else {
+            //         this.$message.error(`${getErrorMessage(response)}`);
+            //     }
+            // }
         },
         resetForm() {
             this.productForm = {
-                product_name: '',
-                image: '',
-                category: null,
-                brand: null,
+                bar_code: '',
+                product_type: null,
+                supplier: null,
+                quantity: null,
+                cost: null,
+                alert_quantity: null,
+                expiry_at: '',
                 remarks: ''
             }
-            this.imageUrl = '';
-            this.imageFile = null;
             this.isUpdate = false;
-            this.isResetImage = true;
-        },
-        deleteProduct(data) {
-            this.product_id = data.id;
-            this.showDeleteDialog = true
-        },
-        async confirmDelete(remarks) {
-            // console.log('remarks=>', remarks)
-            const response = await http.delete(`/products/${this.product_id}`)
-            console.log('product delete response => ', response)
-            if (response.status == 200) {
-                this.showDeleteDialog = false;
-                this.product_id = 0;
-                this.$message.success(`Success: ${response.statusText}`);
-                this.getData();
-            } else {
-                this.$message.error(`${getErrorMessage(response)}`);
-            }
         },
         handlePageSizeChange(size) {
             this.pageSize = size;

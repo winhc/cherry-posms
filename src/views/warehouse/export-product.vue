@@ -9,7 +9,7 @@
     >
       <el-form-item label="Product" prop="product_name">
         <el-select
-          v-model="productForm.product"
+          v-model="productForm.product_data"
           placeholder="Select product"
           @change="selectProduct"
         >
@@ -22,20 +22,25 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="productForm.product != null" label="Bar code">
-        <span>{{ productForm.bar_code }}</span>
-      </el-form-item>
-      <el-form-item v-if="productForm.product != null" label="Category">
+      <el-form-item v-if="productForm.product_data != null" label="Category">
         <span>{{ productForm.category }}</span>
       </el-form-item>
-      <el-form-item v-if="productForm.product != null" label="Brand">
+      <el-form-item v-if="productForm.product_data != null" label="Brand">
         <span>{{ productForm.brand }}</span>
+      </el-form-item>
+      <el-form-item v-if="productForm.product_data != null" label="Bar code" prop="bar_code">
+        <el-input
+          minlength="13"
+          maxlength="13"
+          v-model="productForm.bar_code"
+          style="width: 190px"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Store" prop="store">
         <el-select
           v-model="productForm.store"
           placeholder="Select store"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         >
           <el-option
             v-for="item in storeList"
@@ -51,18 +56,18 @@
           v-model="productForm.quantity"
           controls-position="right"
           :min="0"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         ></el-input-number>
       </el-form-item>
       <el-form-item
         label="Unit"
         prop="product_type"
-        :disabled="productForm.product == null"
+        :disabled="productForm.product_data == null"
       >
         <el-select
           v-model="productForm.product_type"
           placeholder="Select product type"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         >
           <el-option
             v-for="item in productTypeList"
@@ -78,7 +83,7 @@
           v-model="productForm.price"
           controls-position="right"
           :min="0"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         ></el-input-number>
         <span> (MMK)</span>
       </el-form-item>
@@ -87,7 +92,7 @@
           v-model="productForm.alert_quantity"
           controls-position="right"
           :min="0"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         ></el-input-number>
       </el-form-item>
       <el-form-item label="Tax" prop="tax">
@@ -95,7 +100,7 @@
           v-model="productForm.tax"
           controls-position="right"
           :min="0"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         ></el-input-number>
         <span> (MMK)</span>
       </el-form-item>
@@ -103,20 +108,20 @@
         <el-input
           type="textarea"
           v-model="productForm.remarks"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
         ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
           type="info"
           @click="resetForm"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
           >Cancel</el-button
         >
         <el-button
           type="primary"
           @click="onExportSubmit"
-          :disabled="productForm.product == null"
+          :disabled="productForm.product_data == null"
           ><svg-icon icon-class="export" /> Export</el-button
         >
       </el-form-item>

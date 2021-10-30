@@ -175,11 +175,11 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'list-product',
+        path: 'warehouse-product',
         component: () => import('@/views/warehouse/list-product'),
-        name: 'List Product',
+        name: 'Warehouse Product',
         meta: {
-          title: 'List Product'
+          title: 'Warehouse Product'
         }
       },
     ]
