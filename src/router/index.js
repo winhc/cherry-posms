@@ -206,36 +206,36 @@ export const asyncRoutes = [
   //     },
   //   ]
   // },
-  {
-    path: '/store',
-    component: Layout,
-    redirect: '/store/list',
-    alwaysShow: true,
-    name: 'Store',
-    meta: {
-      title: 'Store',
-      icon: 'store',
-      roles: ['admin', 'manager']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/store/list-store'),
-        name: 'List store',
-        meta: {
-          title: 'List store'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/store/add-store'),
-        name: 'Add store',
-        meta: {
-          title: 'Add store'
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/store',
+  //   component: Layout,
+  //   redirect: '/store/list',
+  //   alwaysShow: true,
+  //   name: 'Store',
+  //   meta: {
+  //     title: 'Store',
+  //     icon: 'store',
+  //     roles: ['admin', 'manager']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/store/list-store'),
+  //       name: 'List store',
+  //       meta: {
+  //         title: 'List store'
+  //       }
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: () => import('@/views/store/add-store'),
+  //       name: 'Add store',
+  //       meta: {
+  //         title: 'Add store'
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/product',
     component: Layout,
@@ -355,6 +355,62 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order',
+    children: [
+      {
+        path: 'order',
+        component: () => import('@/views/order/list-order'),
+        name: 'Order',
+        meta: { title: 'Order', icon: 'shopping-bag', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/sale',
+    component: Layout,
+    redirect: '/sale',
+    children: [
+      {
+        path: 'sale',
+        component: () => import('@/views/sale/list-sale'),
+        name: 'Sale',
+        meta: { title: 'Sale', icon: 'shopping-cart', affix: true }
+      }
+    ]
+  },
+  // {
+  //   path: '/purchase',
+  //   component: Layout,
+  //   redirect: '/store/list',
+  //   alwaysShow: true,
+  //   name: 'Store',
+  //   meta: {
+  //     title: 'Store',
+  //     icon: 'store',
+  //     roles: ['admin', 'manager']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/store/list-store'),
+  //       name: 'List store',
+  //       meta: {
+  //         title: 'List store'
+  //       }
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: () => import('@/views/store/add-store'),
+  //       name: 'Add store',
+  //       meta: {
+  //         title: 'Add store'
+  //       }
+  //     }
+  //   ]
+  // },
   peopleRouter,
 
   // {
