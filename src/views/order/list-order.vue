@@ -85,14 +85,14 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center">
+        <!-- <el-table-column align="center">
           <template slot="header">
             <span>User</span>
           </template>
           <template slot-scope="{ row }">
             <span>{{ row.user.user_name }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column v-if="isDetail" align="center">
           <template slot="header">
@@ -117,7 +117,7 @@
             <span>Amount (MMK)</span>
           </template>
           <template slot-scope="{ row }">
-            <span>{{ row.amount }}</span>
+            <span>{{ row.price }}</span>
           </template>
         </el-table-column>
 

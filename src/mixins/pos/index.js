@@ -9,81 +9,108 @@ export const POS = {
     props: {},
     data() {
         return {
-            // brandData: [],
-            // showDeleteDialog: false,
-            // brand_id: 0,
-            // isUpdate: false,
-            // brandForm: {
-            //     brand_name: '',
-            //     remarks: ''
-            // },
-            // rules: {
-            //     brand_name: [
-            //         { required: true, message: 'Enter brand name', trigger: 'blur' }
-            //     ],
-            //     remarks: [
-            //         { required: true, message: 'Enter remarks', trigger: 'blur' }
-            //     ]
-            // },
-            // pickerOptions: {
-            //     disabledDate: function (date) {
-            //         return new Date(date).getTime() > new Date().getTime();
-            //     }
-            // },
-            // searchForm: {
-            //     dateData: [currentDate(), currentDate()],
-            //     brand_name: '',
-            //     isAll: true
-            // },
-            // pageSize: 10,
-            // pageIndex: 1,
-            // tableDataCount: 0,
-            // tableLoading: false,
-            // downloadLoading: false,
-            // messageAlert: {
-            //     title: '',
-            //     isSuccess: true,
-            //     isShow: false,
-            // }
-            title: 'POS'
+            categoryAvatarUrl: process.env.VUE_APP_CATEGORY_AVATAR_API,
+            categoryList: [],
+            selectedCategory: 0,
+            productList: [],
+            customerList: [],
+            selectedCustomer: 1,
+            orderList: [],
+            totalQuantity: 0,
+            totalAmount: 0,
         }
     },
     mounted() { },
     created() {
-        // this.getData();
+        this.getPOSOption();
     },
     destroyed() { },
     methods: {
-        // async getData() {
-        //     this.tableLoading = true;
-        //     console.log('searchForm', this.searchForm);
-        //     const from_date = this.searchForm.dateData[0];
-        //     const to_date = this.searchForm.dateData[1];
-        //     let url = '';
-        //     if (this.searchForm.isAll) {
-        //         url = '/brands?page_size=' + this.pageSize
-        //             + '&page_index=' + this.pageIndex
-        //             + '&brand_name=' + this.searchForm.brand_name
-        //     } else {
-        //         url = '/brands?page_size=' + this.pageSize
-        //             + '&page_index=' + this.pageIndex
-        //             + '&brand_name=' + this.searchForm.brand_name
-        //             + '&from_date=' + from_date
-        //             + '&to_date=' + to_date
-        //     }
-        //     const response = await http.get(url);
-        //     console.log('brand list response => ', response)
-        //     if (response != null) {
-        //         if (response.status == 200) {
-        //             this.brandData = response.data.data
-        //             this.tableDataCount = response.data.count
-        //             console.log('brandData => ', this.brandData)
-        //         } else {
-        //             this.$message.error(`${getErrorMessage(response)}`);
-        //         }
-        //     }
-        //     this.tableLoading = false;
-        // },
+        async getPOSOption() {
+            const response = await http.get('/pos');
+            console.log('pos option response => ', response)
+            if (response != null) {
+                if (response.status == 200) {
+                    this.customerList = response.data.customer.data;
+                    this.categoryList = response.data.category.data;
+                    const all = {
+                        id: 0,
+                        category_name: 'All',
+                        image: null
+                    };
+                    this.categoryList.splice(0, 0, all);
+                    this.getProduct();
+                } else {
+                    this.$message.error(`${getErrorMessage(response)}`);
+                }
+            }
+        },
+        selectCategory(data) {
+            console.log('selectCategory => ', data);
+            this.selectedCategory = data.id;
+            this.getProduct();
+        },
+        selectProduct(data) {
+            // console.log('selectProduct => ', data);
+            const tempOrder = {
+                orderCode: '',
+                product: data.id,
+                product_name: data.product_name,
+                status: 'ordered',
+                customer: 1,
+                quantity: 1,
+                price: data.price,
+                remarks: '',
+            };
+            const tempOrderList = this.orderList;
+            const index = tempOrderList.findIndex(item => item.product == data.id);
+            // console.log('order index =>', index);
+            if (index != -1) {
+                tempOrder.quantity = tempOrderList[index].quantity + 1;
+                tempOrderList[index] = tempOrder;
+            } else {
+                tempOrderList.push(tempOrder);
+            }
+            this.orderList = [];
+            this.orderList = tempOrderList;
+            // console.log('orderList => ', this.orderList)
+            this.totalQuantity = 0;
+            this.totalAmount = 0;
+            for (var item of this.orderList) {
+                console.log('orderItem => ', item);
+                this.totalQuantity += item.quantity;
+                this.totalAmount += item.quantity * item.price;
+            }
+        },
+        clearOrder() {
+            this.orderList = [];
+            this.totalQuantity = 0;
+            this.totalAmount = 0;
+        },
+        async getProduct() {
+            const response = await http.get(`/products/shop/${this.selectedCategory}`);
+            console.log('product response => ', response)
+            if (response != null) {
+                if (response.status == 200) {
+                    const resData = response.data.data;
+                    this.productList = this.listToMatrix(resData, 6);
+                    console.log('ddd==>', this.productList);
+                } else {
+                    this.$message.error(`${getErrorMessage(response)}`);
+                }
+            }
+        },
+        listToMatrix(list, elementPerSubArray) {
+            var matrix = [], i, k;
+            for (i = 0, k = -1; i < list.length; i++) {
+                if (i % elementPerSubArray === 0) {
+                    k++;
+                    matrix[k] = [];
+                }
+                matrix[k].push(list[i]);
+            }
+            return matrix;
+        }
         // handleDownload() {
         //     try {
         //         this.downloadLoading = true;
