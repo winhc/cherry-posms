@@ -106,7 +106,7 @@ export const POS = {
             }
         },
         async getProduct() {
-            const response = await http.get(`/pos/shop?category_id=${this.selectedCategory}&product_name=${this.productName}`);
+            const response = await http.get(`/pos/products?category_id=${this.selectedCategory}&product_name=${this.productName}`);
             console.log('product response => ', response)
             if (response != null) {
                 if (response.status == 200) {
