@@ -3,6 +3,7 @@ import moment from 'moment'
 import DeleteDialog from '../../components/DeleteDialog/'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
+import * as CodeGenerator from '@/utils/code-generator';
 
 export const POS = {
     components: { DeleteDialog },
@@ -18,6 +19,7 @@ export const POS = {
             orderList: [],
             totalQuantity: 0,
             totalAmount: 0,
+            orderCode: CodeGenerator.generateCode({ prefix: 'ODR',length: 5 }),
         }
     },
     mounted() { },
@@ -53,11 +55,11 @@ export const POS = {
         selectProduct(data) {
             // console.log('selectProduct => ', data);
             const tempOrder = {
-                orderCode: '',
+                order_code: this.orderCode,
                 product: data.id,
                 product_name: data.product_name,
                 status: 'ordered',
-                customer: 1,
+                customer: this.selectedCustomer,
                 quantity: 1,
                 price: data.price,
                 remarks: '',
@@ -86,6 +88,18 @@ export const POS = {
             this.orderList = [];
             this.totalQuantity = 0;
             this.totalAmount = 0;
+            this.orderCode = CodeGenerator.generateCode({ prefix: 'ODR',length: 5 });
+        },
+        async createOrder() {
+            const response = await http.post(`/orders`, this.orderList);
+            console.log('create order response => ', response)
+            if (response != null) {
+                if (response.status == 201) {
+                    this.clearOrder();
+                } else {
+                    this.$message.error(`${getErrorMessage(response)}`);
+                }
+            }
         },
         async getProduct() {
             const response = await http.get(`/products/shop/${this.selectedCategory}`);
@@ -110,7 +124,7 @@ export const POS = {
                 matrix[k].push(list[i]);
             }
             return matrix;
-        }
+        },
         // handleDownload() {
         //     try {
         //         this.downloadLoading = true;

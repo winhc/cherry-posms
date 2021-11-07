@@ -50,7 +50,16 @@
               >
                 <div @click="selectProduct(subItem)">
                   <el-card class="card_style" shadow="never">
-                    {{ subItem.product_name }}
+                    <el-row>
+                      <el-col :sm="24">
+                        {{ subItem.product_name }}
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :sm="24" style="color: gray; font-size: 14px">
+                        {{ subItem.price }} Ks
+                      </el-col>
+                    </el-row>
                   </el-card>
                 </div>
               </el-col>
@@ -97,7 +106,7 @@
                     {{ item.product_name }}
                   </el-row>
                   <el-row style="color: gray; font-size: 14px">
-                    K {{ item.price }}
+                    Ks {{ item.price }}
                   </el-row>
                 </el-col>
                 <el-col :span="3">x{{ item.quantity }}</el-col>
@@ -128,8 +137,8 @@
                 {{ totalAmount }} Ks
               </el-col>
             </el-row>
-            <el-button type="primary" style="width: 100%"
-              >Charge 100,000 Ks</el-button
+            <el-button type="primary" style="width: 100%" @click="createOrder"
+              >Charge {{ totalAmount }} Ks</el-button
             >
           </div>
         </div>

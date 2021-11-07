@@ -56,7 +56,7 @@ export const AddProduct = {
         }
         return {
             productForm: {
-                product_code: CodeGenerator.getCode({ prefix: 'P', length: 5 }),
+                product_code: CodeGenerator.generateCode({ prefix: 'P', length: 5 }),
                 bar_code: '',
                 product_name: '',
                 image: '',
@@ -188,7 +188,7 @@ export const AddProduct = {
         },
         resetForm() {
             this.productForm = {
-                product_code: CodeGenerator.getCode({ prefix: 'P', length: 5 }),
+                product_code: CodeGenerator.generateCode({ prefix: 'P', length: 5 }),
                 bar_code: '',
                 product_name: '',
                 image: '',

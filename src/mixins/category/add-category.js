@@ -9,7 +9,7 @@ export const AddCategory = {
   data() {
     return {
       categoryForm: {
-        category_code: CodeGenerator.getCode({ prefix: 'C',length: 5 }),
+        category_code: CodeGenerator.generateCode({ prefix: 'C',length: 5 }),
         category_name: '',
         remarks: ''
       },
@@ -58,7 +58,7 @@ export const AddCategory = {
     },
     resetCategoryForm() {
       this.categoryForm = {
-        category_code: CodeGenerator.getCode({ prefix: 'C',length: 5 }),
+        category_code: CodeGenerator.generateCode({ prefix: 'C',length: 5 }),
         category_name: '',
         remarks: ''
       }
