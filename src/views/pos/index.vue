@@ -35,7 +35,28 @@
               </div>
             </div>
           </div>
-          <div class="title-text" style="margin-top: 10px">Item</div>
+          <el-row
+            class="title-text"
+            style="margin-top: 10px"
+            type="flex"
+            justify="space-between"
+          >
+            <el-col :span="15"> Item </el-col>
+            <el-col :span="9" style="text-align: right">
+              <el-input
+                placeholder="Search item"
+                v-model="productName"
+                size="medium"
+                clearable
+              >
+                <el-button
+                  slot="append"
+                  icon="el-icon-search"
+                  @click="getProduct"
+                ></el-button>
+              </el-input>
+            </el-col>
+          </el-row>
           <div id="product_list_container">
             <el-row
               v-for="(item, index) in productList"
@@ -83,7 +104,7 @@
           </el-row>
           <el-select
             v-model="selectedCustomer"
-            size="small"
+            size="medium"
             style="width: 100%"
           >
             <el-option

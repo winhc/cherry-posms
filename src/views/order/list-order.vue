@@ -121,15 +121,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="isDetail" align="center">
-          <template slot="header">
-            <span>Remarks</span>
-          </template>
-          <template slot-scope="{ row }">
-            <span>{{ row.remarks }}</span>
-          </template>
-        </el-table-column>
-
         <el-table-column align="center">
           <template slot="header">
             <span>Date</span>
@@ -138,6 +129,16 @@
             <span>{{ row.created_at | moment }}</span>
           </template>
         </el-table-column>
+
+        <el-table-column v-if="isDetail" align="center">
+          <template slot="header">
+            <span>Remarks</span>
+          </template>
+          <template slot-scope="{ row }">
+            <span>{{ row.remarks }}</span>
+          </template>
+        </el-table-column>
+        
       </el-table>
       <el-pagination
         v-if="tableDataCount > 0"

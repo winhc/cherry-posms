@@ -19,7 +19,8 @@ export const POS = {
             orderList: [],
             totalQuantity: 0,
             totalAmount: 0,
-            orderCode: CodeGenerator.generateCode({ prefix: 'ODR',length: 5 }),
+            orderCode: CodeGenerator.generateCode({ prefix: 'ODR', length: 5 }),
+            productName: '',
         }
     },
     mounted() { },
@@ -85,16 +86,19 @@ export const POS = {
             }
         },
         clearOrder() {
-            this.orderList = [];
-            this.totalQuantity = 0;
-            this.totalAmount = 0;
-            this.orderCode = CodeGenerator.generateCode({ prefix: 'ODR',length: 5 });
+            if (this.orderList.length != 0) {
+                this.orderList = [];
+                this.totalQuantity = 0;
+                this.totalAmount = 0;
+                this.orderCode = CodeGenerator.generateCode({ prefix: 'ODR', length: 5 });
+            }
         },
         async createOrder() {
             const response = await http.post(`/orders`, this.orderList);
             console.log('create order response => ', response)
             if (response != null) {
                 if (response.status == 201) {
+                    this.$message.success(response.data.message);
                     this.clearOrder();
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
@@ -102,7 +106,7 @@ export const POS = {
             }
         },
         async getProduct() {
-            const response = await http.get(`/products/shop/${this.selectedCategory}`);
+            const response = await http.get(`/pos/shop?category_id=${this.selectedCategory}&product_name=${this.productName}`);
             console.log('product response => ', response)
             if (response != null) {
                 if (response.status == 200) {
