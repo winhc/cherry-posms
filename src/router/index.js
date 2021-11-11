@@ -381,36 +381,36 @@ export const asyncRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/purchase',
-  //   component: Layout,
-  //   redirect: '/store/list',
-  //   alwaysShow: true,
-  //   name: 'Store',
-  //   meta: {
-  //     title: 'Store',
-  //     icon: 'store',
-  //     roles: ['admin', 'manager']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'list',
-  //       component: () => import('@/views/store/list-store'),
-  //       name: 'List store',
-  //       meta: {
-  //         title: 'List store'
-  //       }
-  //     },
-  //     {
-  //       path: 'add',
-  //       component: () => import('@/views/store/add-store'),
-  //       name: 'Add store',
-  //       meta: {
-  //         title: 'Add store'
-  //       }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/purchase',
+    component: Layout,
+    redirect: '/purchase/list',
+    alwaysShow: true,
+    name: 'Purchase',
+    meta: {
+      title: 'Purchase',
+      icon: 'purchase',
+      roles: ['admin', 'manager']
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/purchase/list-purchase'),
+        name: 'List purchase',
+        meta: {
+          title: 'List purchase'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/purchase/add-purchase'),
+        name: 'Add purchase',
+        meta: {
+          title: 'Add purchase'
+        }
+      }
+    ]
+  },
   peopleRouter,
 
   // {
