@@ -2,9 +2,10 @@ import * as http from '@/utils/http'
 import moment from 'moment'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
+import CountTo from 'vue-count-to'
 
-export const ListSale = {
-    components: { },
+export const SaleReport = {
+    components: { CountTo },
     props: {},
     data() {
         return {
@@ -16,15 +17,16 @@ export const ListSale = {
             },
             searchForm: {
                 dateData: [currentDate(), currentDate()],
-                sale_code: '',
-                isAll: false
+                isAll: false,
             },
-            isDetail: false,
             pageSize: 10,
             pageIndex: 1,
             tableDataCount: 0,
             tableLoading: false,
-            downloadLoading: false,
+            saleValue: 0,
+            productCount: 0,
+            purchaseValue: 0,
+            profitValue: 0,
         }
     },
     mounted() { },
@@ -34,19 +36,20 @@ export const ListSale = {
     destroyed() { },
     methods: {
         async getData() {
+            this.saleValue = 0;
+            this.productCount = 0;
+            this.purchaseValue = 0;
+            this.profitValue = 0;
             this.tableLoading = true;
-            console.log('searchForm', this.searchForm);
             const from_date = this.searchForm.dateData[0];
             const to_date = this.searchForm.dateData[1];
             let url = '';
             if (this.searchForm.isAll) {
-                url = '/sales?page_size=' + this.pageSize
+                url = '/reports/sale?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&sale_code=' + this.searchForm.sale_code
             } else {
-                url = '/sales?page_size=' + this.pageSize
+                url = '/reports/sale?page_size=' + this.pageSize
                     + '&page_index=' + this.pageIndex
-                    + '&sale_code=' + this.searchForm.sale_code
                     + '&from_date=' + from_date
                     + '&to_date=' + to_date
             }
@@ -54,52 +57,28 @@ export const ListSale = {
             console.log('order list response => ', response)
             if (response != null) {
                 if (response.status == 200) {
-                    this.saleData = response.data.data
-                    this.tableDataCount = response.data.count
-                    console.log('saleData => ', this.saleData)
+                    this.saleData = response.data.data;
+                    this.tableDataCount = response.data.count;
+                    console.log('saleData => ', this.saleData);
+                    for (var data of this.saleData) {
+                        // console.log('ddddd => ', data);
+                        this.saleValue += data.sale.total_amount;
+                        this.productCount += data.quantity;
+                        this.purchaseValue += (data.quantity * data.product.cost);
+                    }
+                    this.profitValue = this.saleValue - this.purchaseValue;
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
             }
             this.tableLoading = false;
         },
-        handleDownload() {
-            // try {
-            //     this.downloadLoading = true;
-            //     const tHeader = ['Brand Name', 'Created At', 'Updated At', 'Remarks']
-            //     const tBody = [];
-            //     for (const i in this.saleData) {
-            //         let item = this.saleData[i];
-            //         let data = [
-            //             item.sale_code,
-            //             this.formattedDate(item.created_at),
-            //             this.formattedDate(item.updated_at),
-            //             item.remarks
-            //         ];
-            //         tBody.push(data);
-            //     }
-            //     const now = new Date();
-            //     const fileName = 'BrandData_' + now.getFullYear() + (now.getMonth() + 1) + now.getDate() + '_' + now.getHours() + now.getMinutes() + now.getSeconds();
-            //     import('@/vendor/Export2Excel').then(excel => {
-            //         excel.export_json_to_excel({
-            //             header: tHeader,
-            //             data: tBody,
-            //             filename: fileName,
-            //             autoWidth: true,
-            //             bookType: 'xlsx'
-            //         })
-            //         this.downloadLoading = false
-            //     })
-            // } catch (erorr) {
-            //     console.log('Download => ', error);
-            // }
-        },
-        formattedDate(date) {
-            return moment(date).format('DD-MM-YYYY')
-        },
         handleSwitchAndSearch() {
             this.resetPagination();
             this.getData();
+        },
+        formattedDate(date) {
+            return moment(date).format('DD-MM-YYYY')
         },
         resetPagination() {
             this.pageIndex = 1;

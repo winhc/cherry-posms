@@ -20,10 +20,10 @@
           :picker-options="pickerOptions"
         />
       </el-form-item>
-      <el-form-item label="Order code">
+      <el-form-item label="Sale code">
         <el-input
-          v-model="searchForm.order_code"
-          placeholder="Enter order code"
+          v-model="searchForm.sale_code"
+          placeholder="Enter sale code"
           clearable
         ></el-input>
       </el-form-item>
@@ -58,10 +58,10 @@
       >
         <el-table-column v-if="isDetail" align="center">
           <template slot="header">
-            <span>Order code</span>
+            <span>Sale code</span>
           </template>
           <template slot-scope="{ row }">
-            <span>{{ row.order_code }}</span>
+            <span>{{ row.sale_code }}</span>
           </template>
         </el-table-column>
 

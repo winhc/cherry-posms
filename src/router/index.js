@@ -12,6 +12,7 @@ import Layout from '@/layout'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 import peopleRouter from './modules/people'
+import productRouter from './modules/product'
 // import warehouseRouter from './modules/warehouse'
 // import inventoryRouter from './modules/inventory'
 // import storeRouter from './modules/store'
@@ -236,125 +237,126 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/product',
-    component: Layout,
-    redirect: '/product/list',
-    alwaysShow: true,
-    name: 'Product',
-    meta: {
-      title: 'Product',
-      icon: 'component',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/product/list-product'),
-        name: 'List Product',
-        meta: {
-          title: 'List Product'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/product/add-product'),
-        name: 'Add Product',
-        meta: {
-          title: 'Add Product'
-        }
-      }
-    ]
-  },
-  {
-    path: '/category',
-    component: Layout,
-    redirect: '/category/list',
-    alwaysShow: true,
-    name: 'Category',
-    meta: {
-      title: 'Category',
-      icon: 'example',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/category/list-category'),
-        name: 'List Category',
-        meta: {
-          title: 'List Category'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/category/add-category'),
-        name: 'Add Category',
-        meta: {
-          title: 'Add Category'
-        }
-      }
-    ]
-  },
-  {
-    path: '/brand',
-    component: Layout,
-    redirect: '/brand/list',
-    alwaysShow: true,
-    name: 'Brand',
-    meta: {
-      title: 'Brand',
-      icon: 'star',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/brand/list-brand'),
-        name: 'List Brand',
-        meta: {
-          title: 'List Brand'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/brand/add-brand'),
-        name: 'Add Brand',
-        meta: {
-          title: 'Add Brand'
-        }
-      }
-    ]
-  },
-  {
-    path: '/product-type',
-    component: Layout,
-    redirect: '/product-type/list',
-    name: 'Product Type',
-    meta: {
-      title: 'Product Type',
-      icon: 'list',
-      roles: ['admin', 'manager', 'accountant']
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/product-type/list-product-type'),
-        name: 'List Product Type',
-        meta: {
-          title: 'List Product Type'
-        }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/product-type/add-product-type'),
-        name: 'Add Product Type',
-        meta: {
-          title: 'Add Product Type'
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/product',
+  //   component: Layout,
+  //   redirect: '/product/list',
+  //   alwaysShow: true,
+  //   name: 'Product',
+  //   meta: {
+  //     title: 'Product',
+  //     icon: 'component',
+  //     roles: ['admin', 'manager', 'accountant']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/product/list-product'),
+  //       name: 'List Product',
+  //       meta: {
+  //         title: 'List Product'
+  //       }
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: () => import('@/views/product/add-product'),
+  //       name: 'Add Product',
+  //       meta: {
+  //         title: 'Add Product'
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/category',
+  //   component: Layout,
+  //   redirect: '/category/list',
+  //   alwaysShow: true,
+  //   name: 'Category',
+  //   meta: {
+  //     title: 'Category',
+  //     icon: 'example',
+  //     roles: ['admin', 'manager', 'accountant']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/category/list-category'),
+  //       name: 'List Category',
+  //       meta: {
+  //         title: 'List Category'
+  //       }
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: () => import('@/views/category/add-category'),
+  //       name: 'Add Category',
+  //       meta: {
+  //         title: 'Add Category'
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/brand',
+  //   component: Layout,
+  //   redirect: '/brand/list',
+  //   alwaysShow: true,
+  //   name: 'Brand',
+  //   meta: {
+  //     title: 'Brand',
+  //     icon: 'star',
+  //     roles: ['admin', 'manager', 'accountant']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/brand/list-brand'),
+  //       name: 'List Brand',
+  //       meta: {
+  //         title: 'List Brand'
+  //       }
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: () => import('@/views/brand/add-brand'),
+  //       name: 'Add Brand',
+  //       meta: {
+  //         title: 'Add Brand'
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/product-type',
+  //   component: Layout,
+  //   redirect: '/product-type/list',
+  //   name: 'Product Type',
+  //   meta: {
+  //     title: 'Product Type',
+  //     icon: 'list',
+  //     roles: ['admin', 'manager', 'accountant']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/product-type/list-product-type'),
+  //       name: 'List Product Type',
+  //       meta: {
+  //         title: 'List Product Type'
+  //       }
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: () => import('@/views/product-type/add-product-type'),
+  //       name: 'Add Product Type',
+  //       meta: {
+  //         title: 'Add Product Type'
+  //       }
+  //     }
+  //   ]
+  // },
+  productRouter,
   {
     path: '/order',
     component: Layout,
@@ -378,6 +380,26 @@ export const asyncRoutes = [
         component: () => import('@/views/sale/list-sale'),
         name: 'Sale',
         meta: { title: 'Sale', icon: 'shopping-cart', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/report',
+    component: Layout,
+    redirect: '/report/sale-list',
+    alwaysShow: true,
+    name: 'Report',
+    meta: {
+      title: 'Report',
+      icon: 'chart',
+      roles: ['admin', 'manager']
+    },
+    children: [
+      {
+        path: 'sale-report',
+        component: () => import('@/views/report/sale-report'),
+        name: 'Sale Report',
+        meta: { title: 'Sale Report' }
       }
     ]
   },
