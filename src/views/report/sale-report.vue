@@ -7,7 +7,7 @@
           @change="handleSwitchAndSearch"
         ></el-switch>
       </el-form-item>
-      <el-form-item label="Date">
+      <el-form-item v-if="!searchForm.isAll" label="Date">
         <el-date-picker
           v-model="searchForm.dateData"
           type="daterange"
@@ -19,7 +19,7 @@
           :picker-options="pickerOptions"
         />
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="!searchForm.isAll">
         <el-button
           type="primary"
           icon="el-icon-search"

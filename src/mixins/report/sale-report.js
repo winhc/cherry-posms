@@ -17,7 +17,7 @@ export const SaleReport = {
             },
             searchForm: {
                 dateData: [currentDate(), currentDate()],
-                isAll: false,
+                isAll: true,
             },
             pageSize: 10,
             pageIndex: 1,

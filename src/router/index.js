@@ -108,10 +108,10 @@ export const constantRoutes = [
     redirect: '/pos',
     children: [
       {
-        path: 'pos',
+        path: '/pos',
         component: () => import('@/views/pos'),
-        name: 'POS',
-        meta: { title: 'POS', icon: 'menu', affix: true }
+        name: 'Sale',
+        meta: { title: 'Sale', icon: 'shopping', affix: true }
       }
     ]
   },
@@ -356,7 +356,6 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-  productRouter,
   {
     path: '/order',
     component: Layout,
@@ -365,44 +364,25 @@ export const asyncRoutes = [
       {
         path: 'order',
         component: () => import('@/views/order/list-order'),
-        name: 'Order',
-        meta: { title: 'Order', icon: 'shopping-bag', affix: true }
+        name: 'Order List',
+        meta: { title: 'Order List', icon: 'shopping-bag', affix: true }
       }
     ]
   },
   {
     path: '/sale',
     component: Layout,
-    redirect: '/sale',
+    redirect: '/sale/list',
     children: [
       {
-        path: 'sale',
+        path: 'list',
         component: () => import('@/views/sale/list-sale'),
-        name: 'Sale',
-        meta: { title: 'Sale', icon: 'shopping-cart', affix: true }
+        name: 'Sale List',
+        meta: { title: 'Sale List', icon: 'list', affix: true }
       }
     ]
   },
-  {
-    path: '/report',
-    component: Layout,
-    redirect: '/report/sale-list',
-    alwaysShow: true,
-    name: 'Report',
-    meta: {
-      title: 'Report',
-      icon: 'chart',
-      roles: ['admin', 'manager']
-    },
-    children: [
-      {
-        path: 'sale-report',
-        component: () => import('@/views/report/sale-report'),
-        name: 'Sale Report',
-        meta: { title: 'Sale Report' }
-      }
-    ]
-  },
+  productRouter,
   {
     path: '/purchase',
     component: Layout,
@@ -430,6 +410,26 @@ export const asyncRoutes = [
         meta: {
           title: 'Add purchase'
         }
+      }
+    ]
+  },
+  {
+    path: '/report',
+    component: Layout,
+    redirect: '/report/sale-list',
+    alwaysShow: true,
+    name: 'Report',
+    meta: {
+      title: 'Report',
+      icon: 'chart',
+      roles: ['admin', 'manager']
+    },
+    children: [
+      {
+        path: 'sale-report',
+        component: () => import('@/views/report/sale-report'),
+        name: 'Sale Report',
+        meta: { title: 'Sale Report' }
       }
     ]
   },
