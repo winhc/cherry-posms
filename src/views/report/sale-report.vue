@@ -52,7 +52,7 @@
             <svg-icon icon-class="component" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
-            <div class="card-panel-text">Product Count</div>
+            <div class="card-panel-text">Quantity</div>
             <count-to
               :start-val="0"
               :end-val="productCount"

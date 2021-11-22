@@ -59,7 +59,7 @@ export const POS = {
                 order_code: this.orderCode,
                 product: data.id,
                 product_name: data.product_name,
-                status: 'ordered',
+                status: 'paid',
                 customer: this.selectedCustomer,
                 quantity: 1,
                 price: data.price,
