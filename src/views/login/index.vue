@@ -166,7 +166,11 @@ export default {
           /// server not return password
           response.data.user.password = this.loginForm.password;
           this.$store.dispatch("user/login", response.data);
-          this.$router.push({ path: "/" });
+          if(response.data.user.user_type.user_role == 'seller'){
+            this.$router.push({ path: "/pos" });
+          } else {
+            this.$router.push({ path: "/" });
+          }
           this.$message.success("login success");
         } else {
           this.$message.error(`${response.data.message}`);

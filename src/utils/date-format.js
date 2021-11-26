@@ -11,7 +11,3 @@ export const formatYearMonthDay = (date) => {
 export const formatMonthDay = (date) => {
     return moment(new Date(date)).format('MMM DD');
 }
-
-export const formatMonth = (date) => {
-    return moment(new Date(date)).format('MMM');
-}

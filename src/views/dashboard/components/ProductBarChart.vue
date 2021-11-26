@@ -66,9 +66,9 @@ export default {
           axisPointer: {
             type: "shadow",
           },
-          formatter: function (params) {
-            return "Quantity: " + params[0].data.value;
-          },
+          // formatter: function (params) {
+          //   return "Quantity: " + params[0].data.value;
+          // },
         },
         grid: {
           top: 10,
@@ -95,9 +95,13 @@ export default {
             axisTick: {
               show: false,
             },
+            axisLabel: {
+              formatter: "{value} Qty",
+            },
           },
         ],
         series: {
+          name: "Quantity",
           type: "bar",
           stack: "vistors",
           barWidth: "60%",

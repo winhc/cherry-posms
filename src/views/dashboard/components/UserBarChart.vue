@@ -60,17 +60,16 @@ export default {
       this.chart = echarts.init(this.$el, "macarons");
       this.setOptions(this.chartData);
     },
-    setOptions({ barLabel, quantityData, amountData } = {}) {
+    setOptions({ barLabel, barData } = {}) {
       this.chart.setOption({
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "cross",
+            type: "shadow",
           },
         },
-        legend: {},
         grid: {
-          //   top: 10,
+          top: 10,
           left: "2%",
           right: "2%",
           bottom: "3%",
@@ -83,47 +82,30 @@ export default {
             axisTick: {
               alignWithLabel: true,
             },
-            // axisLabel: {
-            //   rotate: 30,
-            // },
+            axisLabel: {
+              rotate: 30,
+            },
           },
         ],
         yAxis: [
           {
             type: "value",
-            name: "Quantity",
-            position: "right",
-            axisLabel: {
-              formatter: "{value} Qty",
+            axisTick: {
+              show: false,
             },
-          },
-          {
-            type: "value",
-            name: "Amount",
-            position: "left",
             axisLabel: {
               formatter: "{value} MMK",
             },
           },
         ],
-        series: [
-          {
-            name: "Quantity",
-            type: "bar",
-            barWidth: "60%",
-            yAxisIndex: 0,
-            data: quantityData,
-            animationDuration,
-          },
-          {
-            name: "Amount",
-            type: "line",
-            smooth: true,
-            yAxisIndex: 1,
-            data: amountData,
-            animationDuration,
-          },
-        ],
+        series: {
+          name: "User",
+          type: "bar",
+          stack: "vistors",
+          barWidth: "60%",
+          data: barData,
+          animationDuration,
+        },
       });
     },
   },

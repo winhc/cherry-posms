@@ -6,8 +6,7 @@
 import echarts from "echarts";
 require("echarts/theme/macarons"); // echarts theme
 import resize from "./mixins/resize";
-import * as numberTool from '@/utils/number-tool'
-
+import * as numberTool from "@/utils/number-tool";
 
 export default {
   mixins: [resize],
@@ -85,9 +84,9 @@ export default {
             type: "cross",
           },
           padding: [5, 10],
-          formatter: function (params) {
-            return "Amount: " + numberTool.numberWithCommas(params[0].data) + " MMK";
-          },
+          // formatter: function (params) {
+          //   return "Amount: " + numberTool.numberWithCommas(params[0].data) + " MMK";
+          // },
         },
         yAxis: {
           axisTick: {

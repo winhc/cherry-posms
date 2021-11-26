@@ -75,19 +75,19 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       component: () => import('@/views/dashboard/index'),
+  //       name: 'Dashboard',
+  //       meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/profile',
     component: Layout,
@@ -102,19 +102,19 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/pos',
-    component: Layout,
-    redirect: '/pos',
-    children: [
-      {
-        path: '/pos',
-        component: () => import('@/views/pos'),
-        name: 'Sale',
-        meta: { title: 'Sale', icon: 'shopping', affix: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/pos',
+  //   component: Layout,
+  //   redirect: '/pos',
+  //   children: [
+  //     {
+  //       path: '/pos',
+  //       component: () => import('@/views/pos'),
+  //       name: 'Sale',
+  //       meta: { title: 'Sale', icon: 'shopping', affix: true }
+  //     }
+  //   ]
+  // },
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -357,6 +357,37 @@ export const asyncRoutes = [
   //   ]
   // },
   {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { 
+          title: 'Dashboard',
+          icon: 'dashboard',
+          affix: true,
+          roles: ['admin', 'manager','accountant']
+        }
+      }
+    ]
+  },
+  {
+    path: '/pos',
+    component: Layout,
+    redirect: '/pos',
+    children: [
+      {
+        path: '/pos',
+        component: () => import('@/views/pos'),
+        name: 'Sale',
+        meta: { title: 'Sale', icon: 'shopping', affix: true }
+      }
+    ]
+  },
+  {
     path: '/order',
     component: Layout,
     redirect: '/order',
@@ -477,18 +508,18 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'Icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/icons/index'),
+  //       name: 'Icons',
+  //       meta: { title: 'Icons', icon: 'icon', noCache: true }
+  //     }
+  //   ]
+  // },
 
   // /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
