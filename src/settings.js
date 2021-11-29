@@ -1,17 +1,17 @@
 module.exports = {
-  title: 'Cherry POSMS',
+  title: 'C H E R R Y - P O S M S',
 
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel
    */
-  showSettings: true,
+  showSettings: false,
 
   /**
    * @type {boolean} true | false
    * @description Whether need tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
    * @type {boolean} true | false

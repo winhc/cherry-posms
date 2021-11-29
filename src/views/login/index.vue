@@ -17,7 +17,7 @@
       </div> -->
 
       <div class="title-container">
-        <h3 class="title">Cherry POSMS</h3>
+        <h3 class="title">C H E R R Y - P O S M S</h3>
       </div>
 
       <el-form-item prop="username">

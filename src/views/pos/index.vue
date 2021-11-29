@@ -3,7 +3,7 @@
     <el-row type="flex" justify="space-between">
       <el-col :span="16">
         <!-- <el-card shadow="never" style="height: 83vh"> -->
-        <div class="card_container">
+        <div>
           <div class="title-text">Category</div>
           <div id="carousel-wrapper">
             <div id="carousel">
@@ -185,7 +185,7 @@ export default {
 #product_list_container {
   margin-top: 10px;
   height: 75%;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   padding-top: 10px;
   /* background-color: yellow; */
   overflow-y: auto;
@@ -199,7 +199,7 @@ export default {
 }
 .card_container {
   background-color: white;
-  height: 83vh;
+  height: 85vh;
   width: 100%;
   padding: 20px;
   position: relative;
@@ -217,7 +217,7 @@ export default {
   padding: 32px;
   background-color: rgb(240, 242, 245);
   position: relative;
-  height: 88vh;
+  /* height: 88vh; */
 }
 #carousel-wrapper {
   position: relative;
