@@ -69,12 +69,14 @@
             </template>
             <template slot-scope="{ row }">
               <el-button
+                v-show="row.id != 1"
                 type="primary"
                 icon="el-icon-edit"
                 circle
                 @click="updateCustomer(row)"
               />
               <el-button
+                v-show="row.id != 1"
                 type="danger"
                 icon="el-icon-delete"
                 circle

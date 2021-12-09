@@ -39,33 +39,33 @@ const peopleRouter = {
                         title: 'Add User'
                     }
                 },
-                {
-                    path: 'user-type',
-                    component: () => import('@/views/people'),
-                    redirect: 'user/user-type/list',
-                    name: 'User Type',
-                    meta: {
-                        title: 'User Type',
-                    },
-                    children: [
-                        {
-                            path: 'list',
-                            component: () => import('@/views/people/user/user-type/list-user-type'),
-                            name: 'List User Type',
-                            meta: {
-                                title: 'List User Type'
-                            }
-                        },
-                        {
-                            path: 'add',
-                            component: () => import('@/views/people/user/user-type/add-user-type'),
-                            name: 'Add User Type',
-                            meta: {
-                                title: 'Add User Type'
-                            }
-                        }
-                    ]
-                },
+                // {
+                //     path: 'user-type',
+                //     component: () => import('@/views/people'),
+                //     redirect: 'user/user-type/list',
+                //     name: 'User Type',
+                //     meta: {
+                //         title: 'User Type',
+                //     },
+                //     children: [
+                //         {
+                //             path: 'list',
+                //             component: () => import('@/views/people/user/user-type/list-user-type'),
+                //             name: 'List User Type',
+                //             meta: {
+                //                 title: 'List User Type'
+                //             }
+                //         },
+                //         {
+                //             path: 'add',
+                //             component: () => import('@/views/people/user/user-type/add-user-type'),
+                //             name: 'Add User Type',
+                //             meta: {
+                //                 title: 'Add User Type'
+                //             }
+                //         }
+                //     ]
+                // },
             ],
         },
         {

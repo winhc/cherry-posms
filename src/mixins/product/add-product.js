@@ -71,9 +71,9 @@ export const AddProduct = {
                 remarks: ''
             },
             rules: {
-                // bar_code: [
-                //     { required: true, validator: validateBarCode, trigger: 'blur' },
-                // ],
+                bar_code: [
+                    { required: true, validator: validateBarCode, trigger: 'blur' },
+                ],
                 product_name: [
                     { required: true, message: 'Enter product name', trigger: 'blur' },
                 ],
@@ -161,7 +161,9 @@ export const AddProduct = {
             formData.append('cost', this.productForm.cost);
             formData.append('price', this.productForm.price);
             formData.append('alert_quantity', this.productForm.alert_quantity);
-            formData.append('expiry_at', this.productForm.expiry_at);
+            if(this.productForm.expiry_at != ''){
+                formData.append('expiry_at', this.productForm.expiry_at);
+            }
             formData.append('remarks', this.productForm.remarks);
             formData.append('image', this.imageFile);
             const response = await http.post('/products', formData);
