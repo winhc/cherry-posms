@@ -70,6 +70,7 @@
                 :span="4"
               >
                 <div @click="selectProduct(subItem)">
+                  <!-- <el-badge :value="100" :max="99" class="badge-item" type="primary"> -->
                   <el-card class="card_style" shadow="never">
                     <el-row>
                       <el-col :sm="24">
@@ -82,6 +83,7 @@
                       </el-col>
                     </el-row>
                   </el-card>
+                  <!-- </el-badge> -->
                 </div>
               </el-col>
             </el-row>
@@ -122,7 +124,7 @@
               id="order_list"
             >
               <el-row :gutter="10">
-                <el-col :span="15">
+                <el-col :span="14">
                   <el-row style="margin-bottom: 5px">
                     {{ item.product_name }}
                   </el-row>
@@ -131,8 +133,27 @@
                   </el-row>
                 </el-col>
                 <el-col :span="3">x{{ item.quantity }}</el-col>
-                <el-col :span="6" style="color: gray">
-                  {{ item.quantity * item.price | numberWithCommas }} Ks
+                <el-col :span="7" style="color: gray">
+                  <el-row style="margin-bottom: 5px">
+                    <span style="float: right"
+                      >{{
+                        (item.quantity * item.price) | numberWithCommas
+                      }}
+                      Ks</span
+                    >
+                  </el-row>
+                  <el-row>
+                    <i
+                      style="
+                        color: red;
+                        float: right;
+                        font-size: 14px;
+                        cursor: pointer;
+                      "
+                      class="el-icon-delete"
+                      @click="deleteOrderItem(item)"
+                    ></i>
+                  </el-row>
                 </el-col>
               </el-row>
             </div>
@@ -158,7 +179,11 @@
                 {{ totalAmount | numberWithCommas }} Ks
               </el-col>
             </el-row>
-            <el-button type="primary" style="width: 100%" @click="createOrder"
+            <el-button
+              type="primary"
+              style="width: 100%"
+              @click="createOrder"
+              :disabled="orderList.length <= 0"
               >Charge {{ totalAmount | numberWithCommas }} Ks</el-button
             >
           </div>
@@ -237,6 +262,11 @@ export default {
   width: 110px;
   height: 205px;
   /* cursor: pointer; */
+}
+
+.badge-item {
+  margin-top: 20px;
+  margin-right: 40px;
 }
 
 .image {

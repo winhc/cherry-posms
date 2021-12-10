@@ -54,7 +54,7 @@ export const POS = {
             this.getProduct();
         },
         selectProduct(data) {
-            // console.log('selectProduct => ', data);
+            // console.debug('selectProduct => ', data);
             const tempOrder = {
                 order_code: this.orderCode,
                 product: data.id,
@@ -69,6 +69,10 @@ export const POS = {
             const index = tempOrderList.findIndex(item => item.product == data.id);
             // console.log('order index =>', index);
             if (index != -1) {
+                console.log('index data => ', tempOrderList[index].quantity);
+                if(tempOrderList[index].quantity >= data.quantity){
+                    return;
+                }
                 tempOrder.quantity = tempOrderList[index].quantity + 1;
                 tempOrderList[index] = tempOrder;
             } else {
@@ -130,6 +134,16 @@ export const POS = {
             }
             return matrix;
         },
+        deleteOrderItem(data){
+            console.debug('delete data==>', data);
+            const index = this.orderList.findIndex(item => item.product == data.product);
+            console.debug('delete Index==>', index);
+            if(index > -1){
+                this.totalQuantity -= data.quantity;
+                this.totalAmount -= data.quantity * data.price;
+                this.orderList.splice(index,1);
+            }
+        }
     },
     watch: {},
     computed: {},
