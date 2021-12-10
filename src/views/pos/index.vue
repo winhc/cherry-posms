@@ -78,7 +78,7 @@
                     </el-row>
                     <el-row>
                       <el-col :sm="24" style="color: gray; font-size: 14px">
-                        {{ subItem.price }} Ks
+                        {{ subItem.price | numberWithCommas }} Ks
                       </el-col>
                     </el-row>
                   </el-card>
@@ -132,7 +132,7 @@
                 </el-col>
                 <el-col :span="3">x{{ item.quantity }}</el-col>
                 <el-col :span="6" style="color: gray">
-                  {{ item.quantity * item.price }} Ks
+                  {{ item.quantity * item.price | numberWithCommas }} Ks
                 </el-col>
               </el-row>
             </div>
@@ -155,11 +155,11 @@
             >
               <el-col :span="12"> Total </el-col>
               <el-col :span="12" style="text-align: right">
-                {{ totalAmount }} Ks
+                {{ totalAmount | numberWithCommas }} Ks
               </el-col>
             </el-row>
             <el-button type="primary" style="width: 100%" @click="createOrder"
-              >Charge {{ totalAmount }} Ks</el-button
+              >Charge {{ totalAmount | numberWithCommas }} Ks</el-button
             >
           </div>
         </div>

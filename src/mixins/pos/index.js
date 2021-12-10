@@ -100,6 +100,7 @@ export const POS = {
                 if (response.status == 201) {
                     this.$message.success(response.data.message);
                     this.clearOrder();
+                    this.getProduct();
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -133,5 +134,8 @@ export const POS = {
     watch: {},
     computed: {},
     filters: {
+        numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     }
 }

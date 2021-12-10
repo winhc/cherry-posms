@@ -76,9 +76,9 @@ export const ListProduct = {
                 remarks: ''
             },
             rules: {
-                // bar_code: [
-                //     { required: true, validator: validateBarCode, trigger: 'blur' },
-                // ],
+                bar_code: [
+                    { required: true, validator: validateBarCode, trigger: 'blur' },
+                ],
                 product_name: [
                     { required: true, message: 'Enter product name', trigger: 'blur' },
                 ],
@@ -236,7 +236,9 @@ export const ListProduct = {
             this.productForm.cost = data.cost;
             this.productForm.price = data.price;
             this.productForm.alert_quantity = data.alert_quantity;
-            this.productForm.expiry_at = data.expiry_at;
+            if(data.expiry_at == null){
+                this.productForm.expiry_at = '';
+            }
             this.productForm.remarks = data.remarks;
             this.productForm.image = data.image;
             this.imageUrl = '';
@@ -281,13 +283,17 @@ export const ListProduct = {
             formData.append('cost', this.productForm.cost);
             formData.append('price', this.productForm.price);
             formData.append('alert_quantity', this.productForm.alert_quantity);
-            formData.append('expiry_at', this.productForm.expiry_at);
+            if(this.productForm.expiry_at != '') {
+                formData.append('expiry_at', this.productForm.expiry_at);
+            }
             formData.append('remarks', this.productForm.remarks);
             if (this.imageUrl == '') {
                 formData.append('image', '');
             } else {
                 formData.append('image', this.imageFile || this.productForm.image);
             }
+            console.debug('update productForm =>', this.productForm);
+            console.debug('update formData =>', formData);
             const response = await http.patch(`/products/${this.product_id}`, formData);
             console.log('updateProduct response =>', response);
             if (response != '') {
