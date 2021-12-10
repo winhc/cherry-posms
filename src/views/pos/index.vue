@@ -17,18 +17,20 @@
                   class="card_style"
                   :style="
                     selectedCategory == item.id
-                      ? 'background-color: yellow'
+                      ? 'background-color: #1890FF; color: white;'
                       : ''
                   "
                 >
-                  <div>
-                    <el-image
-                      v-if="item.image"
-                      :src="categoryAvatarUrl + item.id + '/' + item.image"
-                      fit="fill"
-                    ></el-image>
-                    <div class="label-text">
-                      {{ item.category_name }}
+                  <div style="display: table; height: 110px; overflow: hidden; margin: auto;">
+                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                      <!-- <el-image
+                        v-if="item.image"
+                        :src="categoryAvatarUrl + item.id + '/' + item.image"
+                        fit="fill"
+                      ></el-image> -->
+                      <div>
+                        {{ item.category_name }}
+                      </div>
                     </div>
                   </div>
                 </el-card>
@@ -70,20 +72,24 @@
                 :span="4"
               >
                 <div @click="selectProduct(subItem)">
-                  <!-- <el-badge :value="100" :max="99" class="badge-item" type="primary"> -->
                   <el-card class="card_style" shadow="never">
-                    <el-row>
-                      <el-col :sm="24">
-                        {{ subItem.product_name }}
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :sm="24" style="color: gray; font-size: 14px">
-                        {{ subItem.price | numberWithCommas }} Ks
-                      </el-col>
-                    </el-row>
+                    <div style="display: table; height: 80px; overflow: hidden; margin: auto;">
+                      <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                        <div>
+                          {{ subItem.product_name }}
+                        </div>
+                      </div>
+                    </div>
+                    <div style="background: #1890FF;">
+                      <div style="display: table; height: 28px; overflow: hidden; margin: auto;">
+                        <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                          <div style="color: gray; font-size: 14px; color: white;">
+                            {{ subItem.price | numberWithCommas }} Ks
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </el-card>
-                  <!-- </el-badge> -->
                 </div>
               </el-col>
             </el-row>
@@ -208,10 +214,9 @@ export default {
   overflow-y: auto;
 }
 #product_list_container {
-  margin-top: 10px;
   height: 75%;
   padding-bottom: 10px;
-  padding-top: 10px;
+  /* padding-top: 10px; */
   /* background-color: yellow; */
   overflow-y: auto;
 }
@@ -279,9 +284,6 @@ export default {
   height: 110px;
   cursor: pointer;
 }
-.label-text {
-  text-align: center;
-}
 .title-text {
   font-size: 20px;
   margin-bottom: 10px;
@@ -289,5 +291,8 @@ export default {
 .horizontal-scroll-view {
   overflow: auto;
   white-space: nowrap;
+}
+.el-card__body {
+  padding: 0px;
 }
 </style>
