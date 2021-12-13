@@ -245,7 +245,7 @@
             <el-button
               type="primary"
               style="width: 100%"
-              @click="createOrder"
+              @click="showSaleDetail = true"
               :disabled="orderList.length <= 0"
               >Pay {{ totalAmount | numberWithCommas }} Ks</el-button
             >
@@ -254,6 +254,74 @@
         <!-- </el-card> -->
       </el-col>
     </el-row>
+
+    <!-- sale invoice detail dialog -->
+    <el-dialog
+      title="Sale Detail"
+      :visible.sync="showSaleDetail"
+      width="50%"
+      center
+    >
+      <div>
+        <div style="text-align: center">
+          Date: {{ saleDate }} <br />
+          <br />
+          Sold By: {{ $store.getters.userInfo.user_name }} <br />
+          <br />
+          Sold To: {{ currentCustomer }} <br />
+          <br />
+        </div>
+        <el-table
+          v-if="showSaleDetail"
+          :data="orderList"
+          style="width: 100%; margin-top: 20px"
+          border
+          show-summary
+          :summary-method="getSummaries"
+        >
+          <el-table-column align="center" width="200">
+            <template slot="header">
+              <span>Item</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.product_name }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center">
+            <template slot="header">
+              <span>Qty</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.quantity }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center">
+            <template slot="header">
+              <span>Price</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ row.price | numberWithCommas }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="total" align="center">
+            <template slot="header">
+              <span>Total</span>
+            </template>
+            <template slot-scope="{ row }">
+              <span>{{ (row.quantity * row.price) | numberWithCommas }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button style="width: 100%" type="primary" @click="createOrder"
+          >Confirm</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>

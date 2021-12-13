@@ -4,6 +4,7 @@ import DeleteDialog from '../../components/DeleteDialog/'
 import { getErrorMessage } from '@/utils/message-tip'
 import { currentDate } from '@/utils/date-format'
 import * as CodeGenerator from '@/utils/code-generator';
+import * as numberTool from "@/utils/number-tool";
 
 export const POS = {
     components: { DeleteDialog },
@@ -22,6 +23,10 @@ export const POS = {
             orderCode: CodeGenerator.generateCode({ prefix: 'ODR', length: 5 }),
             productName: '',
             tempProductList: [],
+            showSaleDetail: false,
+            saleDetailData: [],
+            saleDate: currentDate(),
+            currentCustomer: ''
         }
     },
     mounted() { },
@@ -98,6 +103,40 @@ export const POS = {
                 this.orderCode = CodeGenerator.generateCode({ prefix: 'ODR', length: 5 });
             }
         },
+        getSummaries(param) {
+            // console.log('param', param);
+            const index = this.customerList.findIndex(item => item.id == this.selectedCustomer);
+            if (index > -1) {
+                this.currentCustomer = this.customerList[index].customer_name;
+            }
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = 'Total Price';
+                    return;
+                }
+                if (index === 3) {
+                    const values = data.map(item => Number(item.price * item.quantity));
+                    // console.log('saleValues=>', values);
+                    // console.log('column=>', column);
+                    // console.log('data=>', data);
+                    if (!values.every(value => isNaN(value))) {
+                        const totalValue = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+                        sums[index] = 'Ks ' + numberTool.numberWithCommas(totalValue);
+                    }
+                }
+            });
+
+            return sums;
+        },
         async createOrder() {
             const response = await http.post(`/orders`, this.orderList);
             console.log('create order response => ', response)
@@ -110,6 +149,7 @@ export const POS = {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
             }
+            this.showSaleDetail = false;
         },
         async getProduct() {
             const response = await http.get(`/pos/products?category_id=${this.selectedCategory}&product_name=${this.productName}`);
