@@ -37,7 +37,7 @@ export const POS = {
     methods: {
         async getPOSOption() {
             const response = await http.get('/pos');
-            console.log('pos option response => ', response)
+            // console.log('pos option response => ', response)
             if (response != null) {
                 if (response.status == 200) {
                     this.customerList = response.data.customer.data;
@@ -55,7 +55,7 @@ export const POS = {
             }
         },
         selectCategory(data) {
-            console.log('selectCategory => ', data);
+            // console.log('selectCategory => ', data);
             this.selectedCategory = data.id;
             this.getProduct();
         },
@@ -75,8 +75,9 @@ export const POS = {
             const index = tempOrderList.findIndex(item => item.product == data.id);
             // console.log('order index =>', index);
             if (index != -1) {
-                console.log('index data => ', tempOrderList[index].quantity);
+                // console.log('index data => ', tempOrderList[index].quantity);
                 if (tempOrderList[index].quantity >= data.quantity) {
+                    this.$message.info(`No more quantity for ${tempOrderList[index].product_name}`);
                     return;
                 }
                 tempOrder.quantity = tempOrderList[index].quantity + 1;
@@ -90,7 +91,7 @@ export const POS = {
             this.totalQuantity = 0;
             this.totalAmount = 0;
             for (var item of this.orderList) {
-                console.log('orderItem => ', item);
+                // console.log('orderItem => ', item);
                 this.totalQuantity += item.quantity;
                 this.totalAmount += item.quantity * item.price;
             }
@@ -139,7 +140,7 @@ export const POS = {
         },
         async createOrder() {
             const response = await http.post(`/orders`, this.orderList);
-            console.log('create order response => ', response)
+            // console.log('create order response => ', response)
             if (response != null) {
                 if (response.status == 201) {
                     this.$message.success(response.data.message);
@@ -153,13 +154,13 @@ export const POS = {
         },
         async getProduct() {
             const response = await http.get(`/pos/products?category_id=${this.selectedCategory}&product_name=${this.productName}`);
-            console.log('product response => ', response)
+            // console.log('product response => ', response)
             if (response != null) {
                 if (response.status == 200) {
                     const resData = response.data.data;
                     this.tempProductList = resData;
                     this.productList = this.listToMatrix(resData, 6);
-                    console.log('ddd==>', this.productList);
+                    // console.log('ddd==>', this.productList);
                 } else {
                     this.$message.error(`${getErrorMessage(response)}`);
                 }
@@ -195,6 +196,7 @@ export const POS = {
                 if (option == 'increase') {
                     if (pIndex > -1) {
                         if (this.orderList[index].quantity >= this.tempProductList[pIndex].quantity) {
+                            this.$message.info(`No more quantity for ${this.orderList[index].product_name}`);
                             return;
                         }
                     }
