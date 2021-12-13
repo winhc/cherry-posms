@@ -21,8 +21,21 @@
                       : ''
                   "
                 >
-                  <div style="display: table; height: 110px; overflow: hidden; margin: auto;">
-                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                  <div
+                    style="
+                      display: table;
+                      height: 110px;
+                      overflow: hidden;
+                      margin: auto;
+                    "
+                  >
+                    <div
+                      style="
+                        display: table-cell;
+                        vertical-align: middle;
+                        text-align: center;
+                      "
+                    >
                       <!-- <el-image
                         v-if="item.image"
                         :src="categoryAvatarUrl + item.id + '/' + item.image"
@@ -73,17 +86,45 @@
               >
                 <div @click="selectProduct(subItem)">
                   <el-card class="card_style" shadow="never">
-                    <div style="display: table; height: 80px; overflow: hidden; margin: auto;">
-                      <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                    <div
+                      style="
+                        display: table;
+                        height: 80px;
+                        overflow: hidden;
+                        margin: auto;
+                      "
+                    >
+                      <div
+                        style="
+                          display: table-cell;
+                          vertical-align: middle;
+                          text-align: center;
+                        "
+                      >
                         <div>
                           {{ subItem.product_name }}
                         </div>
                       </div>
                     </div>
-                    <div style="background: #1890FF;">
-                      <div style="display: table; height: 28px; overflow: hidden; margin: auto;">
-                        <div style="display: table-cell; vertical-align: middle; text-align: center;">
-                          <div style="color: gray; font-size: 14px; color: white;">
+                    <div style="background: #1890ff">
+                      <div
+                        style="
+                          display: table;
+                          height: 28px;
+                          overflow: hidden;
+                          margin: auto;
+                        "
+                      >
+                        <div
+                          style="
+                            display: table-cell;
+                            vertical-align: middle;
+                            text-align: center;
+                          "
+                        >
+                          <div
+                            style="color: gray; font-size: 14px; color: white"
+                          >
                             {{ subItem.price | numberWithCommas }} Ks
                           </div>
                         </div>
@@ -138,7 +179,23 @@
                     Ks {{ item.price }}
                   </el-row>
                 </el-col>
-                <el-col :span="3">x{{ item.quantity }}</el-col>
+                <el-col :span="3">
+                  <div>
+                    <i
+                      class="el-icon-circle-plus-outline"
+                      style="color: gray; font-size: 16px; cursor: pointer"
+                      @click="handleQuantity(item, 'increase')"
+                    ></i>
+                  </div>
+                  x{{ item.quantity }}
+                  <div>
+                    <i
+                      class="el-icon-remove-outline"
+                      style="color: gray; font-size: 16px; cursor: pointer"
+                      @click="handleQuantity(item, 'decrease')"
+                    ></i>
+                  </div>
+                </el-col>
                 <el-col :span="7" style="color: gray">
                   <el-row style="margin-bottom: 5px">
                     <span style="float: right"
@@ -190,7 +247,7 @@
               style="width: 100%"
               @click="createOrder"
               :disabled="orderList.length <= 0"
-              >Charge {{ totalAmount | numberWithCommas }} Ks</el-button
+              >Pay {{ totalAmount | numberWithCommas }} Ks</el-button
             >
           </div>
         </div>

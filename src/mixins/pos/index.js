@@ -21,6 +21,7 @@ export const POS = {
             totalAmount: 0,
             orderCode: CodeGenerator.generateCode({ prefix: 'ODR', length: 5 }),
             productName: '',
+            tempProductList: [],
         }
     },
     mounted() { },
@@ -70,7 +71,7 @@ export const POS = {
             // console.log('order index =>', index);
             if (index != -1) {
                 console.log('index data => ', tempOrderList[index].quantity);
-                if(tempOrderList[index].quantity >= data.quantity){
+                if (tempOrderList[index].quantity >= data.quantity) {
                     return;
                 }
                 tempOrder.quantity = tempOrderList[index].quantity + 1;
@@ -116,6 +117,7 @@ export const POS = {
             if (response != null) {
                 if (response.status == 200) {
                     const resData = response.data.data;
+                    this.tempProductList = resData;
                     this.productList = this.listToMatrix(resData, 6);
                     console.log('ddd==>', this.productList);
                 } else {
@@ -134,14 +136,44 @@ export const POS = {
             }
             return matrix;
         },
-        deleteOrderItem(data){
+        deleteOrderItem(data) {
             console.debug('delete data==>', data);
             const index = this.orderList.findIndex(item => item.product == data.product);
             console.debug('delete Index==>', index);
-            if(index > -1){
+            if (index > -1) {
                 this.totalQuantity -= data.quantity;
                 this.totalAmount -= data.quantity * data.price;
-                this.orderList.splice(index,1);
+                this.orderList.splice(index, 1);
+            }
+        },
+        handleQuantity(data, option) {
+            // console.log(`handleQuantity=> ${data}, ${option}`);
+            const index = this.orderList.findIndex(item => item.product == data.product);
+            const pIndex = this.tempProductList.findIndex(item => item.id == data.product);
+
+            if (index > -1) {
+                if (option == 'increase') {
+                    if (pIndex > -1) {
+                        if (this.orderList[index].quantity >= this.tempProductList[pIndex].quantity) {
+                            return;
+                        }
+                    }
+                    data.quantity += 1;
+                    this.totalQuantity += 1;
+                    this.totalAmount += data.price;
+                    this.orderList[index] = data;
+                } else if (option == 'decrease') {
+                    data.quantity -= 1;
+                    if (data.quantity == 0) {
+                        this.totalQuantity -= 1;
+                        this.totalAmount -= data.price;
+                        this.orderList.splice(index, 1);
+                    } else {
+                        this.totalQuantity -= 1;
+                        this.totalAmount -= data.price;
+                        this.orderList[index] = data;
+                    }
+                }
             }
         }
     },
